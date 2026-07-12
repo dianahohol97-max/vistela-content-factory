@@ -10,9 +10,12 @@ their own Data Store, so regenerating the queue here is safe/idempotent.
 """
 import json
 import os
+import glob
+import hashlib
 import datetime as dt
 import config as C
 import render as R
+import render_reel as RR
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PINS_DIR = os.path.join(ROOT, "output", "pins")
@@ -76,15 +79,54 @@ def build_carousels():
     return items
 
 
+def build_reels():
+    """Hook->Reveal: one reel per template clip, with a weekly-rotating hook so
+    the same template never repeats the same hook (anti-repeat). Reads clips from
+    input/templates/ (synced from Dropbox by the workflow, or committed)."""
+    items = []
+    clips = sorted(glob.glob(os.path.join(ROOT, C.INPUT_TEMPLATES, "*.mp4")))
+    if not clips:
+        return items
+    week = dt.date.today().isocalendar()[1]
+    out_dir = os.path.join(ROOT, "output", "reels")
+    import re
+    for clip in clips:
+        base = os.path.splitext(os.path.basename(clip))[0]
+        slug = re.sub(r"[^a-z0-9]+", "-", base.lower()).strip("-")
+        h = int(hashlib.md5(base.encode()).hexdigest(), 16)
+        hook = C.REEL_HOOKS[(week + h) % len(C.REEL_HOOKS)]
+        reel, cover = RR.assemble(clip, hook, out_dir, slug)
+        link = RR.listing_link_from_filename(base)
+        caption = (f"{hook} \U0001F90D\n\n"
+                   f"Editable in Canva, instant download \u2014 change names, dates & "
+                   f"colours in minutes, no designer needed.\n\U0001F517 {link}\n\n"
+                   f"{C.REEL_HASHTAGS}")
+        items.append({
+            "id": f"REEL_{slug}_w{week}",
+            "channels": ["instagram_reel", "youtube_short", "tiktok"],
+            "format": "video",
+            "video_url": raw(os.path.relpath(reel, ROOT)),
+            "cover_url": raw(os.path.relpath(cover, ROOT)),
+            "caption": caption,
+            "link": link,
+            "share_to_feed": True,
+            "status": "ready",
+        })
+    return items
+
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     pin_items = build_pins()
     car_items = build_carousels()
+    reel_items = build_reels()
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
         json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": pin_items}, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:
         json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": car_items}, f, indent=2, ensure_ascii=False)
-    print(f"pins: {len(pin_items)}  carousels: {len(car_items)}")
+    with open(os.path.join(Q_DIR, "video_queue.json"), "w") as f:
+        json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": reel_items}, f, indent=2, ensure_ascii=False)
+    print(f"pins: {len(pin_items)}  carousels: {len(car_items)}  reels: {len(reel_items)}")
 
 
 if __name__ == "__main__":

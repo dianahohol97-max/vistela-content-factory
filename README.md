@@ -39,6 +39,23 @@ mkdir -p fonts && curl -sSLg -o fonts/CormorantGaramond.ttf \
 python build.py
 ```
 
-## Next generators (stubs to add)
-- Inspiration pins: "what's in your wedding website" checklist, save-the-date timeline.
-- Video assembly (Reels/TikTok/Shorts): ffmpeg wrapper over the product's own animation.
+## Reels (video)
+`render_reel.py` assembles a source clip into a finished **1080×1920** Reel:
+9:16 with cream padding, a **video-legible** hook on the open (Archivo Black,
+white + black outline on a soft dark band — not the serif, which vanishes on
+video), a CTA end-card, and a cover frame. **Silent by design** — trending audio
+is added in-app at publish (that's what earns reach).
+
+- Drop source clips in `input/` (see `input/README.md`); name them with the Etsy
+  listing id so captions link to the right product.
+- `build.py` produces one reel per template with a **weekly-rotating hook**
+  (anti-repeat on template × hook) and writes `queue/video_queue.json`.
+- Posters (Adrián): Instagram Reels = clone bloom `9417722`; YouTube Shorts =
+  clone `9415516`; TikTok via Metricool/Late. Cadence 2 / day.
+- In production, `input/` is synced from Dropbox at build time (see workflow TODO).
+
+Full spec: `vistela-reels-system.md`.
+
+## Next generators
+- Scene → reveal reels (wedding footage + template) — needs a scene source (stock/AI/UGC).
+- Inspiration pins (deferred — no format chosen yet).

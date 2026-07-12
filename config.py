@@ -66,3 +66,28 @@ CAPTION_TEMPLATE = (
     "#digitalweddinginvitation #animatedsavethedate #weddingwebsite "
     "#weddingstationery #modernbride #weddingplanning2026"
 )
+
+
+# --- Reels (video) ---------------------------------------------------------
+VIDEO_FONT = "fonts/ArchivoBlack.ttf"   # bold sans for video-legible captions
+
+# Input folders (synced from Dropbox by the workflow, or committed manually).
+INPUT_TEMPLATES = "input/templates"          # Canva MP4 exports (Hook->Reveal etc.)
+INPUT_SCREEN    = "input/screen-recordings"  # Personalize-With-Me / website scroll
+INPUT_SCENES    = "input/wedding-scenes"      # for scene->reveal (source tbd)
+
+# Hook rotation for Hook->Reveal. One template -> a different hook each week
+# (anti-repeat on the template x hook combo).
+REEL_HOOKS = [
+    "POV: you found a wedding invitation you can personalize in minutes",
+    "Watch this template become your wedding invitation",
+    "Imagine sending this to your guests instead of a paper card",
+    "Type your names. Add your date. Send it to your guests.",
+    "Your wedding invitation, ready in under 10 minutes",
+    "POV: you refuse to send a boring save the date",
+    "The invitation your guests will actually remember",
+    "No designer. No waiting. Just add your details.",
+]
+
+REEL_HASHTAGS = ("#weddinginvitation #digitalweddinginvitation #animatedsavethedate "
+                 "#weddingwebsite #weddingtiktok #modernbride #weddingplanning2026")

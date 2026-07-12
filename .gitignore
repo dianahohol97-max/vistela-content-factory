@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+
+input/**/*.mp4
+input/**/*.mov
+input/**/*.MP4
+input/**/*.MOV

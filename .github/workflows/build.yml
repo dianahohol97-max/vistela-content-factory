@@ -24,11 +24,20 @@ jobs:
       - name: Install deps
         run: pip install -r requirements.txt
 
-      - name: Fetch brand font
+      - name: Fetch brand fonts
         run: |
           mkdir -p fonts
           curl -sSLg -o fonts/CormorantGaramond.ttf \
             "https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/CormorantGaramond%5Bwght%5D.ttf"
+          curl -sSL  -o fonts/ArchivoBlack.ttf \
+            "https://raw.githubusercontent.com/google/fonts/main/ofl/archivoblack/ArchivoBlack-Regular.ttf"
+
+      - name: Ensure ffmpeg (for reels)
+        run: ffmpeg -version >/dev/null 2>&1 || sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      # TODO (Adrián): sync input clips from Dropbox before building, e.g.
+      #   curl -sS -X POST https://content.dropboxapi.com/2/files/download ... using ${{ secrets.DROPBOX_TOKEN }}
+      # Until then, build processes whatever is committed under input/.
 
       - name: Generate content + queue
         run: python build.py
