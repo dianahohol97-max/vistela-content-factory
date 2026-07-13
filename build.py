@@ -105,9 +105,11 @@ def build_reels():
             "id": f"REEL_{slug}_w{week}",
             "channels": ["instagram_reel", "youtube_short", "tiktok"],
             "format": "video",
+            "title": hook,
             "video_url": raw(os.path.relpath(reel, ROOT)),
             "cover_url": raw(os.path.relpath(cover, ROOT)),
             "caption": caption,
+            "tags": [t.lstrip("#") for t in C.REEL_HASHTAGS.split()],
             "link": link,
             "share_to_feed": True,
             "status": "ready",
@@ -121,11 +123,11 @@ def main():
     car_items = build_carousels()
     reel_items = build_reels()
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
-        json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": pin_items}, f, indent=2, ensure_ascii=False)
+        json.dump(pin_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:
-        json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": car_items}, f, indent=2, ensure_ascii=False)
+        json.dump(car_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "video_queue.json"), "w") as f:
-        json.dump({"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(), "items": reel_items}, f, indent=2, ensure_ascii=False)
+        json.dump(reel_items, f, indent=2, ensure_ascii=False)
     print(f"pins: {len(pin_items)}  carousels: {len(car_items)}  reels: {len(reel_items)}")
 
 

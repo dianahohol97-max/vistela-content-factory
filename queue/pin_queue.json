@@ -1,135 +1,132 @@
-{
-  "generated_at": "2026-07-13T09:30:01.305215+00:00",
-  "items": [
-    {
-      "id": "PIN_burgundy-merlot",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Burgundy & Merlot Wedding Colour Palette",
-      "description": "Burgundy & Merlot — a rooted romance wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #burgundymerlotwedding",
-      "link": "https://vistelaco.etsy.com/listing/4487341587",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/burgundy-merlot.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_plum-fig",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Plum & Fig Wedding Colour Palette",
-      "description": "Plum & Fig — a moody & modern wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #plumfigwedding",
-      "link": "https://vistelaco.etsy.com/listing/4487325089",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/plum-fig.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_sage-olive",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Sage & Olive Wedding Colour Palette",
-      "description": "Sage & Olive — a garden & natural wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #sageolivewedding",
-      "link": "https://vistelaco.etsy.com/listing/4491130603",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/sage-olive.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_emerald-ivory",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Emerald & Ivory Wedding Colour Palette",
-      "description": "Emerald & Ivory — a rich & classic wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #emeraldivorywedding",
-      "link": "https://vistelaco.etsy.com/listing/4491097978",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/emerald-ivory.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_dusty-blue",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Dusty Blue Wedding Colour Palette",
-      "description": "Dusty Blue — a ethereal blue wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #dustybluewedding",
-      "link": "https://vistelaco.etsy.com/listing/4485722500",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/dusty-blue.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_navy-silver",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Navy & Silver Wedding Colour Palette",
-      "description": "Navy & Silver — a chrome & cool wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #navysilverwedding",
-      "link": "https://vistelaco.etsy.com/listing/4487982365",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/navy-silver.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_blush-neutral",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Blush & Neutral Wedding Colour Palette",
-      "description": "Blush & Neutral — a soft & timeless wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #blushneutralwedding",
-      "link": "https://vistelaco.etsy.com/listing/4485801145",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/blush-neutral.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_dusty-rose-mauve",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Dusty Rose & Mauve Wedding Colour Palette",
-      "description": "Dusty Rose & Mauve — a quiet romance wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #dustyrosemauvewedding",
-      "link": "https://vistelaco.etsy.com/listing/4485801145",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/dusty-rose-mauve.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_black-ivory",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Black & Ivory Wedding Colour Palette",
-      "description": "Black & Ivory — a editorial wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #blackivorywedding",
-      "link": "https://vistelaco.etsy.com/listing/4485820230",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/black-ivory.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    },
-    {
-      "id": "PIN_champagne-gold",
-      "channels": [
-        "pinterest"
-      ],
-      "format": "pin",
-      "title": "Champagne & Gold Wedding Colour Palette",
-      "description": "Champagne & Gold — a old money wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #champagnegoldwedding",
-      "link": "https://vistelaco.etsy.com",
-      "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/champagne-gold.png",
-      "board_id": "1092756365776030629",
-      "status": "ready"
-    }
-  ]
-}
+[
+  {
+    "id": "PIN_burgundy-merlot",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Burgundy & Merlot Wedding Colour Palette",
+    "description": "Burgundy & Merlot — a rooted romance wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #burgundymerlotwedding",
+    "link": "https://vistelaco.etsy.com/listing/4487341587",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/burgundy-merlot.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_plum-fig",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Plum & Fig Wedding Colour Palette",
+    "description": "Plum & Fig — a moody & modern wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #plumfigwedding",
+    "link": "https://vistelaco.etsy.com/listing/4487325089",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/plum-fig.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_sage-olive",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Sage & Olive Wedding Colour Palette",
+    "description": "Sage & Olive — a garden & natural wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #sageolivewedding",
+    "link": "https://vistelaco.etsy.com/listing/4491130603",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/sage-olive.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_emerald-ivory",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Emerald & Ivory Wedding Colour Palette",
+    "description": "Emerald & Ivory — a rich & classic wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #emeraldivorywedding",
+    "link": "https://vistelaco.etsy.com/listing/4491097978",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/emerald-ivory.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_dusty-blue",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Dusty Blue Wedding Colour Palette",
+    "description": "Dusty Blue — a ethereal blue wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #dustybluewedding",
+    "link": "https://vistelaco.etsy.com/listing/4485722500",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/dusty-blue.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_navy-silver",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Navy & Silver Wedding Colour Palette",
+    "description": "Navy & Silver — a chrome & cool wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #navysilverwedding",
+    "link": "https://vistelaco.etsy.com/listing/4487982365",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/navy-silver.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_blush-neutral",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Blush & Neutral Wedding Colour Palette",
+    "description": "Blush & Neutral — a soft & timeless wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #blushneutralwedding",
+    "link": "https://vistelaco.etsy.com/listing/4485801145",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/blush-neutral.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_dusty-rose-mauve",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Dusty Rose & Mauve Wedding Colour Palette",
+    "description": "Dusty Rose & Mauve — a quiet romance wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #dustyrosemauvewedding",
+    "link": "https://vistelaco.etsy.com/listing/4485801145",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/dusty-rose-mauve.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_black-ivory",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Black & Ivory Wedding Colour Palette",
+    "description": "Black & Ivory — a editorial wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #blackivorywedding",
+    "link": "https://vistelaco.etsy.com/listing/4485820230",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/black-ivory.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  },
+  {
+    "id": "PIN_champagne-gold",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Champagne & Gold Wedding Colour Palette",
+    "description": "Champagne & Gold — a old money wedding palette for 2026. Editable, animated wedding invitations & websites from VistelaCo. #champagnegoldwedding",
+    "link": "https://vistelaco.etsy.com",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/champagne-gold.png",
+    "board_id": "1092756365776030629",
+    "status": "ready"
+  }
+]
