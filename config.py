@@ -1,3 +1,4 @@
+import os
 """Design tokens + palette library for the VistelaCo content factory.
 
 Everything the generators need lives here. To add a palette, append to
@@ -97,3 +98,56 @@ REEL_HASHTAGS = ("#weddinginvitation #digitalweddinginvitation #animatedsavethed
 EMERALD = "#1E4736"; IVORY = "#F5EFE2"; BRASS = "#C7A76B"; SAGE = "#8AA184"
 PHONE_MOCKUP = "assets/phone_mockup.png"       # realistic phone, transparent screen
 PHONE_HOOK   = "IMAGINE OPENING THIS ON YOUR PHONE"
+
+
+# Rotating hashtag sets (vary per reel so captions aren't identical).
+REEL_HASHTAG_SETS = [
+    "#weddinginvitation #digitalweddinginvitation #animatedsavethedate #weddingwebsite #weddingtiktok #modernbride #weddingplanning2026",
+    "#savethedate #weddingstationery #canvatemplate #weddinginspo #engaged #weddinginvites #2026wedding",
+    "#weddinginvitation #weddingreels #bridetobe #weddingideas #etsywedding #digitalinvite #weddinginspiration",
+]
+REELS_PER_RUN = 2   # daily cadence = 2/day
+
+
+# --- Per-product-type caption copy (IG clean; tags only for TikTok/Shorts) --
+# Instagram hashtags are dead for reach in 2026 (the algorithm reads the content
+# itself), so IG captions stay clean with 1-2 natural keywords. TikTok & YouTube
+# still use tags/keywords for search.
+PRODUCT_COPY = {
+    "save_the_date": {
+        "keyword": "animated save the date",
+        "value": "An animated save the date your guests will actually open \u2014 editable in Canva, ready in minutes.",
+        "tiktok_tags": ["savethedate", "animatedsavethedate", "weddingtiktok", "savethedateideas", "2026wedding"],
+        "yt_tags": ["animated save the date", "digital save the date", "wedding save the date template", "canva save the date"],
+    },
+    "wedding_website": {
+        "keyword": "wedding website template",
+        "value": "Your invitation, RSVP, schedule and love story in one link \u2014 an editable wedding website in Canva.",
+        "tiktok_tags": ["weddingwebsite", "weddingwebsitedesign", "weddingtiktok", "weddingplanning2026", "rsvp"],
+        "yt_tags": ["wedding website template", "canva wedding website", "digital wedding website", "wedding rsvp website"],
+    },
+    "invitation": {
+        "keyword": "animated wedding invitation",
+        "value": "An editable, animated wedding invitation \u2014 change names, dates and colours in minutes.",
+        "tiktok_tags": ["weddinginvitation", "digitalweddinginvitation", "animatedinvitation", "weddingtiktok"],
+        "yt_tags": ["animated wedding invitation", "digital wedding invitation", "canva wedding invitation"],
+    },
+    "default": {
+        "keyword": "editable wedding stationery",
+        "value": "Editable, animated wedding stationery \u2014 personalise it in minutes, no designer needed.",
+        "tiktok_tags": ["wedding", "weddingstationery", "weddingtiktok", "canvatemplate", "2026wedding"],
+        "yt_tags": ["wedding stationery", "canva wedding template", "digital wedding"],
+    },
+}
+
+
+def product_category(path):
+    """Detect product type from its folder or filename (works for EN + UA)."""
+    s = (os.path.basename(os.path.dirname(path)) + " " + os.path.basename(path)).lower()
+    if any(k in s for k in ["save-the-date", "save the date", "savethedate", "std", "save", "\u0434\u0430\u0442\u0430"]):
+        return "save_the_date"
+    if any(k in s for k in ["website", "site", "\u0441\u0430\u0439\u0442"]):
+        return "wedding_website"
+    if any(k in s for k in ["invitation", "invite", "rsvp", "\u0437\u0430\u043f\u0440\u043e\u0448"]):
+        return "invitation"
+    return "default"

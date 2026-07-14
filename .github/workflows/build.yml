@@ -2,7 +2,7 @@ name: build-content
 
 on:
   schedule:
-    - cron: "0 6 * * 1"      # every Monday 06:00 UTC (keeps queue fresh)
+    - cron: "0 6 * * *"      # daily 06:00 UTC -> 2 reels/day via rotation backlog
   workflow_dispatch: {}
 
 concurrency:
