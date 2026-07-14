@@ -153,10 +153,11 @@ def assemble_personalize(clip, hook, out_dir, slug):
     brand CTA. The recording fills 9:16 (cover-crop)."""
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    vf, tmp = _hook_vf(out_dir, slug, hook, y0=150)
+    vf, tmp = _hook_vf(out_dir, slug, hook, y0=150, enable="lt(t,4)")
     part = os.path.join(out_dir, f".{slug}_p.mp4")
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
-          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,{vf}",
+          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+          f"setpts=PTS/{C.PERSONALIZE_SPEED},fps=30,setsar=1,{vf}",
           "-an", "-r", "30", "-pix_fmt", "yuv420p", part])
     cta = _cta_part(out_dir, slug)
     pdur = _dur(part)

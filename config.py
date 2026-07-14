@@ -156,6 +156,7 @@ def product_category(path):
 # --- Personalize-With-Me reels (screen recordings of editing) --------------
 INPUT_PERSONALIZE = "input/personalize"      # Dropbox folder "Personalise with me"
 PERSONALIZE_EVERY_DAYS = 2                    # post one every 2 days
+PERSONALIZE_SPEED = 5                         # speed up the editing recording 5x
 PERSONALIZE_HOOKS = [
     "Watch me personalize this in 60 seconds",
     "Type your names. Add your date. Send it.",
