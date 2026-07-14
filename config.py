@@ -106,7 +106,7 @@ REEL_HASHTAG_SETS = [
     "#savethedate #weddingstationery #canvatemplate #weddinginspo #engaged #weddinginvites #2026wedding",
     "#weddinginvitation #weddingreels #bridetobe #weddingideas #etsywedding #digitalinvite #weddinginspiration",
 ]
-REELS_PER_RUN = 2   # daily cadence = 2/day
+REELS_PER_RUN = 1   # 1/day while phone-reveal is the only reel type
 
 
 # --- Per-product-type caption copy (IG clean; tags only for TikTok/Shorts) --
