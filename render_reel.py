@@ -146,3 +146,28 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug):
 def listing_link_from_filename(filename):
     m = re.search(r"(\d{8,})", filename)
     return f"{C.ETSY_SHOP}/listing/{m.group(1)}" if m else C.ETSY_SHOP
+
+
+def assemble_personalize(clip, hook, out_dir, slug):
+    """Personalize-With-Me: a screen recording of editing the template -> hook ->
+    brand CTA. The recording fills 9:16 (cover-crop)."""
+    os.makedirs(out_dir, exist_ok=True)
+    reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
+    vf, tmp = _hook_vf(out_dir, slug, hook, y0=150)
+    part = os.path.join(out_dir, f".{slug}_p.mp4")
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
+          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,{vf}",
+          "-an", "-r", "30", "-pix_fmt", "yuv420p", part])
+    cta = _cta_part(out_dir, slug)
+    pdur = _dur(part)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", part, "-i", cta, "-filter_complex",
+          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={round(pdur - 0.5, 2)}[v]",
+          "-map", "[v]", "-r", "30", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "20",
+          "-movflags", "+faststart", reel])
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.2", "-i", reel, "-frames:v", "1", cover])
+    for t in tmp + [part, cta]:
+        try:
+            os.remove(t)
+        except OSError:
+            pass
+    return reel, cover

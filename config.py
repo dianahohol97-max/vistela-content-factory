@@ -151,3 +151,16 @@ def product_category(path):
     if any(k in s for k in ["invitation", "invite", "rsvp", "\u0437\u0430\u043f\u0440\u043e\u0448"]):
         return "invitation"
     return "default"
+
+
+# --- Personalize-With-Me reels (screen recordings of editing) --------------
+INPUT_PERSONALIZE = "input/personalize"      # Dropbox folder "Personalise with me"
+PERSONALIZE_EVERY_DAYS = 2                    # post one every 2 days
+PERSONALIZE_HOOKS = [
+    "Watch me personalize this in 60 seconds",
+    "Type your names. Add your date. Send it.",
+    "POV: you found a wedding invitation you can edit yourself",
+    "No designer needed \u2014 just add your details",
+    "Turning this template into our wedding invitation",
+    "Here's how easy it is to make it yours",
+]

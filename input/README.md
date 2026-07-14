@@ -7,6 +7,7 @@ factory reads these on each build and assembles finished Reels.
 templates/          Canva MP4 exports of animated templates  (Hook->Reveal, Before/After, This-or-that)
 screen-recordings/  editing screen-recordings (Personalize-With-Me) + website scrolls
 wedding-scenes/     wedding footage for scene->reveal   (source: stock-licensed / AI / UGC — tbd)
+personalize/        screen recordings of editing a template (Personalise With Me rubric)
 ```
 
 **Naming:** end the filename with the Etsy listing id so the caption links to the

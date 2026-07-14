@@ -153,11 +153,55 @@ def build_reels():
     return items
 
 
+def build_personalize():
+    """Personalize-With-Me rubric: one screen-recording reel every
+    PERSONALIZE_EVERY_DAYS, oldest-clip-first with a rotating hook."""
+    import re
+    items = []
+    clips = sorted(glob.glob(os.path.join(ROOT, C.INPUT_PERSONALIZE, "**", "*.mp4"), recursive=True))
+    if not clips:
+        return items
+    today = dt.date.today()
+    if today.toordinal() % C.PERSONALIZE_EVERY_DAYS != 0:   # every N days
+        return items
+    out_dir = os.path.join(ROOT, "output", "reels")
+    clip, hook = ROT.next_single(ROOT, clips, C.PERSONALIZE_HOOKS, "pwm", today)
+    base = os.path.splitext(os.path.basename(clip))[0]
+    slug = re.sub(r"[^a-z0-9]+", "-", f"pwm-{base}-{today.isoformat()}".lower()).strip("-")
+    reel, cover = RR.assemble_personalize(clip, hook, out_dir, slug)
+    link = RR.listing_link_from_filename(base)
+    copy = C.PRODUCT_COPY[C.product_category(clip)]
+    kw = copy["keyword"]
+    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio (@vistelaco).")
+    tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
+    yt_desc = f"{copy['value']} Shop this {kw} from VistelaCo on Etsy: {link}"
+    items.append({
+        "id": f"REEL_{slug}",
+        "channels": ["instagram_reel", "youtube_short", "tiktok"],
+        "format": "video",
+        "category": C.product_category(clip),
+        "rubric": "personalize_with_me",
+        "title": hook,
+        "video_url": raw(os.path.relpath(reel, ROOT)),
+        "cover_url": raw(os.path.relpath(cover, ROOT)),
+        "caption": ig,
+        "caption_tiktok": tiktok,
+        "yt_description": yt_desc,
+        "yt_tags": copy["yt_tags"],
+        "tiktok_tags": copy["tiktok_tags"],
+        "link": link,
+        "share_to_feed": True,
+        "status": "ready",
+    })
+    _prune_reels(out_dir, keep=8)
+    return items
+
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     pin_items = build_pins()
     car_items = build_carousels()
-    reel_items = build_reels()
+    reel_items = build_reels() + build_personalize()
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
         json.dump(pin_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:

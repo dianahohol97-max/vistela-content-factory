@@ -89,3 +89,24 @@ def next_pairs(root, scenes, products, hooks, n, today=None):
 
     _save(root, log)
     return chosen
+
+
+def next_single(root, clips, hooks, prefix, today=None):
+    """Pick the single clip that has waited longest (oldest-first) and rotate its
+    hook. Used for un-paired reel types like Personalize-With-Me. Logs under
+    'single:<prefix>'."""
+    today = today or dt.date.today()
+    log = _load(root)
+    store = log.setdefault(f"single:{prefix}", {})
+    cname = {c: os.path.basename(c) for c in clips}
+
+    def score(c):
+        rec = store.get(cname[c], {})
+        return (rec.get("count", 0), rec.get("last") or "0000-00-00")
+
+    clip = sorted(clips, key=score)[0]
+    rec = store.get(cname[clip], {"count": 0, "last": None, "last_hook": -1})
+    hook_i = (rec.get("last_hook", -1) + 1) % len(hooks)
+    store[cname[clip]] = {"last": today.isoformat(), "count": rec.get("count", 0) + 1, "last_hook": hook_i}
+    _save(root, log)
+    return clip, hooks[hook_i]
