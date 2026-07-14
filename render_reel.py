@@ -1,126 +1,145 @@
-"""Reel assembler. Two formats:
-- assemble(): Hook -> Reveal  (product clip + hook)
-- assemble_scene_reveal(): wedding scene (+hook) -> product reveal -> CTA
-Hook text is centred, no box, white with black outline + shadow (video-legible)."""
+"""Reel assembler for the VistelaCo factory.
+
+Main format = scene -> phone reveal -> brand CTA:
+  wedding scene (+hook) --xfade--> product playing in a realistic phone (on a
+  blurred scene bg, full invitation with matched-cream fill) --xfade--> emerald
+  brand CTA. Silent (trending audio added in-app at publish).
+
+Screen position and the invitation's background colour are detected
+automatically, so swapping assets/phone_mockup.png or the product still works.
+"""
 import os
 import re
 import subprocess
 import textwrap
+import numpy as np
+from PIL import Image, ImageDraw
 import config as C
 
 W, H = 1080, 1920
+_BBOX = None  # cached mockup screen bbox
 
 
-def _hx(c):
-    return c.replace("#", "0x")
+def _hx(c): return c.replace("#", "0x")
+def _wrap(t, width=24): return textwrap.wrap(t.upper(), width=width)
+def _run(a): subprocess.run(a, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
 
-def _wrap(t, width=24):
-    return textwrap.wrap(t.upper(), width=width)
+def _dur(path):
+    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                        "-of", "csv=p=0", path], capture_output=True, text=True)
+    return float(r.stdout.strip())
 
 
-def _run(args):
-    subprocess.run(args, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+def screen_bbox():
+    """Enclosed transparent region of the phone mockup = the screen."""
+    global _BBOX
+    if _BBOX: return _BBOX
+    im = Image.open(C.PHONE_MOCKUP).convert("RGBA")
+    a = im.split()[3].point(lambda v: 255 if v < 12 else 0).convert("L")
+    ImageDraw.floodfill(a, (0, 0), 128, thresh=0)         # mark border-connected (bg)
+    arr = np.array(a); ys, xs = np.where(arr == 255)       # enclosed = screen
+    _BBOX = (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
+    return _BBOX
 
 
-def _norm(mode):
-    """cover = fill+crop (for footage); pad = contain on cream (for designs)."""
-    cream = _hx(C.BG)
-    if mode == "cover":
-        return f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1"
-    return (f"scale={W}:{H}:force_original_aspect_ratio=decrease,"
-            f"pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color={cream},setsar=1")
+def _sample_cream(clip, out_dir):
+    """Average edge colour of the invitation -> seamless fill for the screen."""
+    tmp = os.path.join(out_dir, ".cream.jpg")
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "8", "-i", clip, "-frames:v", "1", tmp])
+    im = np.array(Image.open(tmp).convert("RGB"))
+    edges = np.vstack([im[:20].reshape(-1, 3), im[-20:].reshape(-1, 3),
+                       im[:, :20].reshape(-1, 3), im[:, -20:].reshape(-1, 3)])
+    r, g, b = edges.mean(0).astype(int)
+    os.remove(tmp)
+    return f"0x{r:02X}{g:02X}{b:02X}"
 
 
-def _hook_filters(out_dir, slug, hook, fontsize=42, y0=230, enable="lt(t,3.0)"):
-    """Per-line centred hook (each line in its own textfile => true centring),
-    no box, white + black outline + soft shadow."""
-    lines = _wrap(hook)
-    lh = int(fontsize * 1.42)
+def _hook_vf(out_dir, slug, hook, fontsize=44, y0=95, enable="1"):
+    """Per-line centred hook, white + black outline (video-legible)."""
     files, parts = [], []
-    for i, ln in enumerate(lines):
+    for i, ln in enumerate(_wrap(hook)):
         p = os.path.join(out_dir, f".{slug}_h{i}.txt")
-        with open(p, "w") as f:
-            f.write(ln)
-        files.append(p)
-        y = y0 + i * lh
-        parts.append(
-            f"drawtext=fontfile={C.VIDEO_FONT}:textfile={p}:fontcolor=white:"
-            f"fontsize={fontsize}:borderw=5:bordercolor=black:shadowcolor=black@0.55:"
-            f"shadowx=2:shadowy=2:x=(w-text_w)/2:y={y}:enable='{enable}'")
+        open(p, "w").write(ln); files.append(p)
+        y = y0 + i * int(fontsize * 1.25)
+        parts.append(f"drawtext=fontfile={C.VIDEO_FONT}:textfile={p}:fontcolor=white:"
+                     f"fontsize={fontsize}:borderw=5:bordercolor=black:shadowcolor=black@0.5:"
+                     f"shadowx=2:shadowy=2:x=(w-text_w)/2:y={y}:enable='{enable}'")
     return ",".join(parts), files
 
 
-def _cta(out_dir, slug):
+def _scene_part(scene, hook, out_dir, slug):
+    out = os.path.join(out_dir, f".{slug}_scene.mp4")
+    vf, tmp = _hook_vf(out_dir, slug, hook, y0=235)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-vf",
+          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,{vf}",
+          "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
+    for t in tmp: os.remove(t)
+    return out, _dur(out)
+
+
+def _phone_part(scene, product, out_dir, slug, dur):
+    sx0, sy0, sx1, sy1 = screen_bbox(); sw, sh = sx1 - sx0, sy1 - sy0
+    inv_h = int(sw * 16 / 9); oy = (sh - inv_h) // 2          # fit-by-width, centred
+    cream = _sample_cream(product, out_dir)
+    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=95)
+    out = os.path.join(out_dir, f".{slug}_phone.mp4")
+    fc = (
+        f"[2:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        f"gblur=sigma=30,eq=brightness=-0.16,setsar=1,fps=30,trim=duration={dur}[obg];"
+        f"color=c={cream}:s={sw}x{sh}:r=30,trim=duration={dur}[scrbg];"
+        f"[0:v]trim=duration={dur},scale={sw}:{inv_h},setsar=1,fps=30[inv];"
+        f"[scrbg][inv]overlay=0:{oy}[screen];"
+        f"color=c=black@0.0:s={W}x{H}:r=30,trim=duration={dur},format=rgba[tb];"
+        f"[tb][screen]overlay={sx0}:{sy0}[pl];"
+        f"[pl][1:v]overlay=0:0[phone];"
+        f"[phone]scale=864:1536,setsar=1[phs];"
+        f"[obg][phs]overlay=108:250[c1];"
+        f"[c1]{vf}[v]"
+    )
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product, "-loop", "1", "-i", C.PHONE_MOCKUP,
+          "-stream_loop", "-1", "-i", scene, "-filter_complex", fc, "-map", "[v]",
+          "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
+    for t in tmp: os.remove(t)
+    return out
+
+
+def _cta_part(out_dir, slug):
     AB, CG = C.VIDEO_FONT, C.FONT
-    cream, ink, muted = _hx(C.BG), _hx(C.INK), _hx(C.MUTED)
-    cta = os.path.join(out_dir, f".{slug}_cta.mp4")
+    em, iv, br = _hx(C.EMERALD), _hx(C.IVORY), _hx(C.BRASS)
+    out = os.path.join(out_dir, f".{slug}_cta.mp4")
     vf = (
-        f"drawtext=fontfile={CG}:text='YOUR WEDDING\\, YOUR WAY':fontcolor={muted}:fontsize=40:x=(w-tw)/2:y=690,"
-        f"drawtext=fontfile={AB}:text='EDITABLE WEDDING':fontcolor={ink}:fontsize=62:x=(w-tw)/2:y=770,"
-        f"drawtext=fontfile={AB}:text='INVITATION & WEBSITE':fontcolor={ink}:fontsize=62:x=(w-tw)/2:y=852,"
-        f"drawtext=fontfile={CG}:text='@vistelaco   \u00b7   on Etsy':fontcolor={ink}:fontsize=54:x=(w-tw)/2:y=992,"
-        f"drawtext=fontfile={AB}:text='EDIT  \u00b7  DOWNLOAD  \u00b7  SEND':fontcolor={muted}:fontsize=28:x=(w-tw)/2:y=1078"
+        f"drawbox=x=(iw-150)/2:y=946:w=150:h=2:color={br}@0.9:t=fill,"
+        f"drawtext=fontfile={CG}:text='YOUR WEDDING\\, YOUR WAY':fontcolor={br}:fontsize=40:x=(w-tw)/2:y=690,"
+        f"drawtext=fontfile={AB}:text='EDITABLE WEDDING':fontcolor={iv}:fontsize=62:x=(w-tw)/2:y=772,"
+        f"drawtext=fontfile={AB}:text='INVITATION & WEBSITE':fontcolor={iv}:fontsize=62:x=(w-tw)/2:y=854,"
+        f"drawtext=fontfile={CG}:text='@vistelaco   \u00b7   on Etsy':fontcolor={iv}:fontsize=56:x=(w-tw)/2:y=980,"
+        f"drawtext=fontfile={AB}:text='E D I T   \u00b7   D O W N L O A D   \u00b7   S E N D':fontcolor={br}:fontsize=28:x=(w-tw)/2:y=1076"
     )
     _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi",
-          "-i", f"color=c={cream}:s={W}x{H}:d=2.4:r=30", "-vf", vf, "-pix_fmt", "yuv420p", cta])
-    return cta
+          "-i", f"color=c={em}:s={W}x{H}:d=2.6:r=30", "-vf", vf, "-pix_fmt", "yuv420p", out])
+    return out
 
 
-def _concat(parts, out):
-    inputs = []
-    for p in parts:
-        inputs += ["-i", p]
-    n = len(parts)
-    fc = "".join(f"[{i}:v]" for i in range(n)) + f"concat=n={n}:v=1:a=0[v]"
-    _run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", fc,
-          "-map", "[v]", "-r", "30", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "20", out])
-
-
-def _cover(reel, out, ss="1.2"):
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", ss, "-i", reel, "-frames:v", "1", out])
-
-
-def assemble(input_clip, hook, out_dir, slug):
-    """Hook -> Reveal: product clip with hook on the open + CTA."""
+def assemble_phone_reveal(scene, product, hook, out_dir, slug):
+    """scene(+hook) -> phone reveal -> brand CTA, with crossfades. Returns (reel, cover)."""
     os.makedirs(out_dir, exist_ok=True)
-    reel = os.path.join(out_dir, f"{slug}.mp4")
-    cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    hookf, tmp = _hook_filters(out_dir, slug, hook, enable="lt(t,3.0)")
-    part_a = os.path.join(out_dir, f".{slug}_a.mp4")
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", input_clip, "-vf",
-          f"{_norm('pad')},{hookf}", "-r", "30", "-pix_fmt", "yuv420p", "-an", part_a])
-    cta = _cta(out_dir, slug)
-    _concat([part_a, cta], reel)
-    _cover(reel, cover)
-    for t in tmp + [part_a, cta]:
-        try:
-            os.remove(t)
-        except OSError:
-            pass
-    return reel, cover
-
-
-def assemble_scene_reveal(scene_clip, product_clip, hook, out_dir, slug):
-    """Scene -> Reveal: wedding footage (+hook) -> product reveal -> CTA."""
-    os.makedirs(out_dir, exist_ok=True)
-    reel = os.path.join(out_dir, f"{slug}.mp4")
-    cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    hookf, tmp = _hook_filters(out_dir, slug, hook, enable="1")  # hook over the whole scene
-    part_s = os.path.join(out_dir, f".{slug}_s.mp4")
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene_clip, "-vf",
-          f"{_norm('cover')},{hookf}", "-r", "30", "-pix_fmt", "yuv420p", "-an", part_s])
-    part_p = os.path.join(out_dir, f".{slug}_p.mp4")
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product_clip, "-vf",
-          _norm('pad'), "-r", "30", "-pix_fmt", "yuv420p", "-an", part_p])
-    cta = _cta(out_dir, slug)
-    _concat([part_s, part_p, cta], reel)
-    _cover(reel, cover, ss="1.0")
-    for t in tmp + [part_s, part_p, cta]:
-        try:
-            os.remove(t)
-        except OSError:
-            pass
+    reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
+    scn, sdur = _scene_part(scene, hook, out_dir, slug)
+    pdur = _dur(product)
+    phn = _phone_part(scene, product, out_dir, slug, pdur)
+    cta = _cta_part(out_dir, slug)
+    f1 = round(sdur - 0.5, 2)
+    f2 = round(sdur + pdur - 0.5 - 0.5, 2)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scn, "-i", phn, "-i", cta, "-filter_complex",
+          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={f1}[a];"
+          f"[a][2:v]xfade=transition=fade:duration=0.5:offset={f2}[v]",
+          "-map", "[v]", "-r", "30", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "20",
+          "-movflags", "+faststart", reel])
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.4", "-i", reel, "-frames:v", "1", cover])
+    for t in (scn, phn, cta):
+        try: os.remove(t)
+        except OSError: pass
     return reel, cover
 
 

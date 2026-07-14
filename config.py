@@ -91,3 +91,9 @@ REEL_HOOKS = [
 
 REEL_HASHTAGS = ("#weddinginvitation #digitalweddinginvitation #animatedsavethedate "
                  "#weddingwebsite #weddingtiktok #modernbride #weddingplanning2026")
+
+
+# --- Brand palette (per brand book) + phone-reveal assets ------------------
+EMERALD = "#1E4736"; IVORY = "#F5EFE2"; BRASS = "#C7A76B"; SAGE = "#8AA184"
+PHONE_MOCKUP = "assets/phone_mockup.png"       # realistic phone, transparent screen
+PHONE_HOOK   = "IMAGINE OPENING THIS ON YOUR PHONE"

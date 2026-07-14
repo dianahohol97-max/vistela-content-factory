@@ -84,18 +84,23 @@ def build_reels():
     the same template never repeats the same hook (anti-repeat). Reads clips from
     input/templates/ (synced from Dropbox by the workflow, or committed)."""
     items = []
-    clips = sorted(glob.glob(os.path.join(ROOT, C.INPUT_TEMPLATES, "*.mp4")))
-    if not clips:
+    products = sorted(glob.glob(os.path.join(ROOT, C.INPUT_TEMPLATES, "*.mp4")))
+    scenes = sorted(glob.glob(os.path.join(ROOT, C.INPUT_SCENES, "*.mp4")))
+    if not products:
         return items
     week = dt.date.today().isocalendar()[1]
     out_dir = os.path.join(ROOT, "output", "reels")
     import re
-    for clip in clips:
+    for clip in products:
         base = os.path.splitext(os.path.basename(clip))[0]
         slug = re.sub(r"[^a-z0-9]+", "-", base.lower()).strip("-")
         h = int(hashlib.md5(base.encode()).hexdigest(), 16)
         hook = C.REEL_HOOKS[(week + h) % len(C.REEL_HOOKS)]
-        reel, cover = RR.assemble(clip, hook, out_dir, slug)
+        if scenes:
+            scene = scenes[(week + h) % len(scenes)]
+            reel, cover = RR.assemble_phone_reveal(scene, clip, hook, out_dir, slug)
+        else:
+            reel, cover = RR.assemble(clip, hook, out_dir, slug)
         link = RR.listing_link_from_filename(base)
         caption = (f"{hook} \U0001F90D\n\n"
                    f"Editable in Canva, instant download \u2014 change names, dates & "
