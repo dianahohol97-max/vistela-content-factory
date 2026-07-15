@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "id": "REEL_11925672-2160-3840-30fps-save-the-date-1-0-2026-07-15",
+    "channels": [
+      "instagram_reel",
+      "youtube_short",
+      "tiktok"
+    ],
+    "format": "video",
+    "category": "save_the_date",
+    "title": "POV: you found a wedding invitation you can personalize in minutes",
+    "video_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/reels/11925672-2160-3840-30fps-save-the-date-1-0-2026-07-15.mp4",
+    "cover_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/reels/11925672-2160-3840-30fps-save-the-date-1-0-2026-07-15_cover.jpg",
+    "caption": "POV: you found a wedding invitation you can personalize in minutes 🤍\n\nAn animated save the date your guests will actually open — editable in Canva, ready in minutes.\n\nThis animated save the date is on Etsy — link in bio (@vistelaco).",
+    "caption_tiktok": "POV: you found a wedding invitation you can personalize in minutes 🤍\n\nAn animated save the date your guests will actually open — editable in Canva, ready in minutes.\n\nThis animated save the date is on Etsy — link in bio (@vistelaco).\n\n#savethedate #animatedsavethedate #weddingtiktok #savethedateideas #2026wedding",
+    "yt_description": "An animated save the date your guests will actually open — editable in Canva, ready in minutes. Shop this animated save the date from VistelaCo on Etsy: https://vistelaco.etsy.com",
+    "yt_tags": [
+      "animated save the date",
+      "digital save the date",
+      "wedding save the date template",
+      "canva save the date"
+    ],
+    "tiktok_tags": [
+      "savethedate",
+      "animatedsavethedate",
+      "weddingtiktok",
+      "savethedateideas",
+      "2026wedding"
+    ],
+    "link": "https://vistelaco.etsy.com",
+    "share_to_feed": true,
+    "status": "ready"
+  }
+]
