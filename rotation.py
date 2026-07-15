@@ -38,9 +38,10 @@ def _days_since(iso, today):
     return (today - dt.date.fromisoformat(iso)).days
 
 
-def next_pairs(root, scenes, products, hooks, n, today=None):
-    """Pick n (scene, product, hook) tuples and update the log. `scenes` and
-    `products` are lists of file paths; identity is the basename."""
+def next_pairs(root, scenes, products, n, today=None):
+    """Pick n (scene, product, hook_index) tuples and update the log. The caller
+    maps hook_index to a product-type-specific hook list. `scenes` and
+    `products` are file paths; identity is the basename."""
     today = today or dt.date.today()
     log = _load(root)
     pairs, scenes_log = log["pairs"], log["scenes"]
@@ -52,7 +53,6 @@ def next_pairs(root, scenes, products, hooks, n, today=None):
     for _ in range(n):
         picked_scenes = {sname[c[0]] for c in chosen}
         picked_products = {pname[c[1]] for c in chosen}
-        used_hooks = {c[2] for c in chosen}
 
         def key(sp):
             return f"{sname[sp[0]]}|{pname[sp[1]]}"
@@ -68,9 +68,9 @@ def next_pairs(root, scenes, products, hooks, n, today=None):
             return pair_ok and scene_ok
 
         pool = [sp for sp in all_pairs if usable(sp, strict=True)]
-        if not pool:                                          # small library: allow same product
+        if not pool:
             pool = [sp for sp in all_pairs if usable(sp, strict=False)]
-        if not pool:                                          # tiny library: just avoid same scene
+        if not pool:
             pool = [sp for sp in all_pairs if sname[sp[0]] not in picked_scenes] or all_pairs
 
         def score(sp):
@@ -79,11 +79,8 @@ def next_pairs(root, scenes, products, hooks, n, today=None):
 
         sp = sorted(pool, key=score)[0]
         rec = pairs.get(key(sp), {"count": 0, "last": None, "last_hook": -1})
-        hook_i = (rec.get("last_hook", -1) + 1) % len(hooks)
-        tries = 0
-        while hooks[hook_i] in used_hooks and tries < len(hooks):   # different hook within a batch
-            hook_i = (hook_i + 1) % len(hooks); tries += 1
-        chosen.append((sp[0], sp[1], hooks[hook_i]))
+        hook_i = (rec.get("last_hook", -1) + 1) % 1000        # rotate; caller does % len(hooks)
+        chosen.append((sp[0], sp[1], hook_i))
         pairs[key(sp)] = {"last": today.isoformat(), "count": rec.get("count", 0) + 1, "last_hook": hook_i}
         scenes_log[sname[sp[0]]] = today.isoformat()
 

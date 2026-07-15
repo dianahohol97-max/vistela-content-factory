@@ -108,24 +108,28 @@ def build_reels():
     today = dt.date.today()
 
     if scenes:
-        jobs = ROT.next_pairs(ROOT, scenes, products, C.REEL_HOOKS, C.REELS_PER_RUN, today)
+        jobs = ROT.next_pairs(ROOT, scenes, products, C.REELS_PER_RUN, today)
     else:
         week = today.isocalendar()[1]
         jobs = []
         for product in products[:C.REELS_PER_RUN]:
             h = int(hashlib.md5(os.path.basename(product).encode()).hexdigest(), 16)
-            jobs.append((None, product, C.REEL_HOOKS[(week + h) % len(C.REEL_HOOKS)]))
+            jobs.append((None, product, week + h))
 
-    for scene, product, hook in jobs:
+    for scene, product, hook_i in jobs:
+        cat = C.product_category(product)
         base = os.path.splitext(os.path.basename(product))[0]
         sbase = os.path.splitext(os.path.basename(scene))[0] if scene else "solo"
+        shooks = C.SHOWCASE_HOOKS.get(cat, C.SHOWCASE_HOOKS["default"])
+        offset = int(hashlib.md5((sbase + base).encode()).hexdigest(), 16)
+        hook = shooks[(hook_i + offset) % len(shooks)]
         slug = re.sub(r"[^a-z0-9]+", "-", f"{sbase}-{base}-{today.isoformat()}".lower()).strip("-")
         if scene:
             reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug)
         else:
             reel, cover = RR.assemble(product, hook, out_dir, slug)
         link = RR.listing_link_from_filename(base)
-        copy = C.PRODUCT_COPY[C.product_category(product)]
+        copy = C.PRODUCT_COPY[cat]
         kw = copy["keyword"]
         # Instagram: clean, no hashtags, one natural keyword + CTA to bio
         ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\n"

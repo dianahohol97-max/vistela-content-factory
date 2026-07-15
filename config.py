@@ -165,3 +165,38 @@ PERSONALIZE_HOOKS = [
     "Turning this template into our wedding invitation",
     "Here's how easy it is to make it yours",
 ]
+
+
+# Showcase hooks for the phone-reveal format (product shown on a phone, not
+# edited). These set up the "imagine opening this on your phone" reveal, so they
+# must be about receiving/opening/showing the product — never about editing
+# (that language belongs to PERSONALIZE_HOOKS).
+SHOWCASE_HOOKS = {
+    "save_the_date": [
+        "POV: you refuse to send a boring save the date",
+        "The save the date your guests will screenshot",
+        "Imagine your guests opening this save the date",
+        "This is how your save the date should arrive",
+        "Your guests are about to receive THIS",
+    ],
+    "wedding_website": [
+        "POV: your guests just opened your wedding website",
+        "Imagine sending your guests a link this beautiful",
+        "Your whole wedding \u2014 in one link",
+        "The wedding website your guests will actually use",
+        "This is how your guests will RSVP",
+    ],
+    "invitation": [
+        "POV: your guests just opened your wedding invitation",
+        "Imagine sending THIS to your guests",
+        "The wedding invite your guests will screenshot",
+        "This is how your invitation should arrive",
+        "Your guests are about to open THIS",
+    ],
+    "default": [
+        "POV: your guests just opened your wedding invite",
+        "Imagine sending THIS to your guests",
+        "The wedding invite your guests won't forget",
+        "This is how your wedding invite should arrive",
+    ],
+}
