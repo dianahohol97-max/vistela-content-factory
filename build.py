@@ -133,7 +133,7 @@ def build_reels():
         kw = copy["keyword"]
         # Instagram: clean, no hashtags, one natural keyword + CTA to bio
         ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\n"
-              f"This {kw} is on Etsy \u2014 link in bio (@vistelaco).")
+              f"This {kw} is on Etsy \u2014 link in bio.")
         tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
         yt_desc = f"{copy['value']} Shop this {kw} from VistelaCo on Etsy: {link}"
         items.append({
@@ -176,7 +176,7 @@ def build_personalize():
     link = RR.listing_link_from_filename(base)
     copy = C.PRODUCT_COPY[C.product_category(clip)]
     kw = copy["keyword"]
-    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio (@vistelaco).")
+    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio.")
     tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
     yt_desc = f"{copy['value']} Shop this {kw} from VistelaCo on Etsy: {link}"
     items.append({

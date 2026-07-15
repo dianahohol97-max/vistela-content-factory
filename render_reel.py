@@ -70,7 +70,7 @@ def _hook_vf(out_dir, slug, hook, fontsize=44, y0=95, enable="1"):
 
 def _scene_part(scene, hook, out_dir, slug):
     out = os.path.join(out_dir, f".{slug}_scene.mp4")
-    vf, tmp = _hook_vf(out_dir, slug, hook, y0=235)
+    vf, tmp = _hook_vf(out_dir, slug, hook, y0=330)
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-vf",
           f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,{vf}",
           "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
@@ -82,7 +82,7 @@ def _phone_part(scene, product, out_dir, slug, dur):
     sx0, sy0, sx1, sy1 = screen_bbox(); sw, sh = sx1 - sx0, sy1 - sy0
     inv_h = int(sw * 16 / 9); oy = (sh - inv_h) // 2          # fit-by-width, centred
     cream = _sample_cream(product, out_dir)
-    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=95)
+    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=140)
     out = os.path.join(out_dir, f".{slug}_phone.mp4")
     fc = (
         f"[2:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
@@ -113,7 +113,7 @@ def _cta_part(out_dir, slug):
         f"drawtext=fontfile={CG}:text='YOUR WEDDING\\, YOUR WAY':fontcolor={br}:fontsize=40:x=(w-tw)/2:y=690,"
         f"drawtext=fontfile={AB}:text='EDITABLE WEDDING':fontcolor={iv}:fontsize=62:x=(w-tw)/2:y=772,"
         f"drawtext=fontfile={AB}:text='INVITATION & WEBSITE':fontcolor={iv}:fontsize=62:x=(w-tw)/2:y=854,"
-        f"drawtext=fontfile={CG}:text='@vistelaco   \u00b7   on Etsy':fontcolor={iv}:fontsize=56:x=(w-tw)/2:y=980,"
+        f"drawtext=fontfile={CG}:text='Shop on Etsy   \u00b7   link in bio':fontcolor={iv}:fontsize=56:x=(w-tw)/2:y=980,"
         f"drawtext=fontfile={AB}:text='E D I T   \u00b7   D O W N L O A D   \u00b7   S E N D':fontcolor={br}:fontsize=28:x=(w-tw)/2:y=1076"
     )
     _run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi",
@@ -153,7 +153,7 @@ def assemble_personalize(clip, hook, out_dir, slug):
     brand CTA. The recording fills 9:16 (cover-crop)."""
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    vf, tmp = _hook_vf(out_dir, slug, hook, y0=150, enable="lt(t,4)")
+    vf, tmp = _hook_vf(out_dir, slug, hook, y0=200, enable="lt(t,4)")
     part = os.path.join(out_dir, f".{slug}_p.mp4")
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
           f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
