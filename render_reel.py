@@ -68,11 +68,15 @@ def _hook_vf(out_dir, slug, hook, fontsize=44, y0=95, enable="1"):
     return ",".join(parts), files
 
 
+SCENE_MAX_S = 3.5   # wedding intro is a hook, not the show
+
+
 def _scene_part(scene, hook, out_dir, slug):
     out = os.path.join(out_dir, f".{slug}_scene.mp4")
     vf, tmp = _hook_vf(out_dir, slug, hook, y0=330)
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-vf",
-          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,{vf}",
+          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
+          f"trim=duration={SCENE_MAX_S},{vf}",
           "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
     for t in tmp: os.remove(t)
     return out, _dur(out)
