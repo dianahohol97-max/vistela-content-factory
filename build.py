@@ -29,6 +29,17 @@ def raw(path_from_root):
     return f"{C.RAW}/{path_from_root.replace(os.sep, '/')}"
 
 
+VIDEO_EXTS = ("*.mp4", "*.mov", "*.m4v", "*.webm")
+
+
+def _videos(folder):
+    """All video files under a folder (any supported extension), recursive."""
+    files = []
+    for pat in VIDEO_EXTS:
+        files += glob.glob(os.path.join(folder, "**", pat), recursive=True)
+    return sorted(files)
+
+
 def build_pins():
     items = []
     for pal in C.PALETTES:
@@ -100,8 +111,8 @@ def build_reels():
     when no wedding scenes are available."""
     import re
     items = []
-    products = sorted(glob.glob(os.path.join(ROOT, C.INPUT_TEMPLATES, "**", "*.mp4"), recursive=True))
-    scenes = sorted(glob.glob(os.path.join(ROOT, C.INPUT_SCENES, "**", "*.mp4"), recursive=True))
+    products = _videos(os.path.join(ROOT, C.INPUT_TEMPLATES))
+    scenes = _videos(os.path.join(ROOT, C.INPUT_SCENES))
     if not products:
         return items
     out_dir = os.path.join(ROOT, "output", "reels")
@@ -162,7 +173,7 @@ def build_personalize():
     PERSONALIZE_EVERY_DAYS, oldest-clip-first with a rotating hook."""
     import re
     items = []
-    clips = sorted(glob.glob(os.path.join(ROOT, C.INPUT_PERSONALIZE, "**", "*.mp4"), recursive=True))
+    clips = _videos(os.path.join(ROOT, C.INPUT_PERSONALIZE))
     if not clips:
         return items
     today = dt.date.today()
