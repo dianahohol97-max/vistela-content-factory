@@ -79,25 +79,42 @@ def _download(token, dbx_path, dest):
 
 
 def main():
+    report = {"folders": {}}
     if not (APP_KEY and APP_SECRET and REFRESH_TOKEN):
         print("Dropbox secrets not set — skipping sync (using committed inputs).")
+        report["status"] = "no-secrets"
+        json.dump(report, open("sync_report.json", "w"), indent=1, ensure_ascii=False)
         return
     token = _access_token()
     total = 0
     for dbx_root, local_root in MAPPING:
-        for e in _list_folder(token, dbx_root):
-            if e.get(".tag") != "file" or not e["name"].lower().endswith(VIDEO_EXT):
-                continue
-            rel = e["path_display"][len(dbx_root):].lstrip("/")
-            dest = os.path.join(local_root, rel)
-            if os.path.exists(dest):
-                continue
-            try:
-                _download(token, e["path_lower"], dest)
-                total += 1
-                print(f"  + {dest}")
-            except Exception as ex:  # noqa
-                print(f"  ! {dest}: {ex}")
+        entries = _list_folder(token, dbx_root)
+        seen = []
+        for e in entries:
+            item = {"path": e.get("path_display"), "tag": e.get(".tag"),
+                    "size": e.get("size")}
+            if e.get(".tag") != "file":
+                item["action"] = "folder"
+            elif not e["name"].lower().endswith(VIDEO_EXT):
+                item["action"] = "skip-ext"
+            else:
+                rel = e["path_display"][len(dbx_root):].lstrip("/")
+                dest = os.path.join(local_root, rel)
+                if os.path.exists(dest):
+                    item["action"] = "exists"
+                else:
+                    try:
+                        _download(token, e["path_lower"], dest)
+                        total += 1
+                        item["action"] = "downloaded"
+                        print(f"  + {dest}")
+                    except Exception as ex:  # noqa
+                        item["action"] = f"error: {ex}"
+                        print(f"  ! {dest}: {ex}")
+            seen.append(item)
+        report["folders"][dbx_root] = {"entries": len(entries), "items": seen}
+    report["downloaded"] = total
+    json.dump(report, open("sync_report.json", "w"), indent=1, ensure_ascii=False)
     print(f"Dropbox sync done — {total} new file(s).")
 
 
