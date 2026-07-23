@@ -49,6 +49,10 @@ def next_pairs(root, scenes, products, n, today=None):
     pname = {p: os.path.basename(p) for p in products}
     all_pairs = [(s, p) for p in products for s in scenes]
     chosen = []
+    prod_counts = {}
+    for k, v in pairs.items():
+        pn = k.split("|", 1)[1]
+        prod_counts[pn] = prod_counts.get(pn, 0) + v.get("count", 0)
 
     for _ in range(n):
         picked_scenes = {sname[c[0]] for c in chosen}
@@ -75,9 +79,11 @@ def next_pairs(root, scenes, products, n, today=None):
 
         def score(sp):
             rec = pairs.get(key(sp), {})
-            return (rec.get("count", 0), rec.get("last") or "0000-00-00")   # never-used first, then oldest
+            return (prod_counts.get(pname[sp[1]], 0),          # least-used product first
+                    rec.get("count", 0), rec.get("last") or "0000-00-00")
 
         sp = sorted(pool, key=score)[0]
+        prod_counts[pname[sp[1]]] = prod_counts.get(pname[sp[1]], 0) + 1
         rec = pairs.get(key(sp), {"count": 0, "last": None, "last_hook": -1})
         hook_i = (rec.get("last_hook", -1) + 1) % 1000        # rotate; caller does % len(hooks)
         chosen.append((sp[0], sp[1], hook_i))
