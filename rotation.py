@@ -13,6 +13,8 @@ import json
 import os
 import datetime as dt
 
+import config as C
+
 LOG_FILE = "rotation_log.json"
 QUARANTINE_PAIR_DAYS = 21     # a pair can't repeat within this window
 QUARANTINE_SCENE_DAYS = 3     # a scene can't reappear within this window
@@ -47,12 +49,25 @@ def next_pairs(root, scenes, products, n, today=None):
     pairs, scenes_log = log["pairs"], log["scenes"]
     sname = {s: os.path.basename(s) for s in scenes}
     pname = {p: os.path.basename(p) for p in products}
+    pcat = {p: C.product_category(p) for p in products}          # path -> product type
+    bcat = {pname[p]: pcat[p] for p in products}                 # basename -> product type
     all_pairs = [(s, p) for p in products for s in scenes]
     chosen = []
     prod_counts = {}
+    # Track when each product TYPE last went out, so types alternate (save-the-date
+    # <-> website <-> invitation) instead of one type starving the others. Without
+    # this, an unused file always wins the tie on raw count, and since ties break
+    # alphabetically by path, Latin folders (Save The Date Animations) forever beat
+    # Cyrillic ones (Весільні Сайти) — every new save-the-date upload jumps the queue
+    # ahead of every website. Balancing by type first fixes that.
+    cat_last = {}
     for k, v in pairs.items():
         pn = k.split("|", 1)[1]
         prod_counts[pn] = prod_counts.get(pn, 0) + v.get("count", 0)
+        c = bcat.get(pn, "default")
+        last = v.get("last")
+        if last and last > cat_last.get(c, ""):
+            cat_last[c] = last
 
     for _ in range(n):
         picked_scenes = {sname[c[0]] for c in chosen}
@@ -79,11 +94,14 @@ def next_pairs(root, scenes, products, n, today=None):
 
         def score(sp):
             rec = pairs.get(key(sp), {})
-            return (prod_counts.get(pname[sp[1]], 0),          # least-used product first
+            cat = pcat[sp[1]]
+            return (-_days_since(cat_last.get(cat), today),    # least-recently-used TYPE first
+                    prod_counts.get(pname[sp[1]], 0),          # then least-used product file
                     rec.get("count", 0), rec.get("last") or "0000-00-00")
 
         sp = sorted(pool, key=score)[0]
         prod_counts[pname[sp[1]]] = prod_counts.get(pname[sp[1]], 0) + 1
+        cat_last[pcat[sp[1]]] = today.isoformat()              # this type just went out
         rec = pairs.get(key(sp), {"count": 0, "last": None, "last_hook": -1})
         hook_i = (rec.get("last_hook", -1) + 1) % 1000        # rotate; caller does % len(hooks)
         chosen.append((sp[0], sp[1], hook_i))
