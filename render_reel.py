@@ -82,11 +82,11 @@ def _scene_part(scene, hook, out_dir, slug):
     return out, _dur(out)
 
 
-def _phone_part(scene, product, out_dir, slug, dur):
+def _phone_part(scene, product, out_dir, slug, dur, phone_hook):
     sx0, sy0, sx1, sy1 = screen_bbox(); sw, sh = sx1 - sx0, sy1 - sy0
     inv_h = int(sw * 16 / 9); oy = (sh - inv_h) // 2          # fit-by-width, centred
     cream = _sample_cream(product, out_dir)
-    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=140)
+    vf, tmp = _hook_vf(out_dir, slug, phone_hook, y0=140)
     out = os.path.join(out_dir, f".{slug}_phone.mp4")
     fc = (
         f"[2:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
@@ -125,13 +125,16 @@ def _cta_part(out_dir, slug):
     return out
 
 
-def assemble_phone_reveal(scene, product, hook, out_dir, slug):
-    """scene(+hook) -> phone reveal -> brand CTA, with crossfades. Returns (reel, cover)."""
+def assemble_phone_reveal(scene, product, hook, out_dir, slug, phone_hook=None):
+    """scene(+hook) -> phone reveal -> brand CTA, with crossfades. Returns (reel, cover).
+    `phone_hook` is the caption over the reveal; defaults to the first PHONE_HOOKS
+    entry, but the builder rotates it so the middle of each reel varies."""
     os.makedirs(out_dir, exist_ok=True)
+    phone_hook = phone_hook or C.PHONE_HOOKS[0]
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
     scn, sdur = _scene_part(scene, hook, out_dir, slug)
     pdur = _dur(product)
-    phn = _phone_part(scene, product, out_dir, slug, pdur)
+    phn = _phone_part(scene, product, out_dir, slug, pdur, phone_hook)
     cta = _cta_part(out_dir, slug)
     f1 = round(sdur - 0.5, 2)
     f2 = round(sdur + pdur - 0.5 - 0.5, 2)

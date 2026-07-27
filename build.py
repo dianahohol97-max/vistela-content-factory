@@ -170,9 +170,13 @@ def build_reels():
         shooks = C.SHOWCASE_HOOKS.get(cat, C.SHOWCASE_HOOKS["default"])
         offset = int(hashlib.md5((sbase + base).encode()).hexdigest(), 16)
         hook = shooks[(hook_i + offset) % len(shooks)]
+        # Rotate the phone-reveal caption too, with a decorrelated offset (base+sbase,
+        # not sbase+base) so the middle caption varies independently of the opener.
+        poffset = int(hashlib.md5((base + sbase).encode()).hexdigest(), 16)
+        phone_hook = C.PHONE_HOOKS[(hook_i + poffset) % len(C.PHONE_HOOKS)]
         slug = re.sub(r"[^a-z0-9]+", "-", f"{sbase}-{base}-{today.isoformat()}".lower()).strip("-")
         if scene:
-            reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug)
+            reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug, phone_hook)
         else:
             reel, cover = RR.assemble(product, hook, out_dir, slug)
         link = RR.listing_link_from_filename(base)

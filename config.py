@@ -97,7 +97,21 @@ REEL_HASHTAGS = ("#weddinginvitation #digitalweddinginvitation #animatedsavethed
 # --- Brand palette (per brand book) + phone-reveal assets ------------------
 EMERALD = "#1E4736"; IVORY = "#F5EFE2"; BRASS = "#C7A76B"; SAGE = "#8AA184"
 PHONE_MOCKUP = "assets/phone_mockup.png"       # realistic phone, transparent screen
-PHONE_HOOK   = "IMAGINE OPENING THIS ON YOUR PHONE"
+# Caption shown over the phone-reveal moment. Rotated per reel so the middle of
+# every video isn't identical. Keep them about receiving/opening/showing on a
+# phone (never about editing — that voice belongs to PERSONALIZE_HOOKS). Short,
+# uppercase-legible, wraps to <=2 lines.
+PHONE_HOOKS = [
+    "IMAGINE OPENING THIS ON YOUR PHONE",
+    "THIS IS WHAT YOUR GUESTS WILL SEE",
+    "IT COMES ALIVE WHEN THEY OPEN IT",
+    "SENT STRAIGHT TO THEIR PHONE",
+    "THE ONE THEY'LL SCREENSHOT",
+    "THIS LANDS RIGHT IN THEIR MESSAGES",
+    "ANIMATED — NOT A STATIC CARD",
+    "PICTURE THIS ARRIVING ON THEIR PHONE",
+]
+PHONE_HOOK = PHONE_HOOKS[0]   # back-compat default
 
 
 # Rotating hashtag sets (vary per reel so captions aren't identical).
@@ -196,6 +210,10 @@ SHOWCASE_HOOKS = {
         "Imagine your guests opening this save the date",
         "This is how your save the date should arrive",
         "Your guests are about to receive THIS",
+        "Save the date? Make it unforgettable",
+        "The first thing your guests will see",
+        "Your guests will remember this one",
+        "This is how you announce the date",
     ],
     "wedding_website": [
         "POV: your guests just opened your wedding website",
@@ -203,6 +221,10 @@ SHOWCASE_HOOKS = {
         "Your whole wedding \u2014 in one link",
         "The wedding website your guests will actually use",
         "This is how your guests will RSVP",
+        "One link. Your whole wedding.",
+        "The wedding website that does it all",
+        "Your guests will RSVP in seconds",
+        "Everything your guests need, in one place",
     ],
     "invitation": [
         "POV: your guests just opened your wedding invitation",
@@ -210,11 +232,18 @@ SHOWCASE_HOOKS = {
         "The wedding invite your guests will screenshot",
         "This is how your invitation should arrive",
         "Your guests are about to open THIS",
+        "The invitation your guests won't forget",
+        "This is how you invite them",
+        "An invitation that feels like an event",
+        "Your guests will open this one twice",
     ],
     "default": [
         "POV: your guests just opened your wedding invite",
         "Imagine sending THIS to your guests",
         "The wedding invite your guests won't forget",
         "This is how your wedding invite should arrive",
+        "Your guests are about to receive THIS",
+        "This is how you set the tone",
+        "The one your guests will screenshot",
     ],
 }
