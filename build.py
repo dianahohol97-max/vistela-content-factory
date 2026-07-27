@@ -91,6 +91,33 @@ def build_carousels():
     return items
 
 
+def _yt_title(hook, kw):
+    """SEO title for YouTube Shorts. The video hook (curiosity/benefit) leads for
+    click-through; a title-case keyword phrase is appended for search, and #Shorts
+    tags it as a Short. Only YouTube reads the `title` field, so this never touches
+    the IG/TikTok captions. Capped at YouTube's 100-char limit."""
+    kw_tc = " ".join(w.capitalize() for w in kw.split())
+    base = f"{hook} | {kw_tc}"
+    title = base if len(base) <= 90 else hook
+    return (title + " #Shorts")[:100]
+
+
+def _yt_description(copy, kw, link):
+    """SEO description for YouTube Shorts. The first line is keyword-rich (that's
+    what search indexes), followed by the value prop, a clear CTA + link, and a
+    hashtag block (the first 3 hashtags render above the title)."""
+    hashtags = " ".join("#" + t for t in copy["yt_hashtags"])
+    return (
+        f"{copy['value']}\n\n"
+        f"✨ 100% editable in Canva — change the names, dates and colours in "
+        f"minutes. No designer, no software, delivered instantly.\n"
+        f"\U0001F6CD️ Shop this {kw} on Etsy → {link}\n\n"
+        f"Animated, editable wedding stationery by VistelaCo — save the dates, "
+        f"invitations and wedding websites your guests will actually remember.\n\n"
+        f"{hashtags}"
+    )
+
+
 def _prune_reels(out_dir, keep=80):
     """Keep the newest `keep` files in the reels folder.
 
@@ -155,18 +182,17 @@ def build_reels():
         ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\n"
               f"This {kw} is on Etsy \u2014 link in bio.")
         tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
-        yt_desc = f"{copy['value']} Shop this {kw} from VistelaCo on Etsy: {link}"
         items.append({
             "id": f"REEL_{slug}",
             "channels": ["instagram_reel", "youtube_short", "tiktok"],
             "format": "video",
             "category": C.product_category(product),
-            "title": hook,
+            "title": _yt_title(hook, kw),  # YouTube-only field; SEO title + #Shorts
             "video_url": raw(os.path.relpath(reel, ROOT)),
             "cover_url": raw(os.path.relpath(cover, ROOT)),
             "caption": ig,                 # Instagram (clean)
             "caption_tiktok": tiktok,      # TikTok (with tags)
-            "yt_description": yt_desc,     # YouTube Shorts
+            "yt_description": _yt_description(copy, kw, link),   # YouTube Shorts (SEO)
             "yt_tags": copy["yt_tags"],
             "tiktok_tags": copy["tiktok_tags"],
             "link": link,
@@ -198,19 +224,18 @@ def build_personalize():
     kw = copy["keyword"]
     ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio.")
     tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
-    yt_desc = f"{copy['value']} Shop this {kw} from VistelaCo on Etsy: {link}"
     items.append({
         "id": f"REEL_{slug}",
         "channels": ["instagram_reel", "youtube_short", "tiktok"],
         "format": "video",
         "category": C.product_category(clip),
         "rubric": "personalize_with_me",
-        "title": hook,
+        "title": _yt_title(hook, kw),  # YouTube-only field; SEO title + #Shorts
         "video_url": raw(os.path.relpath(reel, ROOT)),
         "cover_url": raw(os.path.relpath(cover, ROOT)),
         "caption": ig,
         "caption_tiktok": tiktok,
-        "yt_description": yt_desc,
+        "yt_description": _yt_description(copy, kw, link),
         "yt_tags": copy["yt_tags"],
         "tiktok_tags": copy["tiktok_tags"],
         "link": link,
