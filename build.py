@@ -91,7 +91,16 @@ def build_carousels():
     return items
 
 
-def _prune_reels(out_dir, keep=8):
+def _prune_reels(out_dir, keep=80):
+    """Keep the newest `keep` files in the reels folder.
+
+    NOTE: `keep` counts FILES, and every reel is two files (.mp4 + _cover.jpg),
+    so keep=80 retains ~40 reels. This must stay well above Buffer's TikTok queue
+    depth: Buffer fetches the raw.githubusercontent video URL at publish time, not
+    when the post is queued, and on the Free plan it drains the queue slowly. If a
+    reel is pruned before Buffer publishes it, the URL 404s and the post fails with
+    'media URL not publicly accessible'. ~40 reels of runway keeps URLs alive far
+    longer than the queue can lag. (Full history is in git regardless.)"""
     if not os.path.isdir(out_dir):
         return
     files = sorted((os.path.join(out_dir, f) for f in os.listdir(out_dir)),
@@ -164,7 +173,7 @@ def build_reels():
             "share_to_feed": True,
             "status": "ready",
         })
-    _prune_reels(out_dir, keep=8)
+    _prune_reels(out_dir)
     return items
 
 
@@ -208,7 +217,7 @@ def build_personalize():
         "share_to_feed": True,
         "status": "ready",
     })
-    _prune_reels(out_dir, keep=8)
+    _prune_reels(out_dir)
     return items
 
 
