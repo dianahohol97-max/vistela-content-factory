@@ -246,11 +246,74 @@ def build_personalize():
     return items
 
 
+
+
+def build_product_tour():
+    """Product-tour rubric: every PRODUCT_TOUR_EVERY_DAYS post one raw product
+    video as-is (normalised to 1080x1920) to Instagram + TikTok, alternating
+    save-the-dates and websites. Runs on the days personalize doesn't."""
+    import re
+    import subprocess
+    items = []
+    products = _videos(os.path.join(ROOT, C.INPUT_TEMPLATES))
+    if not products:
+        return items
+    today = dt.date.today()
+    if today.toordinal() % C.PRODUCT_TOUR_EVERY_DAYS != 1:   # alternate with PWM days
+        return items
+    # alternate product type per tour day
+    stds  = [p for p in products if C.product_category(p) == "save_the_date"]
+    sites = [p for p in products if C.product_category(p) == "wedding_website"]
+    cycle = (today.toordinal() // C.PRODUCT_TOUR_EVERY_DAYS) % 2
+    pool = (stds if cycle == 0 else sites) or sites or stds or products
+    clip, hook = ROT.next_single(ROOT, pool, C.PRODUCT_TOUR_HOOKS, "tour", today)
+    out_dir = os.path.join(ROOT, "output", "reels")
+    os.makedirs(out_dir, exist_ok=True)
+    base = os.path.splitext(os.path.basename(clip))[0]
+    slug = re.sub(r"[^a-z0-9]+", "-", f"tour-{base}-{today.isoformat()}".lower()).strip("-")
+    reel = os.path.join(out_dir, f"{slug}.mp4")
+    cover = os.path.join(out_dir, f"{slug}_cover.jpg")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
+                    "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30",
+                    "-t", str(C.PRODUCT_TOUR_MAX_S), "-c:v", "libx264", "-preset", "medium",
+                    "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
+                    "-movflags", "+faststart", reel], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
+                    "-frames:v", "1", cover], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    link = RR.listing_link_from_filename(base)
+    cat = C.product_category(clip)
+    copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
+    kw = copy["keyword"]
+    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio.")
+    tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
+    items.append({
+        "id": f"REEL_{slug}",
+        "channels": ["instagram_reel", "tiktok"],
+        "format": "video",
+        "category": cat,
+        "rubric": "product_tour",
+        "title": _yt_title(hook, kw),
+        "video_url": raw(os.path.relpath(reel, ROOT)),
+        "cover_url": raw(os.path.relpath(cover, ROOT)),
+        "caption": ig,
+        "caption_tiktok": tiktok,
+        "yt_description": _yt_description(copy, kw, link),
+        "yt_tags": copy["yt_tags"],
+        "tiktok_tags": copy["tiktok_tags"],
+        "link": link,
+        "share_to_feed": True,
+        "status": "ready",
+    })
+    _prune_reels(out_dir)
+    return items
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     pin_items = build_pins()
     car_items = build_carousels()
-    reel_items = build_reels() + build_personalize()
+    reel_items = build_reels() + build_personalize() + build_product_tour()
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
         json.dump(pin_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:

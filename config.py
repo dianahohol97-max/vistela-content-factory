@@ -191,6 +191,8 @@ PERSONALIZE_HOOKS = [
 # (that language belongs to PERSONALIZE_HOOKS).
 SHOWCASE_HOOKS = {
     "save_the_date": [
+        "Impossible to wow your guests with a $10 save the date? Watch this.",
+        "A $10 save the date that will actually wow your guests",
         "POV: you refuse to send a boring save the date",
         "The save the date your guests will screenshot",
         "Imagine your guests opening this save the date",
@@ -218,3 +220,18 @@ SHOWCASE_HOOKS = {
         "This is how your wedding invite should arrive",
     ],
 }
+
+
+# --- Product-tour reels (raw product video as-is, IG + TikTok) -------------
+# "Просто як огляд продукту": every PRODUCT_TOUR_EVERY_DAYS the raw product
+# video is posted unedited (normalised to 1080x1920/30fps), alternating between
+# save-the-dates and wedding websites. Runs on the days personalize doesn't.
+PRODUCT_TOUR_EVERY_DAYS = 2
+PRODUCT_TOUR_MAX_S = 30
+PRODUCT_TOUR_HOOKS = [
+    "Full product tour \u2014 no edits, just the template",
+    "The whole thing, start to finish",
+    "Here it is \u2014 exactly what you download",
+    "Unedited: the template as your guests will see it",
+    "A quiet look at the full design",
+]
