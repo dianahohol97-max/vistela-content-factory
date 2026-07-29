@@ -1,97 +1,129 @@
-# Veo / Gemini — промпти для інтро-сцен (wedding couples)
+# Veo / Gemini — готові промпти для інтро-сцен (wedding couples)
 
-Це стартові хук-сцени для рілсів (idуть перед phone-reveal). Формат: **9:16, 5–8 секунд**.
-Пайплайн сам обріже до 3.5 с, тож головна емоція має бути з першої секунди.
-Кладеш готові у Dropbox `/весільні відео` — далі все автоматично.
+Кожен блок нижче — **окремий повний промпт**: копіюєш цілком → вставляєш у Gemini
+(Veo) → отримуєш вертикальне відео 9:16 на 5–8 секунд. Нічого дописувати не треба.
 
----
-
-## База стилю (додавай перед кожним промптом)
-
-> Vertical 9:16 cinematic video, shot on 35mm film look, soft natural light,
-> shallow depth of field, warm romantic color grading, elegant wedding editorial
-> style, smooth slow motion, no text, no logos, no watermarks.
-
-## Правила
-
-- **Перша секунда = емоція.** Рух має вже відбуватись на старті (не «розгойдування»).
-- Обличчя можуть бути видимі або відвернені — обидва варіанти працюють; зі спини
-  часто виглядає дорожче і безпечніше по якості генерації.
-- Проси **very slow, subtle camera movement** — швидкі панорами ламаються.
-- Під кожен продуктовий колір є своя сцена (dusty blue → берег/сутінки,
-  emerald → сад/зелень, blush → золота година).
+Готові кліпи кидай у Dropbox `/весільні відео` — ранковий білд сам їх підхопить,
+ротація сама комбінує сцени з продуктами. Звук не потрібен (рілси йдуть зі своєю
+музикою). Генеруй 2–3 дублі на сцену і бери найкращий.
 
 ---
 
-## 12 сцен
+## 1 · Нічна прогулянка
 
-1. **Нічна прогулянка** (пасує до будь-чого)
-   > Bride and groom walking away from camera down a city street at night, her
-   > long white dress flowing, he holds her hand, warm streetlights bokeh,
-   > candid laughing moment, handheld documentary feel.
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom walk away from the
+> camera down a beautiful old city street at night, her long white dress flowing
+> behind her, he holds her hand, they laugh candidly. Warm streetlight bokeh,
+> shot on 35mm film look, shallow depth of field, romantic color grading, smooth
+> slow motion, handheld documentary feel, no text, no logos, no watermarks.
 
-2. **First look — він обертається**
-   > Groom in a navy suit turns around to see the bride for the first time in a
-   > garden, genuine emotional reaction, she smiles in a lace dress holding a
-   > bouquet of white and dusty blue flowers.
+## 2 · First look — наречений обертається
 
-3. **Фата на вітрі** (dusty blue)
-   > Close-up of a bride's veil catching the sea breeze on a cliffside at dusk,
-   > soft blue hour light, she laughs and holds the veil, ocean blurred behind.
+> Vertical 9:16 cinematic video, 8 seconds. A groom in a navy suit turns around
+> in a blooming garden and sees his bride for the first time — a genuine
+> emotional reaction; she smiles in a lace wedding dress holding a bouquet of
+> white and dusty blue flowers. Soft natural light, shallow depth of field,
+> elegant wedding editorial style, smooth slow motion, warm romantic color
+> grading, no text, no logos, no watermarks.
 
-4. **Біг по пляжу**
-   > Bride and groom running barefoot along the shoreline at golden hour holding
-   > hands, dress and veil flying, joyful, camera tracking alongside them.
+## 3 · Фата на вітрі (dusty blue)
 
-5. **Танець на терасі** (emerald / garden)
-   > Couple slow-dancing on a stone terrace surrounded by lush green ivy and
-   > string lights at twilight, she rests her head on his shoulder, fairy-light bokeh.
+> Vertical 9:16 cinematic video, 8 seconds. Close-up of a bride's veil catching
+> the sea breeze on a cliffside at blue hour, she laughs softly and holds the
+> veil, the ocean blurred behind her, dusty blue tones in the sky and details.
+> Shot on 35mm film look, shallow depth of field, muted romantic color grading,
+> very slow subtle camera movement, smooth slow motion, no text, no logos,
+> no watermarks.
 
-6. **Руки та обручки**
-   > Extreme close-up of a groom sliding a ring onto the bride's hand, her
-   > delicate manicure, his hands trembling slightly, soft window light, linen suit.
+## 4 · Біг по пляжу
 
-7. **Келихи й сміх** (весела енергія)
-   > Bride and groom clinking champagne glasses and laughing at a candlelit
-   > dinner table with white flowers, golden sparkle bokeh, candid joy.
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom run barefoot along
+> the shoreline at golden hour holding hands, her dress and veil flying in the
+> wind, both laughing with joy, camera smoothly tracking alongside them. Warm
+> golden light, 35mm film look, shallow depth of field, romantic color grading,
+> smooth slow motion, no text, no logos, no watermarks.
 
-8. **Кружляння** (universal hero)
-   > Groom lifts and spins the bride in a sunlit meadow, her dress twirling,
-   > genuine laughter, lens flare through the trees, camera slowly circling them.
+## 5 · Танець на терасі (emerald)
 
-9. **Під дощем** (драматично-романтичне)
-   > Couple kissing under a clear umbrella in soft rain on an old European
-   > street at dusk, warm lantern light, rain drops sparkling in slow motion.
+> Vertical 9:16 cinematic video, 8 seconds. A couple slow-dancing on a stone
+> terrace surrounded by lush green ivy and warm string lights at twilight, the
+> bride rests her head on the groom's shoulder, deep emerald green foliage and
+> velvet decor accents, fairy-light bokeh. Elegant wedding editorial style,
+> shallow depth of field, very slow subtle camera movement, smooth slow motion,
+> no text, no logos, no watermarks.
 
-10. **Ранок нареченої** (getting ready)
-    > Bridesmaids in matching dusty blue silk robes helping the bride with the
-    > last button of her dress, morning window light, champagne glasses nearby,
-    > soft laughter.
+## 6 · Обручка крупним планом
 
-11. **Конфеті / пелюстки**
-    > Bride and groom walking down ceremony aisle as guests throw white flower
-    > petals, both laughing, petals falling in slow motion, seaside arch behind.
+> Vertical 9:16 cinematic video, 8 seconds. Extreme close-up of a groom gently
+> sliding a wedding ring onto the bride's finger, her delicate neutral manicure,
+> his hands trembling slightly with emotion, soft window light on linen suit
+> fabric. Macro photography style, shallow depth of field, warm muted color
+> grading, very slow subtle movement, smooth slow motion, no text, no logos,
+> no watermarks.
 
-12. **Тихий момент — чоло до чола**
-    > Bride and groom standing forehead to forehead with closed eyes at sunset
-    > on a hilltop, wind moving her hair and veil gently, intimate and calm,
-    > silhouette rim light.
+## 7 · Келихи й сміх
+
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom clink champagne
+> glasses and laugh at a candlelit dinner table decorated with white flowers,
+> golden sparkle bokeh from candles behind them, candid joyful moment. Warm
+> amber light, champagne and gold accents, 35mm film look, shallow depth of
+> field, smooth slow motion, no text, no logos, no watermarks.
+
+## 8 · Кружляння в лузі
+
+> Vertical 9:16 cinematic video, 8 seconds. A groom lifts and spins his bride in
+> a sunlit meadow, her wedding dress twirling around her, genuine laughter, sun
+> flare through the trees, camera slowly circling the couple. Golden hour light,
+> 35mm film look, shallow depth of field, romantic color grading, smooth slow
+> motion, no text, no logos, no watermarks.
+
+## 9 · Поцілунок під дощем
+
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom kiss under a clear
+> transparent umbrella in soft rain on an old European street at dusk, warm
+> lantern light around them, raindrops sparkling in slow motion. Cinematic 35mm
+> film look, shallow depth of field, romantic moody color grading, very slow
+> subtle camera movement, no text, no logos, no watermarks.
+
+## 10 · Ранок нареченої (dusty blue)
+
+> Vertical 9:16 cinematic video, 8 seconds. Bridesmaids in matching dusty blue
+> silk robes help the bride fasten the last button of her wedding dress, soft
+> morning window light, champagne glasses on the vanity table nearby, quiet
+> laughter and excitement. Elegant wedding editorial style, shallow depth of
+> field, warm muted color grading, smooth slow motion, no text, no logos,
+> no watermarks.
+
+## 11 · Пелюстки на церемонії
+
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom walk down the
+> ceremony aisle as guests toss white flower petals over them, both laughing,
+> petals falling in slow motion, a seaside floral arch blurred behind. Soft
+> natural light, 35mm film look, shallow depth of field, romantic color grading,
+> smooth slow motion, no text, no logos, no watermarks.
+
+## 12 · Чоло до чола на заході сонця
+
+> Vertical 9:16 cinematic video, 8 seconds. A bride and groom stand forehead to
+> forehead with closed eyes on a hilltop at sunset, the wind gently moving her
+> hair and veil, intimate and calm, warm rim light silhouetting the couple.
+> Cinematic 35mm film look, shallow depth of field, romantic color grading,
+> very slow subtle camera movement, smooth slow motion, no text, no logos,
+> no watermarks.
 
 ---
 
-## Бонус: сцени під конкретні палітри
+## Як підфарбувати сцену під палітру продукту
 
-- **Dusty Blue:** додай до будь-якої сцени → "dusty blue color accents: bridesmaid
-  dresses, ribbon details and florals in muted slate blue tones"
-- **Emerald:** → "deep emerald green accents: velvet decor, foliage, groom's tie"
-- **Blush / Dusty Rose:** → "blush pink accents: rose petals, soft pink florals,
-  warm golden hour glow"
-- **Champagne Gold:** → "champagne and gold accents: sequin details, candlelight,
-  warm amber tones"
+Додай ОДИН із цих рядків у кінець будь-якого промпта:
 
-## Технічне
+- **Dusty Blue:** `Dusty blue color accents throughout: bridesmaid dresses, ribbons and florals in muted slate blue tones.`
+- **Emerald:** `Deep emerald green accents throughout: velvet decor, lush foliage, the groom's tie.`
+- **Blush / Dusty Rose:** `Blush pink accents throughout: rose petals, soft pink florals, warm golden glow.`
+- **Champagne Gold:** `Champagne and gold accents throughout: sequin details, candlelight, warm amber tones.`
 
-- Генеруй 2–3 дублі на сцену і бери найкращий — руки/обличчя інколи пливуть.
-- Файли назви як зручно — пайплайн сам їх підхопить з `/весільні відео`
-  (ротація стежить, щоб сцена × продукт не повторювались).
-- Звук з генерації не потрібен — рілси йдуть зі своєю музикою.
+## Пам'ятка
+
+- Емоція має бути з першої секунди — пайплайн бере лише перші 3.5 с.
+- Якщо рух виходить різкий, додай у кінець: `Very slow, subtle, looping-friendly motion.`
+- Обличчя «пливуть»? Візьми варіант зі спини (сцени 1, 4, 11 найбезпечніші).
