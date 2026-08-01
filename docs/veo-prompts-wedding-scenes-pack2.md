@@ -198,13 +198,15 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > A bride and groom walk quickly hand in hand through a tunnel of guests holding
 > lit sparklers at night, sparks flaring near the lens and one guest's arm
-> crossing the frame. Shot on a Sony A7S III with a 35mm lens, 24fps at high ISO
+> crossing the frame. They laugh together as they walk, heads ducked slightly
+> from the sparks. Shot on a Sony A7S III with a 35mm lens, 24fps at high ISO
 > with visible noise, handheld walking backwards with real bounce, focus briefly
 > soft. Lit only by sparklers with clipped hot spots, flat grading, natural skin
 > texture, hair moving as they walk. Style of unedited Pexels wedding send-off
 > footage. No audio, no dialogue, no music — silent footage. No text, no logos.
-> Avoid: waxy plastic skin, airbrushed faces, perfect symmetry, CGI sparks, glow
-> effects, morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
+> Avoid: blank or sad expressions, vacant stares, looking past the camera, waxy
+> plastic skin, airbrushed faces, perfect symmetry, CGI sparks, glow effects,
+> morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
 
 ## 12 · Поле на заході, фата на вітрі
 
