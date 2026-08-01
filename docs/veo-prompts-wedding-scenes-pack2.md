@@ -23,6 +23,16 @@
    додаємо в застосунку (трендовий трек > згенерований).
 8. **Розширений Avoid** — waxy skin, airbrushed faces, perfect symmetry,
    morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
+9. **Тепло і зоровий контакт (обов'язково для сцен із парою)** — заборона на
+   акторську гру без цього дає порожні обличчя й погляди повз одне одного.
+   У кожній сцені з парою прописуй: «they hold eye contact and smile at each
+   other», а в Avoid додавай «blank or sad expressions, vacant stares, looking
+   away from each other or past the camera». Не потрібно тільки там, де пара
+   йде спиною до камери (№2, №8) або облич не видно (№9, №10).
+10. **Ніяких падаючих опадів** — AI майже завжди ламає краплі дощу й сніжинки.
+   Показуй наслідки: мокрий асфальт і відображення, краплі з парасолі, вологе
+   волосся; сніг уже на землі й гілках, пара з рота. В Avoid: «falling rain
+   particles, falling snow particles, CGI raindrops, sparkling snow effects».
 
 Генеруй 2–3 дублі. **Обирай не найкрасивіший, а найменш ідеальний** — саме
 він виглядає справжнім. Найкращі → Dropbox `/весільні відео`.
@@ -57,30 +67,36 @@
 > skin, airbrushed faces, perfect symmetry, morphing hands, extra fingers, slow
 > motion, cinematic score, AI sheen, oversaturation.
 
-## 3 · Дощ і одна парасоля
+## 3 · Після дощу, одна парасоля
 
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
-> A bride and groom stand close under one black umbrella on a wet city sidewalk
-> in light rain and share a brief kiss; raindrops streak past the lens, a car
-> passes behind them out of focus. Shot on a Sony A7S III with a 35mm lens,
-> 24fps, handheld with micro-shake, framing slightly loose. Flat grey daylight,
-> log-style grading with lifted blacks, damp hair strands stuck to her temple,
-> natural skin texture. Style of unedited Pexels wedding footage. No audio, no
-> dialogue, no music — silent footage. No text, no logos. Avoid: waxy plastic
-> skin, airbrushed faces, perfect symmetry, glowing highlights, morphing hands,
-> extra fingers, slow motion, cinematic score, AI sheen.
+> A bride and groom stand close together under one black umbrella on a
+> rain-soaked city sidewalk just after the rain has stopped; wet asphalt
+> reflects shop lights, water drips from the edge of the umbrella, her hem is
+> damp. They look at each other, smile warmly and share a brief kiss. Shot on a
+> Sony A7S III with a 35mm lens, 24fps, handheld with micro-shake, framing
+> slightly loose. Flat grey daylight, log-style grading with lifted blacks,
+> damp hair strands at her temple, natural skin texture. Style of unedited
+> Pexels wedding footage. No audio, no dialogue, no music — silent footage. No
+> text, no logos. Avoid: falling rain particles, CGI raindrops, streaking water
+> on the lens, blank or sad expressions, looking away from each other, waxy
+> plastic skin, airbrushed faces, perfect symmetry, morphing hands, extra
+> fingers, slow motion, cinematic score, AI sheen.
 
-## 4 · Зимова сцена, легкий сніг
+## 4 · Зимові заручини (сезон заручин, не зимове весілля)
 
-> Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
-> A bride in a white faux-fur shawl and a groom in a wool coat stand in a snowy
-> park while light snow falls; he warms her hands in his, her breath is faintly
-> visible in the cold air. Shot on a Sony FX3 with a 35mm lens, 24fps, handheld
-> with slight drift, framing off-centre with empty space on one side. Flat
-> overcast winter light, cool muted grading, red-tinged cold skin on cheeks and
-> hands, flyaway hair under the shawl. Style of unedited Pexels wedding footage.
-> No audio, no dialogue, no music — silent footage. No text, no logos. Avoid:
-> waxy plastic skin, airbrushed faces, perfect symmetry, sparkling snow effects,
+> Real engagement stock footage, vertical 9:16, 8 seconds, single continuous
+> take. A just-engaged couple in warm winter coats and scarves stand in a
+> snow-covered city park — no wedding attire; she wears an engagement ring,
+> holds his lapels and laughs while he smiles down at her, their faces close
+> together. Snow already lies on the ground and on bare branches, faint breath
+> vapour in the cold air. Shot on a Sony FX3 with a 35mm lens, 24fps, handheld
+> with slight drift, framing off-centre. Flat overcast winter light, cool muted
+> grading, cold-flushed cheeks and noses, flyaway hair under a knitted hat,
+> natural skin texture. Style of unedited Pexels engagement footage. No audio,
+> no dialogue, no music — silent footage. No text, no logos. Avoid: falling
+> snow particles, sparkling snow effects, blank or sad expressions, looking
+> away from each other, waxy plastic skin, airbrushed faces, perfect symmetry,
 > morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
 
 ## 5 · Дах на заході сонця, повільний танець
@@ -101,14 +117,17 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > A bride and groom share a plain first dance in a rustic barn — wooden beams,
 > warm string lights overhead, seated guests out of focus in the background, a
-> guest's head partly blocking the lower corner of the frame. Shot on a Sony A7S
-> III with a 35mm lens, 24fps at high ISO with visible sensor noise, handheld,
-> framing slightly crooked. Mixed warm tungsten light, flat grading, real fabric
-> creases, natural skin texture. Style of unedited Pexels wedding reception
-> footage. No audio, no dialogue, no music — silent footage. No text, no logos.
-> Avoid: waxy plastic skin, airbrushed faces, perfect symmetry, choreographed
-> dance moves, morphing hands, extra fingers, slow motion, cinematic score, AI
-> sheen.
+> guest's head partly blocking the lower corner of the frame. They hold eye
+> contact and smile at each other the whole time; she laughs, he pulls her a
+> little closer and she rests her forehead against his. Shot on a Sony A7S III
+> with a 35mm lens, 24fps at high ISO with visible sensor noise, handheld,
+> framing slightly crooked. Mixed warm tungsten light, flat grading, real
+> fabric creases, natural skin texture. Style of unedited Pexels wedding
+> reception footage. No audio, no dialogue, no music — silent footage. No text,
+> no logos. Avoid: blank or sad expressions, vacant stares, looking away from
+> each other or past the camera, waxy plastic skin, airbrushed faces, perfect
+> symmetry, choreographed dance moves, morphing hands, extra fingers, slow
+> motion, cinematic score, AI sheen.
 
 ## 7 · Пляж на заході, прогулянка за руки
 
@@ -191,6 +210,16 @@
 > fingers, slow motion, cinematic score, AI sheen, oversaturation.
 
 ---
+
+## Сезонність сцен (для планування)
+
+- **Осінь — пік весільного сезону в США** (вересень і жовтень — найпопулярніші
+  місяці за даними The Knot; у Британії вересень теж у топі). Осінні сцени
+  найактуальніші прямо зараз.
+- **Зима — низький сезон для весіль, але пік заручин** (листопад–лютий, ~47%
+  заручин; Різдво — день №1). Тому зимова сцена — про заручини, а не про
+  весілля: свіжозаручена пара і є покупцем save the date.
+- **Літо (червень–серпень)** — пік у Британії та Європі.
 
 ## Пам'ятка
 
