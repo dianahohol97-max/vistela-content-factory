@@ -204,7 +204,8 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > A bride and groom stand in a golden meadow at sunset facing each other holding
 > both hands, her long veil lifting in the wind and briefly covering part of the
-> frame; tall grass sways in the foreground, out of focus. Shot on a Sony FX3
+> frame; tall grass sways in the foreground, out of focus. They hold eye
+> contact and smile at each other, calm and unhurried. Shot on a Sony FX3
 > with a 50mm lens, 24fps, static on a tripod with slight wind vibration, framing
 > off-centre. Strong low backlight with haze, blown highlights and a lens flare,
 > flat log-style grading, natural skin texture, loose strands of hair across her
