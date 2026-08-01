@@ -23,12 +23,19 @@
    додаємо в застосунку (трендовий трек > згенерований).
 8. **Розширений Avoid** — waxy skin, airbrushed faces, perfect symmetry,
    morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
-9. **Тепло і зоровий контакт (обов'язково для сцен із парою)** — заборона на
-   акторську гру без цього дає порожні обличчя й погляди повз одне одного.
-   У кожній сцені з парою прописуй: «they hold eye contact and smile at each
-   other», а в Avoid додавай «blank or sad expressions, vacant stares, looking
-   away from each other or past the camera». Не потрібно тільки там, де пара
-   йде спиною до камери (№2, №8) або облич не видно (№9, №10).
+9. **Живий стан — завжди; зоровий контакт — де доцільно.** Заборона на
+   акторську гру без вказівки на теплоту дає порожні обличчя. Тому в кожній
+   сцені з видимими обличчями прописуй якусь живу реакцію, але підбирай її
+   під дію, а не копіюй одну й ту саму:
+   - **статика, танець, пара обличчям одне до одного** (№5, №6, №12) —
+     «they hold eye contact and smile at each other»;
+   - **рух, ходьба, вихід до гостей** (№1, №7, №11) — природніший короткий
+     погляд або спільний сміх: «she glances at him and laughs as they walk»,
+     «laughing together»;
+   - **спини до камери / без облич** (№2, №8, №9, №10) — нічого не треба.
+   В Avoid для сцен із обличчями завжди: «blank or sad expressions, vacant
+   stares, looking past the camera». Однаковий «погляд в очі» в усіх сценах
+   виглядає постановочно — вари́юй.
 10. **Ніяких падаючих опадів** — AI майже завжди ламає краплі дощу й сніжинки.
    Показуй наслідки: мокрий асфальт і відображення, краплі з парасолі, вологе
    волосся; сніг уже на землі й гілках, пара з рота. В Avoid: «falling rain
@@ -136,8 +143,8 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > An Asian bride and groom walk barefoot along wet sand at sunset holding hands,
 > shallow waves washing over their feet, her veil and dress hem moving in the
-> wind; sand sticks to her ankles. They turn to each other, hold eye contact and
-> laugh together as they walk. Shot on a Sony FX3 with a 50mm lens, 24fps,
+> wind; sand sticks to her ankles. They look ahead as they walk, then she
+> glances at him and laughs. Shot on a Sony FX3 with a 50mm lens, 24fps,
 > handheld walking alongside them with natural bounce, horizon slightly tilted.
 > Low backlight with haze and a soft lens flare, flat log-style grading, natural
 > skin texture, wind-messed hair. Style of unedited Pexels wedding footage. No
