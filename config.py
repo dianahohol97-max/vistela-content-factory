@@ -198,6 +198,11 @@ SHOWCASE_HOOKS = {
         "Imagine your guests opening this save the date",
         "This is how your save the date should arrive",
         "Your guests are about to receive THIS",
+        "POV: your Save the Date also plays your favourite song",
+        "POV: you send your guests a video save the date",
+        "This is what a $10 save the date actually looks like",
+        "If you're a 2027 bride, save this now",
+        "The first thing your guests will ever see of your wedding",
     ],
     "wedding_website": [
         "POV: your guests just opened your wedding website",
@@ -205,6 +210,9 @@ SHOWCASE_HOOKS = {
         "Your whole wedding \u2014 in one link",
         "The wedding website your guests will actually use",
         "This is how your guests will RSVP",
+        "One link that answers every guest question",
+        "Stop texting 'what's the dress code' \u2014 put it here",
+        "Your wedding website is doing the RSVP work for you",
     ],
     "invitation": [
         "POV: your guests just opened your wedding invitation",
@@ -229,9 +237,18 @@ SHOWCASE_HOOKS = {
 PRODUCT_TOUR_EVERY_DAYS = 2
 PRODUCT_TOUR_MAX_S = 30
 PRODUCT_TOUR_HOOKS = [
-    "Full product tour \u2014 no edits, just the template",
-    "The whole thing, start to finish",
+    "The reveal you've been waiting for",
+    "Wait for the wax seal\u2026",
+    "Turn your sound on for this one",
+    "Watch me turn a template into THIS",
+    "The full design, start to finish",
     "Here it is \u2014 exactly what you download",
-    "Unedited: the template as your guests will see it",
-    "A quiet look at the full design",
+    "Rate this save the date 1\u201310",
+    "From boring template to dream invite",
 ]
+
+# Burned-in hook overlay on product-tour reels: the hook line is shown as
+# on-screen text for the first HOOK_OVERLAY_SECONDS of the video (top third,
+# safe margins). Half of viewers watch muted; the caption hook alone is not
+# enough.
+HOOK_OVERLAY_SECONDS = 3.0

@@ -248,6 +248,41 @@ def build_personalize():
 
 
 
+def _render_hook_overlay(hook, path):
+    """Render the hook line as a transparent 1080x1920 PNG: wrapped text on a
+    soft dark pill in the top third (viewers scroll muted — the hook must be
+    on-screen, not only in the caption)."""
+    from PIL import Image, ImageDraw, ImageFont
+    W, H = 1080, 1920
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    font = ImageFont.truetype(
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 58)
+    words, lines, cur = hook.split(), [], ""
+    for w in words:
+        t = (cur + " " + w).strip()
+        if d.textlength(t, font=font) <= W - 260:
+            cur = t
+        else:
+            lines.append(cur)
+            cur = w
+    lines.append(cur)
+    lh = 76
+    block_h = lh * len(lines)
+    y0 = 230
+    pad_x, pad_y = 44, 34
+    box_w = max(d.textlength(l, font=font) for l in lines) + pad_x * 2
+    x0 = (W - box_w) / 2
+    d.rounded_rectangle([x0, y0 - pad_y, x0 + box_w, y0 + block_h + pad_y],
+                        radius=34, fill=(16, 23, 31, 175))
+    y = y0
+    for l in lines:
+        lw = d.textlength(l, font=font)
+        d.text(((W - lw) / 2, y), l, font=font, fill=(247, 242, 230, 255))
+        y += lh
+    img.save(path)
+
+
 def build_product_tour():
     """Product-tour rubric: every PRODUCT_TOUR_EVERY_DAYS post one raw product
     video as-is (normalised to 1080x1920) to Instagram + TikTok, alternating
@@ -273,12 +308,19 @@ def build_product_tour():
     slug = re.sub(r"[^a-z0-9]+", "-", f"tour-{base}-{today.isoformat()}".lower()).strip("-")
     reel = os.path.join(out_dir, f"{slug}.mp4")
     cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
-                    "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,fps=30",
+    hook_png = os.path.join(out_dir, f"{slug}_hook.png")
+    _render_hook_overlay(hook, hook_png)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-i", hook_png,
+                    "-filter_complex",
+                    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
+                    "crop=1080:1920,setsar=1,fps=30[v];"
+                    f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]",
+                    "-map", "[out]", "-map", "0:a?",
                     "-t", str(C.PRODUCT_TOUR_MAX_S), "-c:v", "libx264", "-preset", "medium",
                     "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
                     "-movflags", "+faststart", reel], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    os.remove(hook_png)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
                     "-frames:v", "1", cover], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
