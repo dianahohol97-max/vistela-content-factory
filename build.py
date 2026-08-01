@@ -315,9 +315,9 @@ def build_product_tour():
                     "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
                     "crop=1080:1920,setsar=1,fps=30[v];"
                     f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]",
-                    "-map", "[out]", "-an",
+                    "-map", "[out]", "-map", "0:a?",
                     "-t", str(C.PRODUCT_TOUR_MAX_S), "-c:v", "libx264", "-preset", "medium",
-                    "-crf", "20", "-pix_fmt", "yuv420p",
+                    "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
                     "-movflags", "+faststart", reel], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     os.remove(hook_png)
