@@ -25,6 +25,11 @@
    вийде дикторський «рекламний» тон.
 5. **`No background music, no other voices, no sound effects`** — чистий голос,
    трек накладається при публікації.
+6. **Погляд прямо в об'єктив** (`looks directly into the camera lens`) — так
+   репліка звучить як звертання до глядача, а не підслухана сцена.
+7. **Чиста шкіра, але не пластик:** `clear healthy skin with fine natural
+   texture and soft natural makeup, no blemishes` + в Avoid `acne, blemishes,
+   uneven skin spots`. Без «fine natural texture» модель робить воскову маску.
 
 ## Текст реплік
 
@@ -51,15 +56,16 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > Real lifestyle footage, vertical 9:16, 8 seconds, single continuous take. A
 > young woman sits in the passenger seat of a parked car, seatbelt on, holding
 > her phone in one hand; the phone screen is switched off, plain dark glass with
-> nothing displayed on it. She has one hand over her mouth in surprise, then
-> lowers it, smiles and glances down at the phone. Medium shot from the driver's
+> nothing displayed on it. She looks directly into the camera lens
+> the whole time: one hand over her mouth in surprise, then she lowers it and
+> smiles straight into the lens. Medium shot from the driver's
 > side. Shot on a Sony FX3 with a 35mm lens at f/2, 24fps, handheld with
 > micro-shake. Flat daylight through the windscreen, log-style grading, natural
 > skin texture with visible pores, flyaway hair. Audio: she says "Wait — this
 > was ten dollars?" in a warm, casual American accent, conversational tone. No
 > background music, no other voices, no sound effects. No subtitles, no
 > captions, no on-screen text. No logos. Avoid: glowing or readable phone
-> screen, reflections on the screen, exaggerated acting, shouting, advertising
+> screen, reflections on the screen, acne, blemishes, uneven skin spots, exaggerated acting, shouting, advertising
 > voice, crying, waxy plastic skin, airbrushed faces, perfect symmetry, morphing
 > hands, extra fingers, slow motion, AI sheen.
 
@@ -68,8 +74,9 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > Real lifestyle footage, vertical 9:16, 8 seconds, single continuous take. A
 > young woman sits cross-legged on a sofa at home in a soft jumper, holding her
 > phone; the phone screen is switched off, plain dark glass with nothing
-> displayed on it. She looks at the phone with a delighted grin, then looks up
-> toward the camera still smiling. Medium shot, a cushion cropping the lower
+> displayed on it. She glances at the phone once, then looks
+> directly into the camera lens with a delighted grin, holding eye contact with
+> the lens. Medium shot, a cushion cropping the lower
 > corner. Shot on a Canon C70 with a 35mm lens at f/2, 24fps, handheld with
 > drift. Flat window light mixed with a warm lamp, log-style grading, natural
 > skin texture with visible pores, messy hair. Audio: she says "And it plays our
@@ -86,14 +93,16 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > young woman sits at a café table and turns her phone around to show it to a
 > friend sitting opposite, whose back and shoulder are in the foreground; the
 > phone screen is switched off, plain dark glass with nothing displayed on it.
-> She smiles as she holds the phone up. Medium shot from beside the table,
+> She holds the phone up toward her friend while turning her head to look
+> directly into the camera lens, smiling. Medium shot from beside the table,
 > blurred café interior behind. Shot on a Sony A7S III with a 50mm lens at f/2,
 > 24fps, handheld with micro-shake. Mixed window and interior light, flat
-> log-style grading, natural skin texture with visible pores. Audio: she says
+> log-style grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes. Audio: she says
 > "This is our save the date." in a warm, casual American accent, conversational
 > tone. No background music, no other voices, no sound effects. No subtitles, no
 > captions, no on-screen text. No logos, no readable branding. Avoid: glowing or
-> readable phone screen, reflections on the screen, exaggerated acting,
+> readable phone screen, reflections on the screen, acne, blemishes, uneven
+> skin spots, exaggerated acting,
 > advertising voice, waxy plastic skin, airbrushed faces, perfect symmetry,
 > morphing hands, extra fingers, slow motion, AI sheen.
 
@@ -102,15 +111,16 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > Real wedding footage, vertical 9:16, 8 seconds, single continuous take. A
 > bride in a white robe with her hair in rollers sits on the edge of a hotel bed
 > holding her phone; the phone screen is switched off, plain dark glass with
-> nothing displayed on it. She looks at the screen, laughs softly, then looks up
-> toward the camera. Medium shot, the hanging wedding dress softly out of focus
+> nothing displayed on it. She glances at the screen, laughs softly, then looks
+> directly into the camera lens and holds eye contact. Medium shot, the hanging wedding dress softly out of focus
 > behind her. Shot on a Canon C70 with a 35mm lens at f/2, 24fps, handheld with
 > drift. Soft window light with a blown-out curtain highlight, flat log-style
-> grading, natural skin texture with visible pores, stray hairs. Audio: she says
+> grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes, stray hairs. Audio: she says
 > "I didn't expect it to actually move." in a warm, casual American accent,
 > conversational tone. No background music, no other voices, no sound effects.
 > No subtitles, no captions, no on-screen text. No logos. Avoid: glowing or
-> readable phone screen, reflections on the screen, exaggerated acting,
+> readable phone screen, reflections on the screen, acne, blemishes, uneven
+> skin spots, exaggerated acting,
 > advertising voice, crying, waxy plastic skin, airbrushed faces, perfect
 > symmetry, morphing hands, extra fingers, slow motion, AI sheen.
 
@@ -120,14 +130,15 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > young woman in a jumper leans against a kitchen counter holding a coffee mug
 > in one hand and her phone in the other; the phone screen is switched off,
 > plain dark glass with nothing displayed on it. She glances at the phone,
-> raises her eyebrows, smiles and looks up toward the camera. Medium shot,
+> raises her eyebrows, then looks directly into the camera lens, smiling. Medium shot,
 > kitchen shelves blurred behind. Shot on a Sony FX3 with a 35mm lens at f/2,
 > 24fps, handheld with micro-shake. Flat morning window light with one blown
-> highlight, log-style grading, natural skin texture with visible pores. Audio:
+> highlight, log-style grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes. Audio:
 > she says "This cost less than my coffee." in a warm, casual American accent,
 > conversational tone. No background music, no other voices, no sound effects.
 > No subtitles, no captions, no on-screen text. No logos. Avoid: glowing or
-> readable phone screen, reflections on the screen, exaggerated acting,
+> readable phone screen, reflections on the screen, acne, blemishes, uneven
+> skin spots, exaggerated acting,
 > advertising voice, waxy plastic skin, airbrushed faces, perfect symmetry,
 > morphing hands, extra fingers, slow motion, AI sheen.
 
@@ -136,14 +147,15 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > Real lifestyle footage, vertical 9:16, 8 seconds, single continuous take. A
 > young woman sits at a desk holding her phone with a closed laptop beside her;
 > the phone screen is switched off, plain dark glass with nothing displayed on
-> it. She looks at the phone, smiles, nods slightly and looks up toward the
-> camera. Medium shot, framing slightly off-centre. Shot on a Canon C70 with a
+> it. She glances at the phone, then looks directly into the camera lens, smiles
+> and nods slightly. Medium shot, framing slightly off-centre. Shot on a Canon C70 with a
 > 35mm lens at f/2, 24fps, handheld with drift. Flat overcast window light,
-> log-style grading, natural skin texture with visible pores, loose hair. Audio:
+> log-style grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes, loose hair. Audio:
 > she says "One link and everything's on it." in a warm, casual American accent,
 > conversational tone. No background music, no other voices, no sound effects.
 > No subtitles, no captions, no on-screen text. No logos. Avoid: glowing or
-> readable phone screen, reflections on the screen, exaggerated acting,
+> readable phone screen, reflections on the screen, acne, blemishes, uneven
+> skin spots, exaggerated acting,
 > advertising voice, waxy plastic skin, airbrushed faces, perfect symmetry,
 > morphing hands, extra fingers, slow motion, AI sheen.
 
