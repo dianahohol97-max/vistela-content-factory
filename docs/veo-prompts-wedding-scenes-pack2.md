@@ -150,8 +150,8 @@
 > skin texture, wind-messed hair. Style of unedited Pexels wedding footage. No
 > audio, no dialogue, no music — silent footage. No text, no logos. Avoid: waxy
 > plastic skin, airbrushed faces, perfect symmetry, glowing rim light, blank or
-> sad expressions, looking away from each other, morphing hands, extra fingers,
-> slow motion, cinematic score, AI sheen, oversaturation.
+> sad expressions, vacant stares, looking past the camera, morphing hands, extra
+> fingers, slow motion, cinematic score, AI sheen, oversaturation.
 
 ## 8 · Виноградник (Mediterranean)
 
