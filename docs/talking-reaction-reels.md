@@ -60,8 +60,7 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > the whole time: one hand over her mouth in surprise, then she lowers it and
 > smiles straight into the lens. Medium shot from the driver's
 > side. Shot on a Sony FX3 with a 35mm lens at f/2, 24fps, handheld with
-> micro-shake. Flat daylight through the windscreen, log-style grading, natural
-> skin texture with visible pores, flyaway hair. Audio: she says "Wait — this
+> micro-shake. Flat daylight through the windscreen, log-style grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes, flyaway hair. Audio: she says "Wait — this
 > was ten dollars?" in a warm, casual American accent, conversational tone. No
 > background music, no other voices, no sound effects. No subtitles, no
 > captions, no on-screen text. No logos. Avoid: glowing or readable phone
@@ -78,8 +77,7 @@ AI-лейбл на TikTok/Instagram обов'язковий — обличчя �
 > directly into the camera lens with a delighted grin, holding eye contact with
 > the lens. Medium shot, a cushion cropping the lower
 > corner. Shot on a Canon C70 with a 35mm lens at f/2, 24fps, handheld with
-> drift. Flat window light mixed with a warm lamp, log-style grading, natural
-> skin texture with visible pores, messy hair. Audio: she says "And it plays our
+> drift. Flat window light mixed with a warm lamp, log-style grading, clear healthy skin with fine natural texture and soft natural makeup, no blemishes, messy hair. Audio: she says "And it plays our
 > song." in a warm, casual American accent, conversational tone. No background
 > music, no other voices, no sound effects. No subtitles, no captions, no
 > on-screen text. No logos. Avoid: glowing or readable phone screen, reflections
