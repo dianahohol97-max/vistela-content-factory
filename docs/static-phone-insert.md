@@ -80,6 +80,35 @@
 > glare or reflections on the screen, glowing screen, faces, people moving in
 > the background, morphing fingers, extra fingers, slow motion, AI sheen.
 
+
+## 4 · Продовження сцени в машині (під talking-reaction №1)
+
+Прямий наступний кадр після репліки «Wait — this was ten dollars?». Якщо
+Gemini дозволяє — завантаж останній кадр першого кліпу як референс, щоб
+дівчина, одяг і салон збіглися.
+
+> Real lifestyle footage, vertical 9:16, 8 seconds, locked-off tripod shot with
+> absolutely no camera movement — no pan, no tilt, no zoom, no reframing. Direct
+> continuation of the previous shot: the same young woman in the passenger seat
+> of the same parked car, same seatbelt across her chest, same daylight through
+> the windscreen and same wardrobe. She now turns her phone toward the camera
+> and holds it upright and completely still with both hands, elbows braced
+> against her body so the phone does not move at all; the phone is square-on,
+> parallel to the camera sensor, screen facing the camera directly. The screen
+> is switched off, plain matte dark glass with nothing displayed on it and no
+> reflections. All four corners of the screen stay fully visible in frame with
+> generous margin, and her fingers grip only the outer edges of the phone — they
+> never cross onto the screen. Framed from the collarbone down: no face, no head
+> in frame, only hands, forearms, the seatbelt and the car interior. Shot on a
+> Sony FX3 with a 50mm lens at f/4, 24fps, camera locked on a tripod. Flat
+> unchanging daylight through the windscreen angled away from the glass,
+> log-style grading, clear natural hand skin, short unpolished nails. Style of
+> unedited Pexels lifestyle footage. No audio, no dialogue, no music — silent
+> footage. No text, no logos. Avoid: camera movement, zoom, pan, handheld shake,
+> the phone tilting rotating or drifting, fingers covering the screen, glare or
+> reflections on the screen, glowing screen, faces, morphing fingers, extra
+> fingers, slow motion, AI sheen.
+
 ## Як я вставляю продукт
 
 Беру координати чотирьох кутів екрана з першого кадру, масштабую відео продукту
