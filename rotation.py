@@ -17,7 +17,14 @@ import config as C
 
 LOG_FILE = "rotation_log.json"
 QUARANTINE_PAIR_DAYS = 21     # a pair can't repeat within this window
-QUARANTINE_SCENE_DAYS = 3     # a scene can't reappear within this window
+QUARANTINE_SCENE_DAYS = 7     # a scene can't reappear within this window (cap)
+
+
+def _scene_quarantine(n_scenes):
+    """Effective scene quarantine: grows with the pool so a small pool doesn't
+    deadlock (falls back to n-1 days) and a big pool spreads scenes out up to
+    the QUARANTINE_SCENE_DAYS cap."""
+    return max(2, min(QUARANTINE_SCENE_DAYS, n_scenes - 1))
 
 
 def _load(root):
@@ -83,7 +90,7 @@ def next_pairs(root, scenes, products, n, today=None):
                 return False
             rec = pairs.get(key(sp), {})
             pair_ok = _days_since(rec.get("last"), today) >= QUARANTINE_PAIR_DAYS
-            scene_ok = _days_since(scenes_log.get(sname[sp[0]]), today) >= QUARANTINE_SCENE_DAYS
+            scene_ok = _days_since(scenes_log.get(sname[sp[0]]), today) >= _scene_quarantine(len(scenes))
             return pair_ok and scene_ok
 
         pool = [sp for sp in all_pairs if usable(sp, strict=True)]
