@@ -47,7 +47,7 @@
 > airbrushed hands, morphing fingers, extra fingers, slow motion, cinematic
 > score, AI sheen.
 
-## 3 · ASMR: воскова печатка
+## 3 · ASMR: воскова печатка — НЕ ГЕНЕРУВАТИ (папір, суперечить digital-only)
 
 > Real ASMR stock footage, vertical 9:16, 8 seconds, single continuous take,
 > macro. Extreme close-up of a woman's hands pressing a brass seal into a pool
@@ -61,7 +61,7 @@
 > flawless seal, CGI wax, glowing highlights, waxy plastic skin, airbrushed
 > hands, morphing fingers, extra fingers, slow motion, cinematic score, AI sheen.
 
-## 4 · ASMR: картка виходить із конверта
+## 4 · ASMR: картка з конверта — НЕ ГЕНЕРУВАТИ (папір)
 
 > Real ASMR stock footage, vertical 9:16, 8 seconds, single continuous take,
 > macro. Extreme close-up of hands slowly sliding a thick textured card out of a
@@ -134,7 +134,7 @@
 > visible face, readable or glowing phone screen, waxy plastic skin, airbrushed
 > skin, morphing hands, extra fingers, slow motion, cinematic score, AI sheen.
 
-## 9 · Гість читає запрошення на дивані вдома
+## 9 · Гість на дивані — НЕ ГЕНЕРУВАТИ у цьому вигляді (паперовий конверт)
 
 > Real lifestyle stock footage, vertical 9:16, 8 seconds, single continuous
 > take. Filmed over the shoulder: a woman sits cross-legged on a sofa at home
@@ -149,7 +149,7 @@
 > face, readable or glowing screen, waxy plastic skin, airbrushed hands,
 > morphing fingers, extra fingers, slow motion, cinematic score, AI sheen.
 
-## 10 · ASMR: стрічка на конверті
+## 10 · ASMR: стрічка на конверті — НЕ ГЕНЕРУВАТИ (папір)
 
 > Real ASMR stock footage, vertical 9:16, 8 seconds, single continuous take,
 > macro. Extreme close-up of hands tying a thin silk ribbon around a stack of

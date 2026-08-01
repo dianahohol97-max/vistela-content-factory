@@ -62,7 +62,7 @@
 > text, no logos. Avoid: visible faces, readable phone screens, glowing
 > screens, dramatic acting, oversaturation.
 
-## 6 · Макро: конверт і воскова печатка (перебивка для etiquette)
+## 6 · Макро: конверт і печатка — НЕ ГЕНЕРУВАТИ (папір, суперечить digital-only)
 
 > Vertical 9:16 video, 8 seconds, macro photography style. Close-up of a dusty
 > blue handmade paper envelope lying on a linen tablecloth beside a sprig of
