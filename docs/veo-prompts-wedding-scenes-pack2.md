@@ -104,12 +104,14 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > A Black bride and groom slow dance on a rooftop terrace at sunset, city skyline
 > blurred behind them, string lights along the railing partly blown out by the
-> low sun. They simply sway, her head near his shoulder. Shot on a Canon C70 with
+> low sun. They hold eye contact and smile at each other, then she rests her head
+> on his shoulder as they sway. Shot on a Canon C70 with
 > a 35mm lens, 24fps, handheld with micro-shake, one blown highlight in frame and
 > a faint lens flare. Flat log-style grading, natural skin texture with visible
 > pores, loose curls moving in the wind. Style of unedited Pexels wedding footage.
 > No audio, no dialogue, no music — silent footage. No text, no logos. Avoid:
-> waxy plastic skin, airbrushed faces, perfect symmetry, glowing rim light,
+> blank or sad expressions, vacant stares, looking away from each other, waxy
+> plastic skin, airbrushed faces, perfect symmetry, glowing rim light,
 > choreographed moves, morphing hands, slow motion, cinematic score, AI sheen.
 
 ## 6 · Перший танець у стодолі (rustic)
@@ -134,13 +136,15 @@
 > Real wedding stock footage, vertical 9:16, 8 seconds, single continuous take.
 > An Asian bride and groom walk barefoot along wet sand at sunset holding hands,
 > shallow waves washing over their feet, her veil and dress hem moving in the
-> wind; sand sticks to her ankles. Shot on a Sony FX3 with a 50mm lens, 24fps,
+> wind; sand sticks to her ankles. They turn to each other, hold eye contact and
+> laugh together as they walk. Shot on a Sony FX3 with a 50mm lens, 24fps,
 > handheld walking alongside them with natural bounce, horizon slightly tilted.
 > Low backlight with haze and a soft lens flare, flat log-style grading, natural
 > skin texture, wind-messed hair. Style of unedited Pexels wedding footage. No
 > audio, no dialogue, no music — silent footage. No text, no logos. Avoid: waxy
-> plastic skin, airbrushed faces, perfect symmetry, glowing rim light, morphing
-> hands, extra fingers, slow motion, cinematic score, AI sheen, oversaturation.
+> plastic skin, airbrushed faces, perfect symmetry, glowing rim light, blank or
+> sad expressions, looking away from each other, morphing hands, extra fingers,
+> slow motion, cinematic score, AI sheen, oversaturation.
 
 ## 8 · Виноградник (Mediterranean)
 
@@ -206,8 +210,9 @@
 > flat log-style grading, natural skin texture, loose strands of hair across her
 > face. Style of unedited Pexels wedding footage. No audio, no dialogue, no music
 > — silent footage. No text, no logos. Avoid: waxy plastic skin, airbrushed
-> faces, perfect symmetry, glowing rim light, spinning, morphing hands, extra
-> fingers, slow motion, cinematic score, AI sheen, oversaturation.
+> faces, perfect symmetry, glowing rim light, blank or sad expressions, looking
+> away from each other, spinning, morphing hands, extra fingers, slow motion,
+> cinematic score, AI sheen, oversaturation.
 
 ---
 
