@@ -221,7 +221,8 @@ def build_personalize():
     slug = re.sub(r"[^a-z0-9]+", "-", f"pwm-{base}-{today.isoformat()}".lower()).strip("-")
     reel, cover = RR.assemble_personalize(clip, hook, out_dir, slug)
     link = RR.listing_link_from_filename(base)
-    copy = C.PRODUCT_COPY[C.product_category(clip)]
+    cat = C.product_category(clip)
+    copy = C.PRODUCT_COPY[cat]
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
     ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio."
