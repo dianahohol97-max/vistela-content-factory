@@ -113,6 +113,16 @@ REELS_PER_RUN = 1   # 1/day while phone-reveal is the only reel type
 # Instagram hashtags are dead for reach in 2026 (the algorithm reads the content
 # itself), so IG captions stay clean with 1-2 natural keywords. TikTok & YouTube
 # still use tags/keywords for search.
+# Comment-gate CTA: competitor posts using "comment LINK" collect 350\u20131300
+# comments, the strongest algorithmic signal in this niche. Appended last so it
+# is the final thing read.
+COMMENT_GATE = {
+    "save_the_date": 'Comment "DATE" and I\'ll send you the link \U0001F48C',
+    "wedding_website": 'Comment "LINK" and I\'ll send you the template \U0001F48C',
+    "invitation": 'Comment "INVITE" and I\'ll send you the link \U0001F48C',
+    "default": 'Comment "LINK" and I\'ll send it to you \U0001F48C',
+}
+
 PRODUCT_COPY = {
     "save_the_date": {
         "keyword": "animated save the date",
@@ -201,8 +211,19 @@ SHOWCASE_HOOKS = {
         "POV: your Save the Date also plays your favourite song",
         "POV: you send your guests a video save the date",
         "This is what a $10 save the date actually looks like",
-        "If you're a 2027 bride, save this now",
         "The first thing your guests will ever see of your wedding",
+        # money math — strongest lever in this niche
+        # (docs/competitor-research-2026-08.md: price hooks beat aesthetic ones ~30x)
+        "POV: you skipped $400 of printing and sent this instead",
+        "Paper save the dates: $400. This one: under $10.",
+        "How I sent 120 save the dates for under $10",
+        "Budget wedding tip: send your save the date, don't print it",
+        "Stop paying $4 per save the date",
+        # year call-out
+        "2027 brides, this is the save the date you need",
+        "If you're a 2027 bride, save this now",
+        # interaction
+        "Tap the wax seal and watch what happens",
     ],
     "wedding_website": [
         "POV: your guests just opened your wedding website",
@@ -213,6 +234,12 @@ SHOWCASE_HOOKS = {
         "One link that answers every guest question",
         "Stop texting 'what's the dress code' \u2014 put it here",
         "Your wedding website is doing the RSVP work for you",
+        # money math + year call-out
+        "POV: you saved $500 on paper invites and sent this link instead",
+        "Printed invites: $500. This website: under $10.",
+        "Budget wedding tip: your website IS the invitation",
+        "2027 brides, this is the invitation you actually need",
+        "Your whole wedding in one link — for less than a coffee",
     ],
     "invitation": [
         "POV: your guests just opened your wedding invitation",
@@ -242,9 +269,12 @@ PRODUCT_TOUR_HOOKS = [
     "Turn your sound on for this one",
     "Watch me turn a template into THIS",
     "The full design, start to finish",
-    "Here it is \u2014 exactly what you download",
     "Rate this save the date 1\u201310",
     "From boring template to dream invite",
+    # money math
+    "This costs less than one printed invite",
+    "Under $10. Watch the whole thing.",
+    "Budget wedding tip: this replaces $400 of printing",
 ]
 
 # Burned-in hook overlay on product-tour reels: the hook line is shown as

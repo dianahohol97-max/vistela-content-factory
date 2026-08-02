@@ -179,8 +179,9 @@ def build_reels():
         copy = C.PRODUCT_COPY[cat]
         kw = copy["keyword"]
         # Instagram: clean, no hashtags, one natural keyword + CTA to bio
+        gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
         ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\n"
-              f"This {kw} is on Etsy \u2014 link in bio.")
+              f"This {kw} is on Etsy \u2014 link in bio.\n\n{gate}")
         tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
         items.append({
             "id": f"REEL_{slug}",
@@ -222,7 +223,9 @@ def build_personalize():
     link = RR.listing_link_from_filename(base)
     copy = C.PRODUCT_COPY[C.product_category(clip)]
     kw = copy["keyword"]
-    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio.")
+    gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
+    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio."
+          f"\n\n{gate}")
     tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
     items.append({
         "id": f"REEL_{slug}",
@@ -328,7 +331,9 @@ def build_product_tour():
     cat = C.product_category(clip)
     copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
     kw = copy["keyword"]
-    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio.")
+    gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
+    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio."
+          f"\n\n{gate}")
     tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
     items.append({
         "id": f"REEL_{slug}",
