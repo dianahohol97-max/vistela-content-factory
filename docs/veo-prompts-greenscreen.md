@@ -123,3 +123,96 @@ Intensity ~15–25, Shadow ~10. Далі Track або ключові кадри.
 > tapping, glare or gradients on the green, green reflections on skin, motion
 > blur, the phone leaving frame, cinematic lighting, professional look, anything
 > green in the background.
+
+
+---
+
+# ФОТО з зеленим екраном (кращий варіант — вставку робить Клод)
+
+Статичне фото > відео: немає руху, тож вставка лягає ідеально; Imagen
+генерує кадр чистіше за відео (нема часових артефактів); можна вставити
+продукт З ПЕРСПЕКТИВОЮ (телефон під кутом), що на відео недосяжно.
+Життя додається на монтажі: повільний наїзд, світіння екрана, відблиск.
+
+Референс вигляду: пост @thedigitalyes 19,3K ❤️ · 7 927 💬 · 26,1K 📩 —
+рука зі светром, смугаста тканина, дерев'яна підлога в розфокусі,
+тепле кімнатне світло, телефон під кутом.
+
+## 1 · Рука зі светром, смугаста тканина
+
+> Vertical 9:16 photo, shot on an iPhone, casual and unstyled. A young woman's
+> hands hold a smartphone at a natural angle over her lap; she wears a cream
+> knitted jumper with the sleeve slouched at the wrist, sitting on striped beige
+> bedding, a wooden floor and a dark rug blurred far behind. The phone screen is
+> filled entirely with a flat, bright, evenly lit chroma-key green rectangle —
+> pure solid green, no icons, no text, no glare, no reflections, no gradients.
+> The whole phone and all four screen corners are fully visible, and her fingers
+> grip only the outer edges — nothing crosses the screen. Soft warm indoor
+> daylight, shallow depth of field, natural skin texture with visible knuckles,
+> neutral manicure. Nothing green anywhere else in the frame. Avoid: glare or
+> reflections on the green, gradients, fingers over the screen, studio lighting,
+> glossy retouched skin, anything green in the background.
+
+## 2 · Дві руки на колінах, диван
+
+> Vertical 9:16 photo, shot on an iPhone, casual and unstyled. A young woman sits
+> cross-legged on a sofa in soft loungewear, holding a smartphone in both hands
+> resting on her knees, tilted slightly toward the camera; a knitted blanket and
+> cushions around her, a warm lamp glow behind. The phone screen is filled
+> entirely with a flat, bright, evenly lit chroma-key green rectangle — pure
+> solid green, no icons, no text, no glare, no reflections, no gradients. The
+> whole phone and all four screen corners are fully visible, fingers on the outer
+> edges only — nothing crosses the screen. Warm evening light, shallow depth of
+> field, natural skin texture. Nothing green anywhere else in the frame. Avoid:
+> glare or reflections on the green, gradients, fingers over the screen, studio
+> lighting, glossy retouched skin, anything green in the background.
+
+## 3 · Пасажирське сидіння
+
+> Vertical 9:16 photo, shot on an iPhone, casual and unstyled. A young woman sits
+> in the passenger seat of a parked car with her seatbelt across her chest,
+> holding a smartphone in one hand at chest height, tilted slightly; car interior
+> and a blurred street through the window behind. The phone screen is filled
+> entirely with a flat, bright, evenly lit chroma-key green rectangle — pure
+> solid green, no icons, no text, no glare, no reflections, no gradients. The
+> whole phone and all four screen corners are fully visible, fingers on the outer
+> edge only — nothing crosses the screen. Natural daylight, shallow depth of
+> field, natural skin texture, neutral manicure. Nothing green anywhere else in
+> the frame. Avoid: glare or reflections on the green, gradients, fingers over
+> the screen, studio lighting, glossy retouched skin, anything green in the
+> background.
+
+## 4 · Ранок нареченої, сукня позаду
+
+> Vertical 9:16 photo, shot on an iPhone, casual and unstyled. A bride in a white
+> robe with her hair in rollers sits on the edge of a hotel bed, holding a
+> smartphone in both hands in front of her at a natural angle; her wedding dress
+> hangs on the wardrobe door softly out of focus behind her. The phone screen is
+> filled entirely with a flat, bright, evenly lit chroma-key green rectangle —
+> pure solid green, no icons, no text, no glare, no reflections, no gradients.
+> The whole phone and all four screen corners are fully visible, fingers on the
+> outer edges only — nothing crosses the screen. Soft window light, shallow depth
+> of field, natural skin texture. Nothing green anywhere else in the frame.
+> Avoid: glare or reflections on the green, gradients, fingers over the screen,
+> studio lighting, glossy retouched skin, anything green in the background.
+
+## 5 · Кав'ярня, показує телефон через стіл
+
+> Vertical 9:16 photo, shot on an iPhone, casual and unstyled. A young woman sits
+> at a café table holding a smartphone turned toward the camera in one hand,
+> elbow resting on the table beside a flat white in a ceramic cup; blurred café
+> interior behind. The phone screen is filled entirely with a flat, bright,
+> evenly lit chroma-key green rectangle — pure solid green, no icons, no text, no
+> glare, no reflections, no gradients. The whole phone and all four screen
+> corners are fully visible, fingers on the outer edge only — nothing crosses the
+> screen. Warm window light, shallow depth of field, natural skin texture.
+> Nothing green anywhere else in the frame. Avoid: glare or reflections on the
+> green, gradients, fingers over the screen, studio lighting, glossy retouched
+> skin, anything green in the background.
+
+## Що робить Клод із фото
+
+1. Знаходить кути зеленої області → перспективна вставка відео продукту
+2. Легке світіння екрана + відблиск на склі
+3. Повільний наїзд (Ken Burns) — кадр «дихає»
+4. Хук у перші 3 секунди + підпис із коментар-гейтом
