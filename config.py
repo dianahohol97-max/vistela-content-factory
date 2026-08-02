@@ -135,6 +135,14 @@ PRODUCT_COPY = {
                     "save the date template canva", "animated wedding invitation", "wedding stationery"],
         # First 3 render above the Shorts title, so lead with the strongest search terms.
         "yt_hashtags": ["savethedate", "animatedsavethedate", "shorts", "weddingsavethedate", "weddingplanning2026"],
+        # Instagram indexes caption words for search, so one natural keyword
+        # sentence goes in the body; the tag stack goes last.
+        "ig_seo": ("Animated save the date video — a digital save the date template you edit in "
+                   "Canva, download and send. No printing, no postage, no designer."),
+        "ig_hashtags": ["savethedate", "animatedsavethedate", "digitalsavethedate",
+                        "savethedatevideo", "savethedateideas", "weddingstationery",
+                        "weddinginvitations", "2026bride", "2027bride", "bridetobe",
+                        "weddingplanning", "weddingtok"],
     },
     "wedding_website": {
         "keyword": "wedding website template",
@@ -145,6 +153,12 @@ PRODUCT_COPY = {
                     "wedding website canva", "wedding website ideas 2026", "editable wedding website",
                     "online wedding invitation", "wedding planning 2026", "wedding stationery"],
         "yt_hashtags": ["weddingwebsite", "weddingwebsitedesign", "shorts", "weddingplanning2026", "rsvp"],
+        "ig_seo": ("Wedding website template with RSVP — an editable Canva wedding website you "
+                   "personalise yourself and share as one link. Digital invitation, schedule "
+                   "and guest info in one place."),
+        "ig_hashtags": ["weddingwebsite", "weddingwebsitedesign", "weddingwebsitetemplate",
+                        "rsvp", "digitalinvites", "weddingstationery", "weddinginvitations",
+                        "2026bride", "2027bride", "bridetobe", "weddingplanning", "weddingtok"],
     },
     "invitation": {
         "keyword": "animated wedding invitation",
@@ -155,6 +169,13 @@ PRODUCT_COPY = {
                     "modern wedding invitation", "wedding invitation ideas 2026", "evite wedding invitation",
                     "wedding invitation canva", "wedding planning 2026", "wedding stationery"],
         "yt_hashtags": ["weddinginvitation", "digitalweddinginvitation", "shorts", "animatedinvitation", "weddingplanning2026"],
+        "ig_seo": ("Animated wedding invitation — a digital wedding invitation template editable "
+                   "in Canva. Change the names, dates and colours, download and send it the "
+                   "same evening."),
+        "ig_hashtags": ["weddinginvitation", "weddinginvitations", "digitalweddinginvitation",
+                        "animatedinvitation", "digitalinvites", "weddingstationery",
+                        "savethedate", "2026bride", "2027bride", "bridetobe",
+                        "weddingplanning", "weddingtok"],
     },
     "default": {
         "keyword": "editable wedding stationery",
@@ -165,6 +186,13 @@ PRODUCT_COPY = {
                     "wedding invitation template", "wedding planning 2026", "modern wedding stationery",
                     "etsy wedding", "canva wedding", "wedding reels"],
         "yt_hashtags": ["wedding", "weddingstationery", "shorts", "canvatemplate", "weddingplanning2026"],
+        "ig_seo": ("Editable wedding stationery in Canva — animated save the dates, digital "
+                   "wedding invitations and wedding website templates you personalise yourself "
+                   "and send the same day."),
+        "ig_hashtags": ["weddingstationery", "weddinginvitations", "savethedate",
+                        "weddingwebsite", "digitalinvites", "canvatemplate",
+                        "2026bride", "2027bride", "bridetobe", "engaged",
+                        "weddingplanning", "weddingtok"],
     },
 }
 

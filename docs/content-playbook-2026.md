@@ -178,6 +178,23 @@ Wedding Planning Tips · Digital Save the Dates. Опис дошки: 1–2 ре
   #weddingstationery #bridetok #weddingtok #weddingplanning #engaged
   #weddingwebsite #weddinginspo
 
+## 5.1 · SEO в підписі (не тільки хештеги)
+
+IG і TikTok індексують **текст** підпису, не лише теги. Тому кожен підпис
+збирається за структурою (`build._captions`):
+
+1. хук 🤍
+2. вигода одним реченням
+3. **SEO-речення** — ключі природною мовою: `animated save the date video`,
+   `digital save the date template`, `edit in Canva`, `wedding website
+   template with RSVP`
+4. `This <keyword> is on Etsy — link in bio.`
+5. коментар-гейт (`Comment "DATE"…`)
+6. стек хештегів: 12 тегів = широкі + нішеві + рік нареченої
+
+Ключі задаються в `config.PRODUCT_COPY[cat]["ig_seo"]` та `["ig_hashtags"]`
+окремо для save the date / website / invitation, TikTok має свій стек.
+
 ## 6 · Аудіо-стратегія
 
 Трендовий звук: <5 000 uses зі стрілкою вгору = золото; >100K uses = пізно.

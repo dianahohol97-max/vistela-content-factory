@@ -180,9 +180,7 @@ def build_reels():
         kw = copy["keyword"]
         # Instagram: clean, no hashtags, one natural keyword + CTA to bio
         gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
-        ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\n"
-              f"This {kw} is on Etsy \u2014 link in bio.\n\n{gate}")
-        tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
+        ig, tiktok = _captions(hook, copy, kw, gate)
         items.append({
             "id": f"REEL_{slug}",
             "channels": ["instagram_reel", "youtube_short", "tiktok"],
@@ -225,9 +223,7 @@ def build_personalize():
     copy = C.PRODUCT_COPY[cat]
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
-    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio."
-          f"\n\n{gate}")
-    tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
+    ig, tiktok = _captions(hook, copy, kw, gate)
     items.append({
         "id": f"REEL_{slug}",
         "channels": ["instagram_reel", "youtube_short", "tiktok"],
@@ -250,6 +246,23 @@ def build_personalize():
     return items
 
 
+
+
+def _captions(hook, copy, kw, gate):
+    """(instagram, tiktok) captions: hook -> benefit -> keyword sentence -> shop
+    -> comment gate -> tag stack. Instagram and TikTok both index caption text
+    for search, so the product's search terms have to appear as normal words,
+    not only as hashtags. Each platform gets its own tag stack."""
+    body = [f"{hook} \U0001F90D", copy["value"]]
+    if copy.get("ig_seo"):
+        body.append(copy["ig_seo"])
+    body += [f"This {kw} is on Etsy — link in bio.", gate]
+
+    def with_tags(tags):
+        t = " ".join("#" + x for x in tags)
+        return "\n\n".join(body + [t]) if t else "\n\n".join(body)
+
+    return with_tags(copy.get("ig_hashtags", [])), with_tags(copy["tiktok_tags"])
 
 
 def _render_hook_overlay(hook, path):
@@ -333,9 +346,7 @@ def build_product_tour():
     copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
-    ig = (f"{hook} \U0001F90D\n\n{copy['value']}\n\nThis {kw} is on Etsy \u2014 link in bio."
-          f"\n\n{gate}")
-    tiktok = ig + "\n\n" + " ".join("#" + t for t in copy["tiktok_tags"])
+    ig, tiktok = _captions(hook, copy, kw, gate)
     items.append({
         "id": f"REEL_{slug}",
         "channels": ["instagram_reel", "tiktok"],
