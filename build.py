@@ -217,8 +217,6 @@ def build_personalize():
     if not clips:
         return items
     today = dt.date.today()
-    if today.toordinal() % C.PERSONALIZE_EVERY_DAYS != 0:   # every N days
-        return items
     out_dir = os.path.join(ROOT, "output", "reels")
     clip, hook = ROT.next_single(ROOT, clips, C.PERSONALIZE_HOOKS, "pwm", today)
     base = os.path.splitext(os.path.basename(clip))[0]
@@ -317,8 +315,6 @@ def build_product_tour():
     if not products:
         return items
     today = dt.date.today()
-    if today.toordinal() % C.PRODUCT_TOUR_EVERY_DAYS != 1:   # alternate with PWM days
-        return items
     # alternate product type per tour day
     stds  = [p for p in products if C.product_category(p) == "save_the_date"]
     sites = [p for p in products if C.product_category(p) == "wedding_website"]
@@ -374,11 +370,104 @@ def build_product_tour():
     _prune_reels(out_dir)
     return items
 
+def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
+    """Footage-driven reel: a clip filmed/generated outside the factory,
+    normalised to 1080x1920 with the hook burned into the first seconds and its
+    own audio kept. Used by the phone-review and AI-presenter rubrics."""
+    import re
+    items = []
+    clips = _videos(os.path.join(ROOT, folder))
+    if not clips:
+        return items
+    today = dt.date.today()
+    clip, hook = ROT.next_single(ROOT, clips, hooks, prefix, today)
+    out_dir = os.path.join(ROOT, "output", "reels")
+    os.makedirs(out_dir, exist_ok=True)
+    base = os.path.splitext(os.path.basename(clip))[0]
+    slug = re.sub(r"[^a-z0-9]+", "-", f"{prefix}-{base}-{today.isoformat()}".lower()).strip("-")
+    reel = os.path.join(out_dir, f"{slug}.mp4")
+    cover = os.path.join(out_dir, f"{slug}_cover.jpg")
+    hook_png = os.path.join(out_dir, f"{slug}_hook.png")
+    _render_hook_overlay(hook, hook_png)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-i", hook_png,
+                    "-filter_complex",
+                    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
+                    "crop=1080:1920,setsar=1,fps=30[v];"
+                    f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]",
+                    "-map", "[out]", "-map", "0:a?",
+                    "-t", str(max_s), "-c:v", "libx264", "-preset", "medium",
+                    "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",
+                    "-movflags", "+faststart", reel], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    os.remove(hook_png)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
+                    "-frames:v", "1", cover], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    link = RR.listing_link_from_filename(base)
+    cat = C.product_category(clip)
+    copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
+    kw = copy["keyword"]
+    gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
+    ig, tiktok = _captions(hook, copy, kw, gate)
+    item = {
+        "id": f"REEL_{slug}",
+        "channels": ["instagram_reel", "tiktok"],
+        "format": "video",
+        "category": cat,
+        "rubric": rubric,
+        "title": _yt_title(hook, kw),
+        "video_url": raw(os.path.relpath(reel, ROOT)),
+        "cover_url": raw(os.path.relpath(cover, ROOT)),
+        "caption": ig,
+        "caption_tiktok": tiktok,
+        "yt_description": _yt_description(copy, kw, link),
+        "yt_tags": copy["yt_tags"],
+        "tiktok_tags": copy["tiktok_tags"],
+        "link": link,
+        "share_to_feed": True,
+        "status": "ready",
+    }
+    item.update(extra or {})
+    items.append(item)
+    _prune_reels(out_dir)
+    return items
+
+
+def build_phone_review():
+    """A real phone filmed by a second camera while the product plays."""
+    return _build_review("phone_review", C.INPUT_PHONE_REVIEW, C.PHONE_REVIEW_HOOKS,
+                         C.PHONE_REVIEW_MAX_S, "phone")
+
+
+def build_ai_review():
+    """A generated presenter reviewing the product. Carries an AI label the
+    publisher must switch on in the app - both IG and TikTok require it."""
+    return _build_review("ai_review", C.INPUT_AI_REVIEW, C.AI_REVIEW_HOOKS,
+                         C.AI_REVIEW_MAX_S, "ai",
+                         extra={"ai_label": C.AI_REVIEW_LABEL})
+
+
+def build_second_reel():
+    """One reel a day from SECOND_SLOT_CYCLE. Rubrics with no footage yet are
+    skipped so the slot still gets filled by the next one in the cycle."""
+    builders = {
+        "personalize": build_personalize,
+        "phone_review": build_phone_review,
+        "product_tour": build_product_tour,
+        "ai_review": build_ai_review,
+    }
+    for rubric in C.second_slot_order(dt.date.today()):
+        items = builders[rubric]()
+        if items:
+            return items
+    return []
+
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     pin_items = build_pins()
     car_items = build_carousels()
-    reel_items = build_reels() + build_personalize() + build_product_tour()
+    reel_items = build_reels() + build_second_reel()
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
         json.dump(pin_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:

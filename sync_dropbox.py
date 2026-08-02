@@ -27,6 +27,8 @@ MAPPING = [
     ("/весільні відео", "input/wedding-scenes"),
     ("/відео продуктів", "input/templates"),
     ("/Personalise with me", "input/personalize"),
+    ("/огляди з телефоном", "input/phone-reviews"),
+    ("/аі блогери", "input/ai-reviews"),
 ]
 VIDEO_EXT = (".mp4", ".mov", ".m4v", ".webm")
 

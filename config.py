@@ -211,8 +211,11 @@ def product_category(path):
 
 # --- Personalize-With-Me reels (screen recordings of editing) --------------
 INPUT_PERSONALIZE = "input/personalize"      # Dropbox folder "Personalise with me"
-PERSONALIZE_EVERY_DAYS = 2                    # post one every 2 days
+PERSONALIZE_EVERY_DAYS = 2                    # legacy; the cycle below drives it now
 PERSONALIZE_SPEED = 5                         # speed up the editing recording 5x
+# Canva screen recordings were the single best-performing format in the
+# competitor set (5.7K / 4.2K / 3.7K hearts vs 44-164 for finished-product
+# posts), so these hooks carry the price claim, not just the process.
 PERSONALIZE_HOOKS = [
     "Watch me personalize this in 60 seconds",
     "Type your names. Add your date. Send it.",
@@ -220,7 +223,55 @@ PERSONALIZE_HOOKS = [
     "No designer needed \u2014 just add your details",
     "Turning this template into our wedding invitation",
     "Here's how easy it is to make it yours",
+    "I made our save the date for under $10",
+    "Making a $400 save the date for $9",
+    "This took me 6 minutes, not $400",
+    "POV: you saved $400 by editing it yourself",
 ]
+
+# --- Phone-review reels (a real phone filmed by a second camera) -----------
+# The competitors' reels look alive because nothing is composited: a real
+# device is filmed from the side while the animation plays. Hand movement,
+# screen glare and room light are the point - do not clean them up.
+INPUT_PHONE_REVIEW = "input/phone-reviews"   # Dropbox folder "\u043e\u0433\u043b\u044f\u0434\u0438 \u0437 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u043e\u043c"
+PHONE_REVIEW_MAX_S = 15
+PHONE_REVIEW_HOOKS = [
+    "I sent this instead of $400 of paper",
+    "Watch what my guests actually receive",
+    "This is what lands in their messages",
+    "My $9 save the date, on a real phone",
+    "I filmed what the guests see",
+    "POV: this arrives in your messages",
+    "Tap the seal and watch it open",
+    "2027 brides, this is what they get",
+]
+
+# --- AI-presenter review reels ---------------------------------------------
+# A generated presenter reviewing the product. Must be labelled as AI on
+# Instagram and TikTok - both platforms require it for realistic synthetic
+# people, and an unlabelled one risks the reach the reel is made for.
+INPUT_AI_REVIEW = "input/ai-reviews"         # Dropbox folder "\u0430\u0456 \u0431\u043b\u043e\u0433\u0435\u0440\u0438"
+AI_REVIEW_MAX_S = 22
+AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
+AI_REVIEW_HOOKS = [
+    "I reviewed a $9 wedding save the date",
+    "Wedding stationery under $10 - honest look",
+    "I tested the $9 save the date everyone sends",
+    "Is a $10 wedding website actually good?",
+    "Reviewing the save the date from your feed",
+    "2027 brides keep asking about this one",
+]
+
+# The daily feed is one phone-reveal reel plus one reel from this cycle, so
+# every rubric gets a turn and no format repeats two days running. A rubric
+# with no footage yet is skipped and the next one in the cycle takes the slot.
+SECOND_SLOT_CYCLE = ["personalize", "phone_review", "product_tour", "ai_review"]
+
+
+def second_slot_order(today):
+    """Today's rubric preference order for the second daily reel."""
+    i = today.toordinal() % len(SECOND_SLOT_CYCLE)
+    return SECOND_SLOT_CYCLE[i:] + SECOND_SLOT_CYCLE[:i]
 
 
 # Showcase hooks for the phone-reveal format (product shown on a phone, not
@@ -337,7 +388,8 @@ HOOK_OVERLAY_SECONDS = 3.0
 # thought — so an over-long hook fails the build instead of shipping unreadable.
 HOOK_MAX_CHARS = 50
 _too_long = sorted({h for hooks in (list(SHOWCASE_HOOKS.values())
-                                    + [PERSONALIZE_HOOKS, PRODUCT_TOUR_HOOKS])
+                                    + [PERSONALIZE_HOOKS, PRODUCT_TOUR_HOOKS,
+                                       PHONE_REVIEW_HOOKS, AI_REVIEW_HOOKS])
                     for h in hooks if len(h) > HOOK_MAX_CHARS})
 assert not _too_long, f"hooks over {HOOK_MAX_CHARS} chars: {_too_long}"
 
