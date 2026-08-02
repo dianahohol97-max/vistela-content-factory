@@ -3,7 +3,16 @@ name: build-content
 on:
   schedule:
     - cron: "0 6 * * *"      # daily 06:00 UTC -> 2 reels/day via rotation backlog
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      hook:
+        description: "Force this exact hook on the phone-reveal reel (leave empty for rotation)"
+        required: false
+        default: ""
+      product:
+        description: "Only pair products whose filename contains this text (e.g. 'Save the Date')"
+        required: false
+        default: ""
 
 concurrency:
   group: build-content
@@ -43,6 +52,9 @@ jobs:
         run: python sync_dropbox.py
 
       - name: Generate content + queue
+        env:
+          FORCE_HOOK: ${{ inputs.hook }}
+          FORCE_PRODUCT: ${{ inputs.product }}
         run: python build.py
 
       - name: Commit generated media & queue

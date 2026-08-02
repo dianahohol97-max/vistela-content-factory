@@ -149,6 +149,12 @@ def build_reels():
     items = []
     products = _videos(os.path.join(ROOT, C.INPUT_TEMPLATES))
     scenes = _videos(os.path.join(ROOT, C.INPUT_SCENES))
+    # Manual re-issue: workflow_dispatch can pin the hook and narrow the product
+    # pool, so a specific reel can be rebuilt without waiting for the rotation.
+    force_hook = os.environ.get("FORCE_HOOK", "").strip()
+    force_product = os.environ.get("FORCE_PRODUCT", "").strip().lower()
+    if force_product:
+        products = [p for p in products if force_product in os.path.basename(p).lower()] or products
     if not products:
         return items
     out_dir = os.path.join(ROOT, "output", "reels")
@@ -169,7 +175,7 @@ def build_reels():
         sbase = os.path.splitext(os.path.basename(scene))[0] if scene else "solo"
         shooks = C.hooks_for(cat, product)
         offset = int(hashlib.md5((sbase + base).encode()).hexdigest(), 16)
-        hook = shooks[(hook_i + offset) % len(shooks)]
+        hook = force_hook or shooks[(hook_i + offset) % len(shooks)]
         slug = re.sub(r"[^a-z0-9]+", "-", f"{sbase}-{base}-{today.isoformat()}".lower()).strip("-")
         if scene:
             reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug)
