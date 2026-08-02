@@ -325,3 +325,23 @@ _too_long = sorted({h for hooks in (list(SHOWCASE_HOOKS.values())
                                     + [PERSONALIZE_HOOKS, PRODUCT_TOUR_HOOKS])
                     for h in hooks if len(h) > HOOK_MAX_CHARS})
 assert not _too_long, f"hooks over {HOOK_MAX_CHARS} chars: {_too_long}"
+
+
+# Hooks that promise a specific visual only work on products that actually have
+# it: "tap the wax seal" on a lace-frame design is a broken promise, and the
+# viewer who taps and sees no seal is the one who scrolls. Each entry lists the
+# filename keywords a product must match for that hook to be eligible.
+HOOK_REQUIRES = {
+    "Tap the wax seal and watch what happens": ("envelope", "seal", "wax"),
+    "POV: your save the date plays your song": ("music", "song", "audio"),
+}
+
+
+def hooks_for(category, product_path):
+    """Showcase hooks eligible for this product (visual promises filtered out
+    when the product can't keep them). Never returns an empty list."""
+    name = os.path.basename(product_path).lower()
+    hooks = SHOWCASE_HOOKS.get(category, SHOWCASE_HOOKS["default"])
+    ok = [h for h in hooks
+          if h not in HOOK_REQUIRES or any(k in name for k in HOOK_REQUIRES[h])]
+    return ok or hooks

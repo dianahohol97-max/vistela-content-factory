@@ -167,7 +167,7 @@ def build_reels():
         cat = C.product_category(product)
         base = os.path.splitext(os.path.basename(product))[0]
         sbase = os.path.splitext(os.path.basename(scene))[0] if scene else "solo"
-        shooks = C.SHOWCASE_HOOKS.get(cat, C.SHOWCASE_HOOKS["default"])
+        shooks = C.hooks_for(cat, product)
         offset = int(hashlib.md5((sbase + base).encode()).hexdigest(), 16)
         hook = shooks[(hook_i + offset) % len(shooks)]
         slug = re.sub(r"[^a-z0-9]+", "-", f"{sbase}-{base}-{today.isoformat()}".lower()).strip("-")
