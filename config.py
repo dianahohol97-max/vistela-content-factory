@@ -228,25 +228,26 @@ PERSONALIZE_HOOKS = [
 # must be about receiving/opening/showing the product — never about editing
 # (that language belongs to PERSONALIZE_HOOKS).
 SHOWCASE_HOOKS = {
+    # Descriptive openers ("the save the date your guests will screenshot",
+    # "imagine sending THIS") are deliberately gone: they describe the product
+    # instead of making a claim, so there is nothing to keep watching for.
+    # Every hook here carries a number, a POV or a year call-out - the three
+    # patterns that outperformed in docs/competitor-research-2026-08.md
+    # (price hooks beat aesthetic ones ~30x).
     "save_the_date": [
-        "Can a $10 save the date really wow people?",
-        "A $10 save the date that actually wows people",
-        "POV: you refuse to send a boring save the date",
-        "The save the date your guests will screenshot",
-        "Imagine your guests opening this save the date",
-        "This is how your save the date should arrive",
-        "Your guests are about to receive THIS",
-        "POV: your save the date plays your song",
-        "POV: you send your guests a video save the date",
-        "This is what a $10 save the date looks like",
-        "Your save the date is their first impression",
-        # money math — strongest lever in this niche
-        # (docs/competitor-research-2026-08.md: price hooks beat aesthetic ones ~30x)
-        "POV: you skipped $400 of printing",
+        # money math - strongest lever in this niche
         "Paper save the dates: $400. This one: under $10.",
         "How I sent 120 save the dates for under $10",
-        "Budget tip: send it, don't print it",
         "Stop paying $4 per save the date",
+        "I paid $9 instead of $400. Here's what I sent",
+        "This is what a $10 save the date looks like",
+        "Can a $10 save the date really wow people?",
+        "A $10 save the date that actually wows people",
+        "Budget tip: send it, don't print it",
+        # POV
+        "POV: you skipped $400 of printing",
+        "POV: you refuse to send a boring save the date",
+        "POV: your save the date plays your song",
         # year call-out
         "2027 brides, this is the save the date you need",
         "If you're a 2027 bride, save this now",
@@ -254,33 +255,35 @@ SHOWCASE_HOOKS = {
         "Tap the wax seal and watch what happens",
     ],
     "wedding_website": [
+        # money math
+        "Printed invites: $500. This website: under $10.",
+        "Your whole wedding in one link, under $10",
+        "Budget tip: your website IS the invitation",
+        "A wedding website for the price of a coffee",
+        # POV
+        "POV: you sent a link instead of $500 of paper",
         "POV: your guests just opened your wedding website",
-        "Imagine sending your guests a link this beautiful",
-        "Your whole wedding \u2014 in one link",
-        "The wedding website your guests will actually use",
-        "This is how your guests will RSVP",
+        # claim
         "One link that answers every guest question",
         "Never answer 'what's the dress code' again",
         "Let your website collect the RSVPs for you",
-        # money math + year call-out
-        "POV: you sent a link instead of $500 of paper",
-        "Printed invites: $500. This website: under $10.",
-        "Budget tip: your website IS the invitation",
+        # year call-out
         "2027 brides, this is the invite you need",
-        "Your whole wedding in one link, under $10",
     ],
     "invitation": [
+        "Printed invites: $500. This one: under $10.",
+        "Stop paying $5 per wedding invitation",
+        "POV: you skipped $500 of printing",
         "POV: your guests just opened your invitation",
-        "Imagine sending THIS to your guests",
-        "The wedding invite your guests will screenshot",
-        "This is how your invitation should arrive",
-        "Your guests are about to open THIS",
+        "2027 brides, this is the invite you need",
+        "Budget tip: send it, don't print it",
     ],
     "default": [
+        "Paper stationery: $400. This one: under $10.",
+        "Stop paying $4 per wedding invite",
+        "POV: you skipped $400 of printing",
         "POV: your guests just opened your wedding invite",
-        "Imagine sending THIS to your guests",
-        "The wedding invite your guests won't forget",
-        "This is how your wedding invite should arrive",
+        "2027 brides, save this now",
     ],
 }
 
