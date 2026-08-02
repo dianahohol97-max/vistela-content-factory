@@ -66,5 +66,11 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "chore: refresh pins, carousels & queue [skip ci]"
+            # a push to main while the build was running would otherwise reject
+            # this one and throw away the generated media
+            for i in 1 2 3; do
+              git push && exit 0
+              git pull --rebase origin main
+            done
             git push
           fi
