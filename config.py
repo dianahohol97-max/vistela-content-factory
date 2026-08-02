@@ -244,6 +244,11 @@ SHOWCASE_HOOKS = {
         "Can a $10 save the date really wow people?",
         "A $10 save the date that actually wows people",
         "Budget tip: send it, don't print it",
+        # first person, past tense - a bride's experience, not a brand claim
+        "I stopped paying $4 per save the date",
+        "I didn't print a single save the date",
+        "I sent 120 save the dates from my phone",
+        "I skipped $400 of printing and sent this",
         # POV
         "POV: you skipped $400 of printing",
         "POV: you refuse to send a boring save the date",
@@ -260,6 +265,10 @@ SHOWCASE_HOOKS = {
         "Your whole wedding in one link, under $10",
         "Budget tip: your website IS the invitation",
         "A wedding website for the price of a coffee",
+        # first person, past tense
+        "I skipped $500 of paper and sent one link",
+        "I built our wedding website in one evening",
+        "I never answered 'what's the dress code' again",
         # POV
         "POV: you sent a link instead of $500 of paper",
         "POV: your guests just opened your wedding website",
@@ -273,6 +282,8 @@ SHOWCASE_HOOKS = {
     "invitation": [
         "Printed invites: $500. This one: under $10.",
         "Stop paying $5 per wedding invitation",
+        "I stopped paying $5 per wedding invitation",
+        "I sent our invitations without printing one",
         "POV: you skipped $500 of printing",
         "POV: your guests just opened your invitation",
         "2027 brides, this is the invite you need",
@@ -281,6 +292,7 @@ SHOWCASE_HOOKS = {
     "default": [
         "Paper stationery: $400. This one: under $10.",
         "Stop paying $4 per wedding invite",
+        "I stopped paying $4 per wedding invite",
         "POV: you skipped $400 of printing",
         "POV: your guests just opened your wedding invite",
         "2027 brides, save this now",
