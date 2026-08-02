@@ -257,6 +257,11 @@ SHOWCASE_HOOKS = {
 }
 
 
+# Phone-reveal reels: hard cap on the product segment. A 45s website scroll
+# played at 1x made 54-second reels and completion rate (and reach) collapsed.
+# Longer tours are sped up to fit, so the whole product is still shown.
+PHONE_REVEAL_MAX_S = 11
+
 # --- Product-tour reels (raw product video as-is, IG + TikTok) -------------
 # "Просто як огляд продукту": every PRODUCT_TOUR_EVERY_DAYS the raw product
 # video is posted unedited (normalised to 1080x1920/30fps), alternating between

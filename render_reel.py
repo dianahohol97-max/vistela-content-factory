@@ -82,7 +82,7 @@ def _scene_part(scene, hook, out_dir, slug):
     return out, _dur(out)
 
 
-def _phone_part(scene, product, out_dir, slug, dur):
+def _phone_part(scene, product, out_dir, slug, dur, speed=1.0):
     sx0, sy0, sx1, sy1 = screen_bbox(); sw, sh = sx1 - sx0, sy1 - sy0
     inv_h = int(sw * 16 / 9); oy = (sh - inv_h) // 2          # fit-by-width, centred
     cream = _sample_cream(product, out_dir)
@@ -92,7 +92,8 @@ def _phone_part(scene, product, out_dir, slug, dur):
         f"[2:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
         f"gblur=sigma=30,eq=brightness=-0.16,setsar=1,fps=30,trim=duration={dur}[obg];"
         f"color=c={cream}:s={sw}x{sh}:r=30,trim=duration={dur}[scrbg];"
-        f"[0:v]trim=duration={dur},scale={sw}:{inv_h},setsar=1,fps=30[inv];"
+        f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
+        f"scale={sw}:{inv_h},setsar=1,fps=30[inv];"
         f"[scrbg][inv]overlay=0:{oy}[screen];"
         f"color=c=black@0.0:s={W}x{H}:r=30,trim=duration={dur},format=rgba[tb];"
         f"[tb][screen]overlay={sx0}:{sy0}[pl];"
@@ -130,8 +131,11 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug):
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
     scn, sdur = _scene_part(scene, hook, out_dir, slug)
-    pdur = _dur(product)
-    phn = _phone_part(scene, product, out_dir, slug, pdur)
+    src = _dur(product)
+    # long product tours kill completion rate — fit the whole tour into
+    # PHONE_REVEAL_MAX_S by speeding it up instead of cutting it off mid-scroll
+    pdur = min(src, C.PHONE_REVEAL_MAX_S)
+    phn = _phone_part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
     cta = _cta_part(out_dir, slug)
     f1 = round(sdur - 0.5, 2)
     f2 = round(sdur + pdur - 0.5 - 0.5, 2)
