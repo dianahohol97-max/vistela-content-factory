@@ -216,7 +216,7 @@ PERSONALIZE_SPEED = 5                         # speed up the editing recording 5
 PERSONALIZE_HOOKS = [
     "Watch me personalize this in 60 seconds",
     "Type your names. Add your date. Send it.",
-    "POV: you found a wedding invitation you can edit yourself",
+    "POV: a wedding invite you can edit yourself",
     "No designer needed \u2014 just add your details",
     "Turning this template into our wedding invitation",
     "Here's how easy it is to make it yours",
@@ -229,23 +229,23 @@ PERSONALIZE_HOOKS = [
 # (that language belongs to PERSONALIZE_HOOKS).
 SHOWCASE_HOOKS = {
     "save_the_date": [
-        "Impossible to wow your guests with a $10 save the date? Watch this.",
-        "A $10 save the date that will actually wow your guests",
+        "Can a $10 save the date really wow people?",
+        "A $10 save the date that actually wows people",
         "POV: you refuse to send a boring save the date",
         "The save the date your guests will screenshot",
         "Imagine your guests opening this save the date",
         "This is how your save the date should arrive",
         "Your guests are about to receive THIS",
-        "POV: your Save the Date also plays your favourite song",
+        "POV: your save the date plays your song",
         "POV: you send your guests a video save the date",
-        "This is what a $10 save the date actually looks like",
-        "The first thing your guests will ever see of your wedding",
+        "This is what a $10 save the date looks like",
+        "Your save the date is their first impression",
         # money math — strongest lever in this niche
         # (docs/competitor-research-2026-08.md: price hooks beat aesthetic ones ~30x)
-        "POV: you skipped $400 of printing and sent this instead",
+        "POV: you skipped $400 of printing",
         "Paper save the dates: $400. This one: under $10.",
         "How I sent 120 save the dates for under $10",
-        "Budget wedding tip: send your save the date, don't print it",
+        "Budget tip: send it, don't print it",
         "Stop paying $4 per save the date",
         # year call-out
         "2027 brides, this is the save the date you need",
@@ -260,17 +260,17 @@ SHOWCASE_HOOKS = {
         "The wedding website your guests will actually use",
         "This is how your guests will RSVP",
         "One link that answers every guest question",
-        "Stop texting 'what's the dress code' \u2014 put it here",
-        "Your wedding website is doing the RSVP work for you",
+        "Never answer 'what's the dress code' again",
+        "Let your website collect the RSVPs for you",
         # money math + year call-out
-        "POV: you saved $500 on paper invites and sent this link instead",
+        "POV: you sent a link instead of $500 of paper",
         "Printed invites: $500. This website: under $10.",
-        "Budget wedding tip: your website IS the invitation",
-        "2027 brides, this is the invitation you actually need",
-        "Your whole wedding in one link — for less than a coffee",
+        "Budget tip: your website IS the invitation",
+        "2027 brides, this is the invite you need",
+        "Your whole wedding in one link, under $10",
     ],
     "invitation": [
-        "POV: your guests just opened your wedding invitation",
+        "POV: your guests just opened your invitation",
         "Imagine sending THIS to your guests",
         "The wedding invite your guests will screenshot",
         "This is how your invitation should arrive",
@@ -315,3 +315,13 @@ PRODUCT_TOUR_HOOKS = [
 # safe margins). Half of viewers watch muted; the caption hook alone is not
 # enough.
 HOOK_OVERLAY_SECONDS = 3.0
+
+
+# The hook is burned into the video and has ~2 seconds to be read on a muted
+# scroll. Past HOOK_MAX_CHARS it wraps to three lines and stops reading as one
+# thought — so an over-long hook fails the build instead of shipping unreadable.
+HOOK_MAX_CHARS = 50
+_too_long = sorted({h for hooks in (list(SHOWCASE_HOOKS.values())
+                                    + [PERSONALIZE_HOOKS, PRODUCT_TOUR_HOOKS])
+                    for h in hooks if len(h) > HOOK_MAX_CHARS})
+assert not _too_long, f"hooks over {HOOK_MAX_CHARS} chars: {_too_long}"
