@@ -235,13 +235,16 @@ PERSONALIZE_HOOKS = [
 # screen glare and room light are the point - do not clean them up.
 INPUT_PHONE_REVIEW = "input/phone-reviews"   # Dropbox folder "\u041e\u0433\u043b\u044f\u0434\u0438 \u041d\u0430 \u0410\u0439\u043f\u0430\u0434\u0456"
 PHONE_REVIEW_MAX_S = 15
+# The footage is a real device on a desk or in a hand, so the hook has to match
+# what is on the screen. "This arrives in your messages" over a Canva editor is
+# the same broken promise as a wax-seal hook on a design with no seal.
 PHONE_REVIEW_HOOKS = [
-    "I sent this instead of $400 of paper",
-    "Watch what my guests actually receive",
-    "This is what lands in their messages",
+    "I made this instead of $400 of paper",
+    "This cost $9. Paper would be $400.",
     "My $9 save the date, filmed unedited",
-    "I filmed what the guests see",
-    "POV: this arrives in your messages",
+    "POV: this is what $9 gets you",
+    "I edited this on my iPad in 6 minutes",
+    "Watch what my guests actually receive",
     "Tap the seal and watch it open",
     "2027 brides, this is what they get",
 ]

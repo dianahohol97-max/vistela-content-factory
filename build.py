@@ -382,6 +382,7 @@ def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
         return items
     today = dt.date.today()
     clip, hook = ROT.next_single(ROOT, clips, hooks, prefix, today)
+    hook = os.environ.get("FORCE_HOOK", "").strip() or hook
     out_dir = os.path.join(ROOT, "output", "reels")
     os.makedirs(out_dir, exist_ok=True)
     base = os.path.splitext(os.path.basename(clip))[0]
