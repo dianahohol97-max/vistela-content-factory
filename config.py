@@ -212,7 +212,8 @@ def product_category(path):
 # --- Personalize-With-Me reels (screen recordings of editing) --------------
 INPUT_PERSONALIZE = "input/personalize"      # Dropbox folder "Personalise with me"
 PERSONALIZE_EVERY_DAYS = 2                    # legacy; the cycle below drives it now
-PERSONALIZE_SPEED = 5                         # speed up the editing recording 5x
+PERSONALIZE_TARGET_S = 14                     # target length after speed-up
+PERSONALIZE_SPEED = 5                         # legacy; target length drives it now
 # Canva screen recordings were the single best-performing format in the
 # competitor set (5.7K / 4.2K / 3.7K hearts vs 44-164 for finished-product
 # posts), so these hooks carry the price claim, not just the process.

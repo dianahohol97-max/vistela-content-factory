@@ -162,10 +162,15 @@ def assemble_personalize(clip, hook, out_dir, slug):
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
     vf, tmp = _hook_vf(out_dir, slug, hook, y0=200, enable="lt(t,4)")
+    # A fixed 5x multiplier turned a 32-second recording into 6 seconds - too
+    # fast to read what is being typed, which is the whole point of the format.
+    # Speed is derived from the source so the result always lands near the
+    # target length, whatever the recording's length.
+    speed = max(1.0, _dur(clip) / C.PERSONALIZE_TARGET_S)
     part = os.path.join(out_dir, f".{slug}_p.mp4")
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-vf",
           f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
-          f"setpts=PTS/{C.PERSONALIZE_SPEED},fps=30,setsar=1,{vf}",
+          f"setpts=PTS/{speed:.4f},fps=30,setsar=1,{vf}",
           "-an", "-r", "30", "-pix_fmt", "yuv420p", part])
     cta = _cta_part(out_dir, slug)
     pdur = _dur(part)
