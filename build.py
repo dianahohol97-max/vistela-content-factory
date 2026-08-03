@@ -271,37 +271,32 @@ def _captions(hook, copy, kw, gate):
 
 
 def _render_hook_overlay(hook, path):
-    """Render the hook line as a transparent 1080x1920 PNG: wrapped text on a
-    soft dark pill in the top third (viewers scroll muted — the hook must be
-    on-screen, not only in the caption)."""
+    """Render the hook as a transparent 1080x1920 PNG, matching the phone-reveal
+    style exactly: brand video font, white fill, heavy black outline, no
+    background box, wrapped and centred in the top third. Both text styles used
+    to coexist (a dark pill here, an outline in render_reel), which read as two
+    different accounts in one feed."""
     from PIL import Image, ImageDraw, ImageFont
     W, H = 1080, 1920
+    SIZE, STROKE, Y0 = 58, 7, 300
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    font = ImageFont.truetype(
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 58)
-    words, lines, cur = hook.split(), [], ""
+    font = ImageFont.truetype(os.path.join(ROOT, C.VIDEO_FONT), SIZE)
+    words, lines, cur = hook.upper().split(), [], ""
     for w in words:
         t = (cur + " " + w).strip()
-        if d.textlength(t, font=font) <= W - 260:
+        if d.textlength(t, font=font) <= W - 200:
             cur = t
         else:
             lines.append(cur)
             cur = w
     lines.append(cur)
-    lh = 76
-    block_h = lh * len(lines)
-    y0 = 230
-    pad_x, pad_y = 44, 34
-    box_w = max(d.textlength(l, font=font) for l in lines) + pad_x * 2
-    x0 = (W - box_w) / 2
-    d.rounded_rectangle([x0, y0 - pad_y, x0 + box_w, y0 + block_h + pad_y],
-                        radius=34, fill=(16, 23, 31, 175))
-    y = y0
-    for l in lines:
-        lw = d.textlength(l, font=font)
-        d.text(((W - lw) / 2, y), l, font=font, fill=(247, 242, 230, 255))
-        y += lh
+    y = Y0
+    for line in lines:
+        lw = d.textlength(line, font=font)
+        d.text(((W - lw) / 2, y), line, font=font, fill=(255, 255, 255, 255),
+               stroke_width=STROKE, stroke_fill=(0, 0, 0, 255))
+        y += int(SIZE * 1.25)
     img.save(path)
 
 
