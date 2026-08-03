@@ -373,6 +373,9 @@ def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
     import re
     items = []
     clips = _videos(os.path.join(ROOT, folder))
+    pick = os.environ.get("FORCE_CLIP", "").strip().lower()
+    if pick:
+        clips = [c for c in clips if pick in os.path.basename(c).lower()] or clips
     if not clips:
         return items
     today = dt.date.today()

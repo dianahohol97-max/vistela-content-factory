@@ -17,6 +17,10 @@ on:
         description: "Force the second reel's rubric (personalize / phone_review / product_tour / ai_review)"
         required: false
         default: ""
+      clip:
+        description: "Only use review clips whose filename contains this text (e.g. '17 56 10')"
+        required: false
+        default: ""
 
 concurrency:
   group: build-content
@@ -60,6 +64,7 @@ jobs:
           FORCE_HOOK: ${{ inputs.hook }}
           FORCE_PRODUCT: ${{ inputs.product }}
           FORCE_RUBRIC: ${{ inputs.rubric }}
+          FORCE_CLIP: ${{ inputs.clip }}
         run: python build.py
 
       - name: Commit generated media & queue
