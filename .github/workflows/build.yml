@@ -21,6 +21,10 @@ on:
         description: "Only use review clips whose filename contains this text (e.g. '17 56 10')"
         required: false
         default: ""
+      category:
+        description: "Force the product type on a review reel (save_the_date / wedding_website / invitation)"
+        required: false
+        default: ""
 
 concurrency:
   group: build-content
@@ -65,6 +69,7 @@ jobs:
           FORCE_PRODUCT: ${{ inputs.product }}
           FORCE_RUBRIC: ${{ inputs.rubric }}
           FORCE_CLIP: ${{ inputs.clip }}
+          FORCE_CATEGORY: ${{ inputs.category }}
         run: python build.py
 
       - name: Commit generated media & queue

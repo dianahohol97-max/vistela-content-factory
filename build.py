@@ -404,8 +404,14 @@ def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
                     "-frames:v", "1", cover], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     link = RR.listing_link_from_filename(base)
-    cat = C.product_category(clip)
-    copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
+    # Camera filenames carry no product type, so a clip dropped in the folder
+    # root falls back to generic stationery copy. Put it in a "Save The Date" /
+    # "Wedding Websites" subfolder (or pass FORCE_CATEGORY) to get the exact
+    # keyword and the right comment gate.
+    cat = os.environ.get("FORCE_CATEGORY", "").strip() or C.product_category(clip)
+    if cat not in C.PRODUCT_COPY:
+        cat = "default"
+    copy = C.PRODUCT_COPY[cat]
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
     ig, tiktok = _captions(hook, copy, kw, gate)
