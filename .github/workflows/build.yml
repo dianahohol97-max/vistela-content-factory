@@ -13,6 +13,10 @@ on:
         description: "Only pair products whose filename contains this text (e.g. 'Save the Date')"
         required: false
         default: ""
+      rubric:
+        description: "Force the second reel's rubric (personalize / phone_review / product_tour / ai_review)"
+        required: false
+        default: ""
 
 concurrency:
   group: build-content
@@ -55,6 +59,7 @@ jobs:
         env:
           FORCE_HOOK: ${{ inputs.hook }}
           FORCE_PRODUCT: ${{ inputs.product }}
+          FORCE_RUBRIC: ${{ inputs.rubric }}
         run: python build.py
 
       - name: Commit generated media & queue

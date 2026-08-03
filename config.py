@@ -233,13 +233,13 @@ PERSONALIZE_HOOKS = [
 # The competitors' reels look alive because nothing is composited: a real
 # device is filmed from the side while the animation plays. Hand movement,
 # screen glare and room light are the point - do not clean them up.
-INPUT_PHONE_REVIEW = "input/phone-reviews"   # Dropbox folder "\u043e\u0433\u043b\u044f\u0434\u0438 \u0437 \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u043e\u043c"
+INPUT_PHONE_REVIEW = "input/phone-reviews"   # Dropbox folder "\u041e\u0433\u043b\u044f\u0434\u0438 \u041d\u0430 \u0410\u0439\u043f\u0430\u0434\u0456"
 PHONE_REVIEW_MAX_S = 15
 PHONE_REVIEW_HOOKS = [
     "I sent this instead of $400 of paper",
     "Watch what my guests actually receive",
     "This is what lands in their messages",
-    "My $9 save the date, on a real phone",
+    "My $9 save the date, filmed unedited",
     "I filmed what the guests see",
     "POV: this arrives in your messages",
     "Tap the seal and watch it open",

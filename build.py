@@ -456,7 +456,9 @@ def build_second_reel():
         "product_tour": build_product_tour,
         "ai_review": build_ai_review,
     }
-    for rubric in C.second_slot_order(dt.date.today()):
+    forced = os.environ.get("FORCE_RUBRIC", "").strip()
+    order = [forced] if forced in builders else C.second_slot_order(dt.date.today())
+    for rubric in order:
         items = builders[rubric]()
         if items:
             return items
