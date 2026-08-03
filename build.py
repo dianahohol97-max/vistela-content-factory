@@ -219,12 +219,18 @@ def build_personalize():
         return items
     today = dt.date.today()
     out_dir = os.path.join(ROOT, "output", "reels")
+    pick = os.environ.get("FORCE_CLIP", "").strip().lower()
+    if pick:
+        clips = [c for c in clips if pick in os.path.basename(c).lower()] or clips
     clip, hook = ROT.next_single(ROOT, clips, C.PERSONALIZE_HOOKS, "pwm", today)
+    hook = os.environ.get("FORCE_HOOK", "").strip() or hook
     base = os.path.splitext(os.path.basename(clip))[0]
     slug = re.sub(r"[^a-z0-9]+", "-", f"pwm-{base}-{today.isoformat()}".lower()).strip("-")
     reel, cover = RR.assemble_personalize(clip, hook, out_dir, slug)
     link = RR.listing_link_from_filename(base)
-    cat = C.product_category(clip)
+    cat = os.environ.get("FORCE_CATEGORY", "").strip() or C.product_category(clip)
+    if cat not in C.PRODUCT_COPY:
+        cat = "default"
     copy = C.PRODUCT_COPY[cat]
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
@@ -233,7 +239,7 @@ def build_personalize():
         "id": f"REEL_{slug}",
         "channels": ["instagram_reel", "youtube_short", "tiktok"],
         "format": "video",
-        "category": C.product_category(clip),
+        "category": cat,
         "rubric": "personalize_with_me",
         "title": _yt_title(hook, kw),  # YouTube-only field; SEO title + #Shorts
         "video_url": raw(os.path.relpath(reel, ROOT)),
@@ -317,6 +323,7 @@ def build_product_tour():
     cycle = (today.toordinal() // C.PRODUCT_TOUR_EVERY_DAYS) % 2
     pool = (stds if cycle == 0 else sites) or sites or stds or products
     clip, hook = ROT.next_single(ROOT, pool, C.PRODUCT_TOUR_HOOKS, "tour", today)
+    hook = os.environ.get("FORCE_HOOK", "").strip() or hook
     out_dir = os.path.join(ROOT, "output", "reels")
     os.makedirs(out_dir, exist_ok=True)
     base = os.path.splitext(os.path.basename(clip))[0]
@@ -340,8 +347,10 @@ def build_product_tour():
                     "-frames:v", "1", cover], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     link = RR.listing_link_from_filename(base)
-    cat = C.product_category(clip)
-    copy = C.PRODUCT_COPY.get(cat, C.PRODUCT_COPY["default"])
+    cat = os.environ.get("FORCE_CATEGORY", "").strip() or C.product_category(clip)
+    if cat not in C.PRODUCT_COPY:
+        cat = "default"
+    copy = C.PRODUCT_COPY[cat]
     kw = copy["keyword"]
     gate = C.COMMENT_GATE.get(cat, C.COMMENT_GATE["default"])
     ig, tiktok = _captions(hook, copy, kw, gate)
