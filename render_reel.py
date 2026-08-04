@@ -31,6 +31,17 @@ def _dur(path):
     return float(r.stdout.strip())
 
 
+def _dims(path):
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0",
+                        "-show_entries", "stream=width,height", "-of", "csv=p=0:s=x", path],
+                       capture_output=True, text=True)
+    try:
+        w, h = r.stdout.strip().split("x")[:2]
+        return int(w), int(h)
+    except ValueError:
+        return 1080, 1920
+
+
 def screen_bbox():
     """Enclosed transparent region of the phone mockup = the screen."""
     global _BBOX
@@ -164,6 +175,12 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, device="phone"):
     src = _dur(product)
     # long product tours kill completion rate — fit the whole tour into
     # PHONE_REVEAL_MAX_S by speeding it up instead of cutting it off mid-scroll
+    # The frame follows the footage, not the product type: websites re-recorded
+    # on a phone are portrait and belong in the phone; only landscape desktop
+    # captures go in the laptop. Guessing from the category alone put a vertical
+    # phone capture in a laptop, letterboxed with white on both sides.
+    pw, ph = _dims(product)
+    device = "laptop" if pw > ph else "phone"
     cap = C.LAPTOP_REVEAL_MAX_S if device == "laptop" else C.PHONE_REVEAL_MAX_S
     pdur = min(src, cap)
     part = _laptop_part if device == "laptop" else _phone_part
