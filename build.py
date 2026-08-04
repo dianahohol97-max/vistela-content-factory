@@ -155,7 +155,10 @@ def build_reels():
     force_hook = os.environ.get("FORCE_HOOK", "").strip()
     force_product = os.environ.get("FORCE_PRODUCT", "").strip().lower()
     if force_product:
-        products = [p for p in products if force_product in os.path.basename(p).lower()] or products
+        # match the whole relative path, so a folder name ("Весільні Сайти")
+        # works as well as a filename fragment
+        products = [p for p in products
+                    if force_product in os.path.relpath(p, ROOT).lower()] or products
     if not products:
         return items
     out_dir = os.path.join(ROOT, "output", "reels")
