@@ -179,7 +179,9 @@ def build_reels():
         hook = force_hook or shooks[(hook_i + offset) % len(shooks)]
         slug = re.sub(r"[^a-z0-9]+", "-", f"{sbase}-{base}-{today.isoformat()}".lower()).strip("-")
         if scene:
-            reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug)
+            device = "laptop" if cat == "wedding_website" else "phone"
+            reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug,
+                                                   device=device)
         else:
             reel, cover = RR.assemble(product, hook, out_dir, slug)
         link = RR.listing_link_from_filename(base)

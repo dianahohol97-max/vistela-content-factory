@@ -109,6 +109,34 @@ def _phone_part(scene, product, out_dir, slug, dur, speed=1.0):
     return out
 
 
+def _laptop_part(scene, product, out_dir, slug, dur, speed=1.0):
+    """The website playing in a laptop on a blurred scene background. The clip
+    keeps its own aspect and is letterboxed on its sampled edge colour, so a
+    desktop capture is never stretched."""
+    sx0, sy0, sx1, sy1 = C.LAPTOP_SCREEN
+    sw, sh = sx1 - sx0, sy1 - sy0
+    cream = _sample_cream(product, out_dir)
+    vf, tmp = _hook_vf(out_dir, slug, C.LAPTOP_HOOK, y0=430)
+    out = os.path.join(out_dir, f".{slug}_laptop.mp4")
+    fc = (
+        f"[2:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        f"gblur=sigma=30,eq=brightness=-0.16,setsar=1,fps=30,trim=duration={dur}[obg];"
+        f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
+        f"scale={sw}:{sh}:force_original_aspect_ratio=decrease,"
+        f"pad={sw}:{sh}:(ow-iw)/2:(oh-ih)/2:color={cream},setsar=1,fps=30[screen];"
+        f"color=c=black@0.0:s={W}x{H}:r=30,trim=duration={dur},format=rgba[tb];"
+        f"[tb][screen]overlay={sx0}:{sy0}[pl];"
+        f"[pl][1:v]overlay=0:0[laptop];"
+        f"[obg][laptop]overlay=0:0[c1];"
+        f"[c1]{vf}[v]"
+    )
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product, "-loop", "1", "-i", C.LAPTOP_MOCKUP,
+          "-stream_loop", "-1", "-i", scene, "-filter_complex", fc, "-map", "[v]",
+          "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
+    for t in tmp: os.remove(t)
+    return out
+
+
 def _cta_part(out_dir, slug):
     AB, CG = C.VIDEO_FONT, C.FONT
     em, iv, br = _hx(C.EMERALD), _hx(C.IVORY), _hx(C.BRASS)
@@ -126,8 +154,10 @@ def _cta_part(out_dir, slug):
     return out
 
 
-def assemble_phone_reveal(scene, product, hook, out_dir, slug):
-    """scene(+hook) -> phone reveal -> brand CTA, with crossfades. Returns (reel, cover)."""
+def assemble_phone_reveal(scene, product, hook, out_dir, slug, device="phone"):
+    """scene(+hook) -> device reveal -> brand CTA, with crossfades. `device` is
+    "phone" for vertical products and "laptop" for wedding websites, which are
+    recorded as 16:9 desktop captures. Returns (reel, cover)."""
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
     scn, sdur = _scene_part(scene, hook, out_dir, slug)
@@ -135,7 +165,8 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug):
     # long product tours kill completion rate — fit the whole tour into
     # PHONE_REVEAL_MAX_S by speeding it up instead of cutting it off mid-scroll
     pdur = min(src, C.PHONE_REVEAL_MAX_S)
-    phn = _phone_part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
+    part = _laptop_part if device == "laptop" else _phone_part
+    phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
     cta = _cta_part(out_dir, slug)
     f1 = round(sdur - 0.5, 2)
     f2 = round(sdur + pdur - 0.5 - 0.5, 2)

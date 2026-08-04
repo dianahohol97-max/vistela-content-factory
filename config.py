@@ -99,6 +99,13 @@ EMERALD = "#1E4736"; IVORY = "#F5EFE2"; BRASS = "#C7A76B"; SAGE = "#8AA184"
 PHONE_MOCKUP = "assets/phone_mockup.png"       # realistic phone, transparent screen
 PHONE_HOOK   = "IMAGINE OPENING THIS ON YOUR PHONE"
 
+# Wedding websites are 16:9 desktop captures. Forced into the phone screen they
+# were squeezed to a 9:16 box and the page text became unreadable, so they get
+# a laptop frame instead - the same footage at nearly twice the width.
+LAPTOP_MOCKUP = "assets/laptop_mockup.png"
+LAPTOP_SCREEN = (78, 720, 1002, 1240)          # inner screen, 924x520 (16:9)
+LAPTOP_HOOK   = "IMAGINE SENDING THIS LINK"
+
 
 # Rotating hashtag sets (vary per reel so captions aren't identical).
 REEL_HASHTAG_SETS = [
