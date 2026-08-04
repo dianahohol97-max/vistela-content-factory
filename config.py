@@ -268,7 +268,7 @@ AI_REVIEW_HOOKS = [
     "I reviewed a $9 wedding save the date",
     "Wedding stationery under $10 - honest look",
     "I tested the $9 save the date everyone sends",
-    "Is a $10 wedding website actually good?",
+    "Is a $15 wedding website actually good?",
     "Reviewing the save the date from your feed",
     "2027 brides keep asking about this one",
 ]
@@ -323,10 +323,10 @@ SHOWCASE_HOOKS = {
     ],
     "wedding_website": [
         # money math
-        "Printed invites: $500. This website: under $10.",
-        "Your whole wedding in one link, under $10",
+        "Printed invites: $500. This website: under $15.",
+        "Your whole wedding in one link, under $15",
         "Budget tip: your website IS the invitation",
-        "A wedding website for the price of a coffee",
+        "A wedding website for less than $15",
         # first person, past tense
         "I skipped $500 of paper and sent one link",
         "I built our wedding website in one evening",
@@ -366,6 +366,10 @@ SHOWCASE_HOOKS = {
 # played at 1x made 54-second reels and completion rate (and reach) collapsed.
 # Longer tours are sped up to fit, so the whole product is still shown.
 PHONE_REVEAL_MAX_S = 11
+# A website tour is a scroll through several pages; squeezed into the same 11
+# seconds as a save-the-date animation it raced past unreadably. Websites get
+# their own, longer budget so the scroll stays slow enough to follow.
+LAPTOP_REVEAL_MAX_S = 20
 
 # --- Product-tour reels (raw product video as-is, IG + TikTok) -------------
 # "Просто як огляд продукту": every PRODUCT_TOUR_EVERY_DAYS the raw product

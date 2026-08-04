@@ -164,7 +164,8 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, device="phone"):
     src = _dur(product)
     # long product tours kill completion rate — fit the whole tour into
     # PHONE_REVEAL_MAX_S by speeding it up instead of cutting it off mid-scroll
-    pdur = min(src, C.PHONE_REVEAL_MAX_S)
+    cap = C.LAPTOP_REVEAL_MAX_S if device == "laptop" else C.PHONE_REVEAL_MAX_S
+    pdur = min(src, cap)
     part = _laptop_part if device == "laptop" else _phone_part
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
     cta = _cta_part(out_dir, slug)

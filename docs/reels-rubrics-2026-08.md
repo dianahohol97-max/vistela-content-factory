@@ -119,10 +119,10 @@ and watch it open`
 > month for four dollars a card.
 
 > Printed invitations for a hundred and twenty guests will cost you around
-> five hundred dollars. This wedding website costs under ten, and it has the
+> five hundred dollars. This wedding website costs under fifteen, and it has the
 > RSVP built in. I'll be honest, I didn't expect it to look this good.
 
-**Хуки:** `I reviewed a $9 wedding save the date` · `Is a $10 wedding website
+**Хуки:** `I reviewed a $9 wedding save the date` · `Is a $15 wedding website
 actually good?` · `I tested the $9 save the date everyone sends`
 
 ---
