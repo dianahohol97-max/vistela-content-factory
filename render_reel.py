@@ -165,7 +165,7 @@ def _cta_part(out_dir, slug):
     return out
 
 
-def assemble_phone_reveal(scene, product, hook, out_dir, slug, device="phone"):
+def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None):
     """scene(+hook) -> device reveal -> brand CTA, with crossfades. `device` is
     "phone" for vertical products and "laptop" for wedding websites, which are
     recorded as 16:9 desktop captures. Returns (reel, cover)."""
@@ -181,7 +181,10 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, device="phone"):
     # phone capture in a laptop, letterboxed with white on both sides.
     pw, ph = _dims(product)
     device = "laptop" if pw > ph else "phone"
-    cap = C.LAPTOP_REVEAL_MAX_S if device == "laptop" else C.PHONE_REVEAL_MAX_S
+    # Length is a property of the product (a website scroll needs time to be
+    # followed), the frame is a property of the footage. They are set apart on
+    # purpose: a website filmed on a phone is portrait but still a long scroll.
+    cap = max_s or C.PHONE_REVEAL_MAX_S
     pdur = min(src, cap)
     part = _laptop_part if device == "laptop" else _phone_part
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
