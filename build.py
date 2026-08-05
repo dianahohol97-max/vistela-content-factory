@@ -187,7 +187,11 @@ def build_reels():
         if scene:
             max_s = (C.LAPTOP_REVEAL_MAX_S if cat == "wedding_website"
                      else C.PHONE_REVEAL_MAX_S)
-            intro = intros[hook_i % len(intros)] if intros else scene
+            # the intro has to show the same product the hook promises: a
+            # save-the-date clip under a "one link" website hook is the same
+            # broken promise as a wax-seal hook on a design with no seal
+            same = [c for c in intros if C.product_category(c) == cat]
+            intro = same[hook_i % len(same)] if same else scene
             reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug,
                                                    max_s=max_s, intro=intro)
         else:
