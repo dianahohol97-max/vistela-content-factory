@@ -165,13 +165,13 @@ def _cta_part(out_dir, slug):
     return out
 
 
-def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None):
+def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None, intro=None):
     """scene(+hook) -> device reveal -> brand CTA, with crossfades. `device` is
     "phone" for vertical products and "laptop" for wedding websites, which are
     recorded as 16:9 desktop captures. Returns (reel, cover)."""
     os.makedirs(out_dir, exist_ok=True)
     reel = os.path.join(out_dir, f"{slug}.mp4"); cover = os.path.join(out_dir, f"{slug}_cover.jpg")
-    scn, sdur = _scene_part(scene, hook, out_dir, slug)
+    scn, sdur = _scene_part(intro or scene, hook, out_dir, slug)
     src = _dur(product)
     # long product tours kill completion rate — fit the whole tour into
     # PHONE_REVEAL_MAX_S by speeding it up instead of cutting it off mid-scroll

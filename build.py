@@ -173,6 +173,9 @@ def build_reels():
             h = int(hashlib.md5(os.path.basename(product).encode()).hexdigest(), 16)
             jobs.append((None, product, week + h))
 
+    # real hands beat stock couples as the opener (see config.INTRO_FROM_REVIEWS)
+    intros = _videos(os.path.join(ROOT, C.INPUT_PHONE_REVIEW)) if C.INTRO_FROM_REVIEWS else []
+
     for scene, product, hook_i in jobs:
         cat = C.product_category(product)
         base = os.path.splitext(os.path.basename(product))[0]
@@ -184,8 +187,9 @@ def build_reels():
         if scene:
             max_s = (C.LAPTOP_REVEAL_MAX_S if cat == "wedding_website"
                      else C.PHONE_REVEAL_MAX_S)
+            intro = intros[hook_i % len(intros)] if intros else scene
             reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug,
-                                                   max_s=max_s)
+                                                   max_s=max_s, intro=intro)
         else:
             reel, cover = RR.assemble(product, hook, out_dir, slug)
         link = RR.listing_link_from_filename(base)

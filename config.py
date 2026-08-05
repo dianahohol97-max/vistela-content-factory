@@ -106,6 +106,13 @@ LAPTOP_MOCKUP = "assets/laptop_mockup.png"
 LAPTOP_SCREEN = (78, 720, 1002, 1240)          # inner screen, 924x520 (16:9)
 LAPTOP_HOOK   = "IMAGINE SENDING THIS LINK"
 
+# Opening shot for phone-reveal reels. Stock couple footage is generic and
+# burns the three seconds that decide whether anyone stays; real footage of
+# hands and a real device is what outperformed in the competitor set. When the
+# review folder has clips, the intro comes from there and the stock wedding
+# scene is only the fallback.
+INTRO_FROM_REVIEWS = True
+
 
 # Rotating hashtag sets (vary per reel so captions aren't identical).
 REEL_HASHTAG_SETS = [
