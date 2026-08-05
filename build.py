@@ -190,7 +190,10 @@ def build_reels():
             # the intro has to show the same product the hook promises: a
             # save-the-date clip under a "one link" website hook is the same
             # broken promise as a wax-seal hook on a design with no seal
-            same = [c for c in intros if C.product_category(c) == cat]
+            # an unsorted clip (no product subfolder) claims no type, so it can
+            # open any reel; only a clip of a *different* known type is excluded
+            same = [c for c in intros
+                    if C.product_category(c) in (cat, "default")]
             intro = same[hook_i % len(same)] if same else scene
             reel, cover = RR.assemble_phone_reveal(scene, product, hook, out_dir, slug,
                                                    max_s=max_s, intro=intro)
