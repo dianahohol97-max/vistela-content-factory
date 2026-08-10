@@ -1,0 +1,25 @@
+{
+  "comment": "Public Dropbox folder share links (created via Make, account dianahoholsmm). Folder links always serve the CURRENT contents as a zip, so new clips Diana drops into these Dropbox folders reach the next build automatically - no API keys needed.",
+  "folders": [
+    {
+      "dropbox": "/весільні відео",
+      "local": "input/wedding-scenes",
+      "url": "https://www.dropbox.com/scl/fo/j8ymx6rdegdz1yxqpdbc6/AABEnSt9QAdS-s9zAG7aE_Q?rlkey=swgmkj0p7vwpox1dvl5ytbp9v"
+    },
+    {
+      "dropbox": "/відео продуктів",
+      "local": "input/templates",
+      "url": "https://www.dropbox.com/scl/fo/p7jy8pwq7lku8b0zad971/ACy-TejcDIrA1VKfeP-wpMM?rlkey=x6oajhw3ehq3r027thlhc4pom"
+    },
+    {
+      "dropbox": "/Personalise with me",
+      "local": "input/personalize",
+      "url": "https://www.dropbox.com/scl/fo/fxqc9w623mtakzbg92uzp/AJ-bW2yzRxxVMrb0YxNvF9k?rlkey=4p0celyzv31i4rwu3esgbu2jn"
+    },
+    {
+      "dropbox": "/Огляди На Айпаді",
+      "local": "input/phone-reviews",
+      "url": "https://www.dropbox.com/scl/fo/7pmsrucq4ybf2r14o3xt3/AM0HgmQI9zlKx-6YaubsUoM?rlkey=fmn2uex6bzwrg9m9r1nlstdku"
+    }
+  ]
+}

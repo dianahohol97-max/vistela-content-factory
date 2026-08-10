@@ -1,11 +1,14 @@
 """Sync input media from Dropbox into input/ before a build.
 
 Runs on the GitHub Actions runner (which can reach Dropbox), NOT in the design
-sandbox. Uses refresh-token auth so it keeps working for the daily cron:
-Adrian sets three repo secrets once —
-  DROPBOX_APP_KEY, DROPBOX_APP_SECRET, DROPBOX_REFRESH_TOKEN
-(create a Dropbox app, generate a refresh token). If they're absent the script
-exits quietly, so the build still runs on whatever is committed.
+sandbox. Two auth-free-ordered modes:
+
+1. API mode — if the three repo secrets are set (DROPBOX_APP_KEY,
+   DROPBOX_APP_SECRET, DROPBOX_REFRESH_TOKEN), sync via the files API.
+2. Share-link mode — otherwise, download each folder as a zip through the
+   public share links in input_links.json. Folder links always serve the
+   folder's CURRENT contents, so clips added to Dropbox reach the next build
+   with no keys and no re-linking.
 
 Folder mapping (Dropbox -> local):
   /весільні відео            -> input/wedding-scenes
@@ -13,11 +16,13 @@ Folder mapping (Dropbox -> local):
                                                        product-type detection)
   /Personalise with me       -> input/personalize
 """
+import io
 import json
 import os
 import sys
 import urllib.request
 import urllib.parse
+import zipfile
 
 APP_KEY = os.environ.get("DROPBOX_APP_KEY")
 APP_SECRET = os.environ.get("DROPBOX_APP_SECRET")
@@ -80,12 +85,60 @@ def _download(token, dbx_path, dest):
         f.write(data)
 
 
+def _sync_from_links():
+    """Share-link mode: pull each mapped folder as a zip via its public link."""
+    report = {"status": "share-links", "folders": {}}
+    try:
+        cfg = json.load(open("input_links.json"))
+    except FileNotFoundError:
+        print("No secrets and no input_links.json — using committed inputs.")
+        report["status"] = "no-secrets"
+        json.dump(report, open("sync_report.json", "w"), indent=1, ensure_ascii=False)
+        return
+    total = 0
+    for folder in cfg["folders"]:
+        url = folder["url"].split("&dl=")[0].split("?dl=")[0]
+        sep = "&" if "?" in url else "?"
+        url += sep + "dl=1"
+        local_root = folder["local"]
+        items = []
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "vistela-factory"})
+            with urllib.request.urlopen(req) as r:
+                blob = r.read()
+            zf = zipfile.ZipFile(io.BytesIO(blob))
+            names = [n for n in zf.namelist() if not n.endswith("/")]
+            # the zip may nest everything under one top-level dir — strip it
+            roots = {n.split("/", 1)[0] for n in names if "/" in n}
+            strip = roots.pop() + "/" if len(roots) == 1 and all("/" in n for n in names) else ""
+            for n in names:
+                rel = n[len(strip):] if n.startswith(strip) else n
+                if not rel.lower().endswith(VIDEO_EXT):
+                    items.append({"path": rel, "action": "skip-ext"})
+                    continue
+                dest = os.path.join(local_root, rel)
+                if os.path.exists(dest):
+                    items.append({"path": rel, "action": "exists"})
+                    continue
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                with open(dest, "wb") as f:
+                    f.write(zf.read(n))
+                total += 1
+                items.append({"path": rel, "action": "downloaded"})
+                print(f"  + {dest}")
+        except Exception as ex:  # noqa
+            items.append({"action": f"error: {ex}"})
+            print(f"  ! {folder['dropbox']}: {ex}")
+        report["folders"][folder["dropbox"]] = {"items": items}
+    report["downloaded"] = total
+    json.dump(report, open("sync_report.json", "w"), indent=1, ensure_ascii=False)
+    print(f"Dropbox share-link sync done — {total} new file(s).")
+
+
 def main():
     report = {"folders": {}}
     if not (APP_KEY and APP_SECRET and REFRESH_TOKEN):
-        print("Dropbox secrets not set — skipping sync (using committed inputs).")
-        report["status"] = "no-secrets"
-        json.dump(report, open("sync_report.json", "w"), indent=1, ensure_ascii=False)
+        _sync_from_links()
         return
     token = _access_token()
     total = 0
