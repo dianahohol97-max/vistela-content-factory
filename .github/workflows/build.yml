@@ -2,7 +2,7 @@ name: build-content
 
 on:
   schedule:
-    - cron: "0 6 * * *"      # daily 06:00 UTC -> 2 reels/day via rotation backlog
+    - cron: "0 6 * * 1,4"    # Mon+Thu 06:00 UTC -> content plan posts reels Tue+Fri, by hand
   workflow_dispatch:
     inputs:
       hook:
