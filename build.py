@@ -380,11 +380,33 @@ def build_product_tour():
     cover = os.path.join(out_dir, f"{slug}_cover.jpg")
     hook_png = os.path.join(out_dir, f"{slug}_hook.png")
     _render_hook_overlay(hook, hook_png)
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", clip, "-i", hook_png,
-                    "-filter_complex",
-                    "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
-                    "crop=1080:1920,setsar=1,fps=30[v];"
-                    f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]",
+    # A 16:9 desktop capture cropped to 9:16 loses both sides of the page — the
+    # title gets cut and the browser chrome stays. Landscape footage goes into
+    # the laptop frame instead, letterboxed, exactly like the reveal reels do.
+    pw, ph = RR._dims(clip)
+    if pw > ph:
+        sx0, sy0, sx1, sy1 = C.LAPTOP_SCREEN
+        sw, sh = sx1 - sx0, sy1 - sy0
+        cream = RR._sample_cream(clip, out_dir)
+        inputs = ["-i", clip, "-i", C.LAPTOP_MOCKUP, "-i", hook_png]
+        fc = (
+            "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
+            "gblur=sigma=30,eq=brightness=-0.16,setsar=1,fps=30[bg];"
+            f"[0:v]scale={sw}:{sh}:force_original_aspect_ratio=decrease,"
+            f"pad={sw}:{sh}:(ow-iw)/2:(oh-ih)/2:color={cream},setsar=1,fps=30[screen];"
+            "color=c=black@0.0:s=1080x1920:r=30,format=rgba[tb];"
+            f"[tb][screen]overlay={sx0}:{sy0}[pl];"
+            "[pl][1:v]overlay=0:0[laptop];"
+            "[bg][laptop]overlay=0:0[v];"
+            f"[v][2:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]"
+        )
+    else:
+        inputs = ["-i", clip, "-i", hook_png]
+        fc = ("[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
+              "crop=1080:1920,setsar=1,fps=30[v];"
+              f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs,
+                    "-filter_complex", fc,
                     "-map", "[out]", "-map", "0:a?",
                     "-t", str(C.PRODUCT_TOUR_MAX_S), "-c:v", "libx264", "-preset", "medium",
                     "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k",

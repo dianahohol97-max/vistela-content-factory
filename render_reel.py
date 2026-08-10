@@ -32,14 +32,19 @@ def _dur(path):
 
 
 def _dims(path):
-    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0",
-                        "-show_entries", "stream=width,height", "-of", "csv=p=0:s=x", path],
-                       capture_output=True, text=True)
     try:
+        r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0",
+                            "-show_entries", "stream=width,height", "-of", "csv=p=0:s=x", path],
+                           capture_output=True, text=True)
         w, h = r.stdout.strip().split("x")[:2]
         return int(w), int(h)
-    except ValueError:
-        return 1080, 1920
+    except (ValueError, OSError):
+        pass
+    # no ffprobe (imageio's bundled build ships ffmpeg only) — read the size off
+    # the stream line ffmpeg prints to stderr
+    r = subprocess.run(["ffmpeg", "-i", path], capture_output=True, text=True)
+    m = re.search(r"Video:.*?, (\d+)x(\d+)", r.stderr)
+    return (int(m.group(1)), int(m.group(2))) if m else (1080, 1920)
 
 
 def screen_bbox():
