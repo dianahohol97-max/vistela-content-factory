@@ -497,18 +497,42 @@ def build_second_reel():
     return []
 
 
+def _merge_reels(path, fresh, keep=12):
+    """Reels are built twice a week but reach the content plan only when the
+    command center imports them, so overwriting this file dropped any build
+    nobody imported in between — every rubric except the newest disappeared
+    that way. Keep a short backlog, newest last, deduped by id."""
+    old = []
+    if os.path.exists(path):
+        try:
+            with open(path) as f:
+                old = json.load(f)
+        except (ValueError, OSError):
+            old = []
+    by_id = {}
+    for item in list(old) + list(fresh):
+        if isinstance(item, dict) and item.get("id"):
+            by_id[item["id"]] = item
+    return list(by_id.values())[-keep:]
+
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     pin_items = build_pins()
     car_items = build_carousels()
     reel_items = build_reels() + build_second_reel()
+    video_path = os.path.join(Q_DIR, "video_queue.json")
+    reel_queue = _merge_reels(video_path, reel_items)
     with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
         json.dump(pin_items, f, indent=2, ensure_ascii=False)
     with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:
         json.dump(car_items, f, indent=2, ensure_ascii=False)
-    with open(os.path.join(Q_DIR, "video_queue.json"), "w") as f:
-        json.dump(reel_items, f, indent=2, ensure_ascii=False)
-    print(f"pins: {len(pin_items)}  carousels: {len(car_items)}  reels: {len(reel_items)}")
+    with open(video_path, "w") as f:
+        json.dump(reel_queue, f, indent=2, ensure_ascii=False)
+    print(
+        f"pins: {len(pin_items)}  carousels: {len(car_items)}  "
+        f"reels: {len(reel_items)} new, {len(reel_queue)} in queue"
+    )
 
 
 if __name__ == "__main__":
