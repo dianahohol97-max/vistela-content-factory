@@ -119,6 +119,35 @@ def _yt_description(copy, kw, link):
     )
 
 
+# Basenames the current queue points at. On a CI checkout every file carries the
+# same mtime, so the "newest" sort below is effectively arbitrary and has already
+# pruned reels that had just been built — leaving the command center and Buffer
+# pointing at a 404. Anything still queued is protected from pruning outright.
+PROTECTED_MEDIA = set()
+
+
+def _protect_queued_media(queue):
+    PROTECTED_MEDIA.clear()
+    for item in queue or []:
+        for url in (item.get("video_url"), item.get("cover_url")):
+            if url:
+                PROTECTED_MEDIA.add(os.path.basename(url))
+
+
+def _drop_dead_entries(queue, out_dir):
+    """Re-render rather than advertise a missing file: an entry whose media is
+    gone is dropped from the queue, which frees its source clip to come round
+    again in the rubric's rotation on the next run."""
+    live, dead = [], []
+    for item in queue:
+        name = os.path.basename(item.get("video_url") or "")
+        if name and not os.path.exists(os.path.join(out_dir, name)):
+            dead.append(item.get("id"))
+        else:
+            live.append(item)
+    return live, dead
+
+
 def _prune_reels(out_dir, keep=80):
     """Keep the newest `keep` files in the reels folder.
 
@@ -134,6 +163,8 @@ def _prune_reels(out_dir, keep=80):
     files = sorted((os.path.join(out_dir, f) for f in os.listdir(out_dir)),
                    key=os.path.getmtime, reverse=True)
     for f in files[keep:]:
+        if os.path.basename(f) in PROTECTED_MEDIA:
+            continue
         try:
             os.remove(f)
         except OSError:
@@ -532,6 +563,12 @@ def build_daily_reels():
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
     today = dt.date.today()
+    video_path_early = os.path.join(Q_DIR, "video_queue.json")
+    try:
+        with open(video_path_early) as f:
+            _protect_queued_media(json.load(f))
+    except (OSError, ValueError):
+        pass
     # Only reels went daily. Pins and carousels keep the Mon+Thu cadence they
     # were tuned for: generating them every day would flood the Pinterest queue,
     # and writing their files on a day nothing was built would blank them.
@@ -541,6 +578,9 @@ def main():
     reel_items = build_daily_reels()
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)
+    reel_queue, dead = _drop_dead_entries(reel_queue, os.path.join(ROOT, "output", "reels"))
+    if dead:
+        print(f"⚠ media missing, dropped from queue (will re-render): {', '.join(dead)}")
     if pin_items is not None:
         with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
             json.dump(pin_items, f, indent=2, ensure_ascii=False)
