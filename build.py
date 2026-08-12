@@ -497,7 +497,7 @@ def build_second_reel():
     return []
 
 
-def _merge_reels(path, fresh, keep=12):
+def _merge_reels(path, fresh, keep=30):
     """Reels are built twice a week but reach the content plan only when the
     command center imports them, so overwriting this file dropped any build
     nobody imported in between — every rubric except the newest disappeared
@@ -516,21 +516,42 @@ def _merge_reels(path, fresh, keep=12):
     return list(by_id.values())[-keep:]
 
 
+def build_daily_reels():
+    """Diana's plan from 11.08.2026: an iPad review (phone_review) every day and
+    a personalise-with-me every other day. The scene->phone-reveal, product tour
+    and AI-presenter rubrics stay in the code and still run on a manual dispatch
+    with FORCE_RUBRIC — they are simply no longer on the schedule."""
+    if os.environ.get("FORCE_RUBRIC", "").strip():
+        return build_second_reel()
+    items = build_phone_review()
+    if dt.date.today().toordinal() % 2 == 0:
+        items += build_personalize()
+    return items
+
+
 def main():
     os.makedirs(Q_DIR, exist_ok=True)
-    pin_items = build_pins()
-    car_items = build_carousels()
-    reel_items = build_reels() + build_second_reel()
+    today = dt.date.today()
+    # Only reels went daily. Pins and carousels keep the Mon+Thu cadence they
+    # were tuned for: generating them every day would flood the Pinterest queue,
+    # and writing their files on a day nothing was built would blank them.
+    static_day = today.weekday() in (0, 3) or os.environ.get("FORCE_STATIC")
+    pin_items = build_pins() if static_day else None
+    car_items = build_carousels() if static_day else None
+    reel_items = build_daily_reels()
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)
-    with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
-        json.dump(pin_items, f, indent=2, ensure_ascii=False)
-    with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:
-        json.dump(car_items, f, indent=2, ensure_ascii=False)
+    if pin_items is not None:
+        with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
+            json.dump(pin_items, f, indent=2, ensure_ascii=False)
+    if car_items is not None:
+        with open(os.path.join(Q_DIR, "carousel_queue.json"), "w") as f:
+            json.dump(car_items, f, indent=2, ensure_ascii=False)
     with open(video_path, "w") as f:
         json.dump(reel_queue, f, indent=2, ensure_ascii=False)
     print(
-        f"pins: {len(pin_items)}  carousels: {len(car_items)}  "
+        f"pins: {'skipped' if pin_items is None else len(pin_items)}  "
+        f"carousels: {'skipped' if car_items is None else len(car_items)}  "
         f"reels: {len(reel_items)} new, {len(reel_queue)} in queue"
     )
 

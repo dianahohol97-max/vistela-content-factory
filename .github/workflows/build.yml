@@ -2,7 +2,9 @@ name: build-content
 
 on:
   schedule:
-    - cron: "0 6 * * 1,4"    # Mon+Thu 06:00 UTC -> content plan posts reels Tue+Fri, by hand
+    # Daily 06:00 UTC — an iPad review every day, a personalise-with-me every
+    # other day. Pins and carousels still build only on Mon+Thu (see build.py).
+    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       hook:
