@@ -193,10 +193,10 @@ def pin_laptop():
     eyebrow(d, 88, "EDITABLE CANVA WEBSITE")
     y = headline(d, 146, ["Every detail,"], 74)
     y = script_line(d, y + 6, "beautifully in place", 96)
-    subline(d, y + 20, "Countdown · Timeline · Dress code · Travel & Stay")
+    subline(d, y + 20, "Countdown · Love story · Timeline · Dress code · FAQ")
 
     p3 = src("p3-details.jpg")
-    hero = p3.crop((0, 0, p3.width, int(p3.width * 520 / 924)))
+    hero = p3.crop((0, 100, p3.width, 100 + int(p3.width * 520 / 924)))
 
     lap = Image.open(LAPTOP).convert("RGBA")
     sx0, sy0, sx1, sy1 = LAPTOP_SCREEN
@@ -246,16 +246,18 @@ def pin_rsvp():
 def pin_gallery():
     img = canvas().convert("RGBA")
     d = ImageDraw.Draw(img)
-    eyebrow(d, 74, "OUR STORY IN PICTURES")
-    y = headline(d, 128, ["Your love story", "has its own page"], 70)
+    eyebrow(d, 74, "PHOTO GALLERY PAGE")
+    y = headline(d, 128, ["Your story,"], 70)
+    y = script_line(d, y + 6, "in pictures", 100)
+    subline(d, y + 18, "A separate gallery page for the moments that brought you here")
     p6 = src("p6-gallery.jpg")
     top = p6.crop((0, 0, p6.width, int(p6.height * 0.42)))
-    crop = cover(top, 860, 880, anchor="top")
-    box = (70, 452, 930, 1332)
+    crop = cover(top, 860, 830, anchor="top")
+    box = (70, 502, 930, 1332)
     img = shadow_card(img, box)
     img.alpha_composite(rounded(crop, 26), (box[0], box[1]))
     d = ImageDraw.Draw(img)
-    pills(d, ["PHOTO GALLERY", "LOVE STORY PAGE", "CANVA"])
+    pills(d, ["GALLERY PAGE", "ADD YOUR PHOTOS", "CANVA FREE"])
     save(img, "pin-gallery.jpg")
 
 
