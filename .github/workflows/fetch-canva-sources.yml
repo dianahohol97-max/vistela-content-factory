@@ -35,15 +35,20 @@ jobs:
               os.makedirs(folder, exist_ok=True)
               data = json.load(open(src_file))
               for page in data["pages"]:
-                  out = os.path.join(folder, page["name"] + ".jpg")
+                  raw = page["name"].endswith((".mp4", ".gif"))
+                  out = os.path.join(folder, page["name"] + ("" if raw else ".jpg"))
                   if os.path.exists(out):
                       print("skip", out)
                       continue
                   try:
-                      r = requests.get(page["url"], timeout=120)
+                      r = requests.get(page["url"], timeout=300)
                       r.raise_for_status()
                   except Exception as e:
                       print("FAILED", page["name"], e)
+                      continue
+                  if raw:
+                      open(out, "wb").write(r.content)
+                      print("saved", out, len(r.content), "bytes")
                       continue
                   tmp = out + ".tmp.png"
                   open(tmp, "wb").write(r.content)

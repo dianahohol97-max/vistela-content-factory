@@ -1,0 +1,6 @@
+{
+  "comment": "Signed Canva export URL for the ivory embossed-frame animated save the date video (Canva design DAHRN6f-OQ0, 'f Save the Date - Frame Project - Ivory'). The fetch-canva-sources workflow downloads it to pins/ivory-frame-save-the-date/src/ for local frame extraction and pin composition.",
+  "pages": [
+    {"name": "video.mp4", "url": "https://export-download.canva.com/f-OQ0/DAHRN6f-OQ0/-1/0-2946993279212696946.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20260818%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260818T235215Z&X-Amz-Expires=87793&X-Amz-Signature=3f32d6d1af42f4684402e499f1b3d0662cad3b730f80b85cb8bea7594aa32600&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2020%20Aug%202026%2000%3A15%3A28%20GMT"}
+  ]
+}
