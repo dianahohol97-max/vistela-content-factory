@@ -56,7 +56,18 @@ jobs:
             "https://raw.githubusercontent.com/google/fonts/main/ofl/archivoblack/ArchivoBlack-Regular.ttf"
 
       - name: Ensure ffmpeg (for reels)
-        run: ffmpeg -version >/dev/null 2>&1 || sudo apt-get update && sudo apt-get install -y ffmpeg
+        # `A || B && C` groups as `(A || B) && C`, so the install ran on every
+        # build even though the runner image already ships ffmpeg — and once apt
+        # stalled it hung the job for an hour. Guard it properly and keep apt
+        # non-interactive so it can never wait on a prompt.
+        run: |
+          if ffmpeg -version >/dev/null 2>&1; then
+            echo "ffmpeg already present: $(ffmpeg -version | head -1)"
+          else
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg
+          fi
+        timeout-minutes: 5
 
       - name: Sync input clips from Dropbox
         env:
