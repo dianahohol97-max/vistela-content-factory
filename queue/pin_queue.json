@@ -258,5 +258,70 @@
     "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-duo-phones.jpg",
     "board_id": "1092756365775798807",
     "status": "pending"
+  },
+  {
+    "id": "PIN_ivory-std-seal-hero",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Animated Save the Date Video - Wax Seal Envelope Opening - Elegant Ivory",
+    "description": "An animated save the date video that opens like a wax-sealed envelope - embossed ivory ornaments, your names, a calendar with your date and a built-in RSVP QR code. Editable in free Canva, instant download from VistelaCo. #savethedate #animatedsavethedate #savethedatevideo #ivorywedding #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4537052447",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/ivory-frame-save-the-date/pin-seal-hero.jpg",
+    "board_id": "1092756365776399583",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_ivory-std-story",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Digital Save the Date Video in 3 Acts - Seal, Names & Date - Canva Template",
+    "description": "A digital save the date that tells the whole story in one tap: the wax seal opens, your names appear, and a calendar circles your date with an animated heart - then guests RSVP by QR code. Editable in free Canva, instant download. #digitalsavethedate #savethedate #weddingannouncement #savethedatevideo #canvawedding",
+    "link": "https://vistelaco.etsy.com/listing/4537052447",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/ivory-frame-save-the-date/pin-story-strip.jpg",
+    "board_id": "1092756365776399585",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_ivory-std-names",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Elegant Save the Date Video with Embossed Frame - Your Names in Motion",
+    "description": "An elegant video save the date framed in embossed ivory florals - swap in your names and wedding date in free Canva and send it by text, WhatsApp or email. A luxury paperless announcement for modern couples. Instant download from VistelaCo. #savethedate #elegantwedding #videoinvitation #paperlesswedding #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4537052447",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/ivory-frame-save-the-date/pin-names-phone.jpg",
+    "board_id": "1092756365776399591",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_ivory-std-calendar",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Save the Date Calendar Video - A Date They Will Never Forget",
+    "description": "A save the date idea guests remember: an animated calendar with a heart drawn around your day, wrapped in an embossed ivory frame. Change the month, day and names in free Canva and share as a video. Instant download from VistelaCo. #savethedate #savethedateideas #weddingcalendar #weddingannouncement #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4537052447",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/ivory-frame-save-the-date/pin-calendar-phone.jpg",
+    "board_id": "1092756365776030625",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_ivory-std-rsvp-qr",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Save the Date Video with QR Code RSVP - Guests Reply in One Tap",
+    "description": "A save the date video with RSVP built in - guests watch the animation, scan the QR code and reply. No paper cards, no chasing. Embossed ivory design, editable in free Canva, sent as one link. Instant download from VistelaCo. #savethedate #qrcodewedding #weddingrsvp #digitalinvitation #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4537052447",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/ivory-frame-save-the-date/pin-rsvp-qr.jpg",
+    "board_id": "1092756365776399590",
+    "status": "pending"
   }
 ]
