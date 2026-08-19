@@ -193,5 +193,70 @@
     "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-gallery.jpg",
     "board_id": "1092756365775835450",
     "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-six-pages",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Wedding Website Template - One Link, Six Pages: Envelope, RSVP, Gallery & More",
+    "description": "See the whole wedding website at once: envelope entry, invitation, details with countdown, travel & stay, RSVP form and photo gallery - six elegant ivory pages in one link. Editable in free Canva, instant download from VistelaCo. #weddingwebsite #paperlesswedding #weddingplanning #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-six-pages.jpg",
+    "board_id": "1092756365776037252",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-full-scroll",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Elegant Wedding Website Template - Full Site Preview with Countdown & Timeline",
+    "description": "The whole wedding website at a glance: love story, live countdown, ceremony and reception with maps, wedding day timeline, dress code palette, FAQ and RSVP. One elegant ivory design, editable in free Canva, published in minutes. #weddingwebsite #weddingtimeline #elegantwedding #canvawedding",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-full-scroll.jpg",
+    "board_id": "1092756365775835450",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-guest-journey",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Digital Wedding Invitation Website - The Journey Your Guests Experience",
+    "description": "Not just a link - a little journey. Guests tap the sealed envelope, your invitation unfolds, they browse details, countdown and timeline, then RSVP right there. An ivory wedding website template, editable in free Canva. Instant download from VistelaCo. #weddingwebsite #digitalinvitation #weddingrsvp #paperlesswedding",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-journey.jpg",
+    "board_id": "1092756365776030627",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-music",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Wedding Invitation Website That Plays Your Song - Music Page & Vinyl Details",
+    "description": "A vinyl record spins inside the envelope, and your song plays - this ivory wedding website comes with a music video page, animated envelope opening and polaroid photos. Editable in free Canva, shared as one link. Instant download from VistelaCo. #weddingwebsite #weddingmusic #digitalinvitation #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-vinyl.jpg",
+    "board_id": "1092756365776030623",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-envelope-entry",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Ivory Wedding Website with Envelope Entry Page - Tap to Open, Editable in Canva",
+    "description": "Tap the wax-sealed envelope and the wedding unfolds - invitation, details, countdown, RSVP and gallery, all behind one elegant entry page. An ivory wedding website template you edit in free Canva and send as a single link or QR code. #weddingwebsite #envelopeinvitation #weddinginspo #canvawedding",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-duo-phones.jpg",
+    "board_id": "1092756365775798807",
+    "status": "pending"
   }
 ]

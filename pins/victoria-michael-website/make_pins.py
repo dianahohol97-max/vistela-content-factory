@@ -267,3 +267,182 @@ if __name__ == "__main__":
     pin_laptop()
     pin_rsvp()
     pin_gallery()
+
+
+# ================================================================ batch 2
+def label_under(d, cx, y, s):
+    f = font("Montserrat.ttf", 20, 600)
+    tr = 4
+    w = text_w(d, s, f, tr)
+    draw_tracked(d, (cx - w / 2, y), s, f, TAUPE, tr)
+
+
+def rot_card(im, angle, radius=16):
+    """Rounded card with a soft edge, rotated, on transparent layer."""
+    card = rounded(im, radius)
+    return card.rotate(angle, expand=True, resample=Image.BICUBIC)
+
+
+# ---------------------------------------------------------------- pin 6: all six pages
+def pin_six_pages():
+    img = canvas().convert("RGBA")
+    d = ImageDraw.Draw(img)
+    eyebrow(d, 64, "COMPLETE WEDDING WEBSITE")
+    y = headline(d, 112, ["One link."], 66)
+    y = script_line(d, y + 2, "Six beautiful pages", 92)
+
+    pages = [
+        ("p1-envelope.jpg", "ENVELOPE", "top"),
+        ("p2-menu.jpg", "INVITATION", "top"),
+        ("p3-details.jpg", "DETAILS", "top"),
+        ("p4-travel.jpg", "TRAVEL & STAY", "top"),
+        ("p5-rsvp.jpg", "RSVP", "top"),
+        ("p6-gallery.jpg", "GALLERY", "top"),
+    ]
+    cw, ch, lw = 424, 264, 40  # card size + label band
+    gx, gy = 36, 34
+    x0 = (W - (2 * cw + gx)) / 2
+    y0 = 400
+    for i, (name, label, anchor) in enumerate(pages):
+        r, c = divmod(i, 2)
+        im = src(name)
+        if name == "p3-details.jpg":
+            im = im.crop((0, 100, im.width, 100 + int(im.width * ch / cw)))
+        if name == "p6-gallery.jpg":
+            im = im.crop((0, 0, im.width, int(im.height * 0.35)))
+        if name == "p2-menu.jpg":
+            im = im.crop((0, int(im.height*0.06), im.width, im.height))
+        crop = cover(im, cw, ch, anchor=anchor)
+        cx = x0 + c * (cw + gx)
+        cy = y0 + r * (ch + lw + gy)
+        box = (cx, cy, cx + cw, cy + ch)
+        img_l = shadow_card(img, box, radius=14, blur=12, alpha=48, offset=(0, 8))
+        img.paste(img_l, (0, 0))
+        img.alpha_composite(rounded(crop, 14), (int(cx), int(cy)))
+        d = ImageDraw.Draw(img)
+        label_under(d, cx + cw / 2, cy + ch + 12, label)
+    pills(d, ["RSVP FORM", "COUNTDOWN", "EDIT IN CANVA"])
+    save(img, "pin-six-pages.jpg")
+
+
+# ---------------------------------------------------------------- pin 7: full details scroll
+def pin_full_scroll():
+    img = canvas().convert("RGBA")
+    d = ImageDraw.Draw(img)
+    eyebrow(d, 64, "EVERY SECTION INCLUDED")
+    y = headline(d, 112, ["The whole website,"], 64)
+    y = script_line(d, y + 4, "at a glance", 94)
+
+    p3 = src("p3-details.jpg")
+    cols, gap = 3, 22
+    col_h = 920
+    col_w = (900 - gap * (cols - 1)) // cols
+    seg = p3.height // cols
+    x = (W - (col_w * cols + gap * (cols - 1))) / 2
+    y0 = 410
+    for i in range(cols):
+        strip = p3.crop((0, i * seg, p3.width, (i + 1) * seg))
+        strip = strip.resize((col_w, int(seg * col_w / p3.width)), Image.LANCZOS)
+        strip = strip.crop((0, 0, col_w, min(col_h, strip.height)))
+        box = (x, y0, x + col_w, y0 + strip.height)
+        img_l = shadow_card(img, box, radius=12, blur=12, alpha=46, offset=(0, 8))
+        img.paste(img_l, (0, 0))
+        img.alpha_composite(rounded(strip, 12), (int(x), y0))
+        x += col_w + gap
+    d = ImageDraw.Draw(img)
+    pills(d, ["COUNTDOWN", "TIMELINE", "DRESS CODE", "FAQ"])
+    save(img, "pin-full-scroll.jpg")
+
+
+# ---------------------------------------------------------------- pin 8: guest journey
+def pin_journey():
+    img = canvas().convert("RGBA")
+    d = ImageDraw.Draw(img)
+    eyebrow(d, 60, "WHAT YOUR GUESTS SEE")
+    y = headline(d, 106, ["Not just a link -"], 62)
+    y = script_line(d, y + 2, "a little journey", 90)
+
+    steps = [
+        ("p1-envelope.jpg", "They tap the sealed envelope", "center"),
+        ("p2-menu.jpg", "Your invitation unfolds", "top"),
+        ("p3-details.jpg", "Details, countdown & timeline", "top"),
+        ("p5-rsvp.jpg", "They RSVP right there", "top"),
+    ]
+    iw, ih = 400, 196
+    row_h = 240
+    y0 = 392
+    numf = font("PlayfairDisplay.ttf", 44, 560)
+    txtf = font("Montserrat.ttf", 26, 520)
+    for i, (name, caption, anchor) in enumerate(steps):
+        im = src(name)
+        if name == "p3-details.jpg":
+            im = im.crop((0, int(im.height * 0.3955), im.width, int(im.height * 0.3955) + int(im.width * ih / iw)))
+        if name == "p5-rsvp.jpg":
+            im = im.crop((int(im.width*0.25), int(im.height*0.30), int(im.width*0.75), im.height))
+        crop = cover(im, iw, ih, anchor=anchor)
+        left = i % 2 == 0
+        ix = 70 if left else W - 70 - iw
+        iy = y0 + i * row_h
+        box = (ix, iy, ix + iw, iy + ih)
+        img_l = shadow_card(img, box, radius=14, blur=12, alpha=46, offset=(0, 8))
+        img.paste(img_l, (0, 0))
+        img.alpha_composite(rounded(crop, 14), (ix, iy))
+        d = ImageDraw.Draw(img)
+        # number + caption on the other side
+        tx0 = ix + iw + 44 if left else 70
+        tx1 = W - 70 if left else ix - 44
+        n = str(i + 1)
+        d.text((tx0, iy + 30), n, font=numf, fill=BROWN)
+        words, line, lines = caption.split(), "", []
+        for wd in words:
+            t = (line + " " + wd).strip()
+            if d.textlength(t, font=txtf) <= tx1 - tx0:
+                line = t
+            else:
+                lines.append(line); line = wd
+        lines.append(line)
+        ty = iy + 96
+        for ln in lines:
+            d.text((tx0, ty), ln, font=txtf, fill=(94, 78, 60))
+            ty += 36
+    pills(d, ["ENVELOPE ENTRY", "6 PAGES", "ONE LINK"])
+    save(img, "pin-journey.jpg")
+
+
+# ---------------------------------------------------------------- pin 9: vinyl / music
+def pin_vinyl():
+    img = canvas().convert("RGBA")
+    d = ImageDraw.Draw(img)
+    eyebrow(d, 74, "MUSIC VIDEO PAGE INCLUDED")
+    y = headline(d, 128, ["An invitation that"], 66)
+    y = script_line(d, y + 4, "plays your song", 96)
+    subline(d, y + 18, "Vinyl details · your track · animated envelope opening")
+
+    p2 = src("p2-menu.jpg")
+    crop = p2.crop((int(p2.width*0.13), 0, int(p2.width*0.87), int(p2.height * 0.36)))
+    crop = cover(crop, 840, 780, anchor="top")
+    box = (80, 540, 920, 1320)
+    img = shadow_card(img, box)
+    img.alpha_composite(rounded(crop, 26), (box[0], box[1]))
+    d = ImageDraw.Draw(img)
+    pills(d, ["ADD YOUR MUSIC", "EDIT IN CANVA FREE"])
+    save(img, "pin-vinyl.jpg")
+
+
+# ---------------------------------------------------------------- pin 10: envelope -> menu duo
+def pin_duo():
+    img = canvas().convert("RGBA")
+    d = ImageDraw.Draw(img)
+    eyebrow(d, 70, "ENVELOPE ENTRY PAGE")
+    y = headline(d, 122, ["Tap the envelope -"], 64)
+    y = script_line(d, y + 2, "the wedding unfolds", 94)
+
+    p1 = src("p1-envelope.jpg")
+    env = p1.crop((int(p1.width*0.28), 0, int(p1.width*0.72), p1.height))
+    ph1 = phone_with(env, 880).rotate(4, expand=True, resample=Image.BICUBIC)
+    ph2 = phone_with(src("p2-menu.jpg"), 880).rotate(-4, expand=True, resample=Image.BICUBIC)
+    paste_center(img, ph1, 300, 900)
+    paste_center(img, ph2, 700, 940)
+    d = ImageDraw.Draw(img)
+    pills(d, ["ONE LINK", "6 PAGES", "RSVP & COUNTDOWN"])
+    save(img, "pin-duo-phones.jpg")
