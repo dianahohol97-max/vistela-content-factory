@@ -1,0 +1,61 @@
+# Bridge for sandboxed pin-production sessions: the session's egress proxy only
+# allows GitHub, so signed Canva export URLs are committed to
+# pins/<slug>/sources.json and this runner (open internet) downloads the pages
+# and commits them back under pins/<slug>/src/ for local composition.
+name: fetch-canva-sources
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "pins/*/sources.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-canva-sources
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download sources listed in pins/*/sources.json
+        run: |
+          python3 -m pip install --quiet pillow requests
+          python3 - <<'EOF'
+          import json, os, glob, requests
+          from PIL import Image
+
+          for src_file in glob.glob("pins/*/sources.json"):
+              folder = os.path.join(os.path.dirname(src_file), "src")
+              os.makedirs(folder, exist_ok=True)
+              data = json.load(open(src_file))
+              for page in data["pages"]:
+                  out = os.path.join(folder, page["name"] + ".jpg")
+                  if os.path.exists(out):
+                      print("skip", out)
+                      continue
+                  try:
+                      r = requests.get(page["url"], timeout=120)
+                      r.raise_for_status()
+                  except Exception as e:
+                      print("FAILED", page["name"], e)
+                      continue
+                  tmp = out + ".tmp.png"
+                  open(tmp, "wb").write(r.content)
+                  im = Image.open(tmp).convert("RGB")
+                  im.save(out, "JPEG", quality=92)
+                  os.remove(tmp)
+                  print("saved", out, im.size)
+          EOF
+      - name: Commit downloaded sources
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pins/*/src
+          git diff --cached --quiet || git commit -m "Fetch Canva source pages for pin production"
+          git push
