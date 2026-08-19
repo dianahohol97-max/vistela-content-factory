@@ -28,14 +28,21 @@ APP_KEY = os.environ.get("DROPBOX_APP_KEY")
 APP_SECRET = os.environ.get("DROPBOX_APP_SECRET")
 REFRESH_TOKEN = os.environ.get("DROPBOX_REFRESH_TOKEN")
 
-MAPPING = [
-    ("/весільні відео", "input/wedding-scenes"),
-    ("/відео продуктів", "input/templates"),
-    ("/Personalise with me", "input/personalize"),
-    ("/Огляди На Айпаді", "input/phone-reviews"),
-    ("/аі блогери", "input/ai-reviews"),
-]
 VIDEO_EXT = (".mp4", ".mov", ".m4v", ".webm")
+# Stills for pin artwork: screenshots and the PDF export of a Canva site. These
+# are committed (unlike the clips, which .gitignore keeps out), so the design
+# sandbox — which cannot reach Dropbox — gets them with a plain git pull.
+PHOTO_EXT = (".png", ".jpg", ".jpeg", ".webp", ".pdf")
+
+# (Dropbox folder, local folder, accepted extensions)
+MAPPING = [
+    ("/весільні відео", "input/wedding-scenes", VIDEO_EXT),
+    ("/відео продуктів", "input/templates", VIDEO_EXT),
+    ("/Personalise with me", "input/personalize", VIDEO_EXT),
+    ("/Огляди На Айпаді", "input/phone-reviews", VIDEO_EXT),
+    ("/аі блогери", "input/ai-reviews", VIDEO_EXT),
+    ("/фото сайтів", "input/site-photos", PHOTO_EXT),
+]
 
 
 def _access_token():
@@ -101,6 +108,7 @@ def _sync_from_links():
         sep = "&" if "?" in url else "?"
         url += sep + "dl=1"
         local_root = folder["local"]
+        exts = tuple(folder.get("ext", VIDEO_EXT))
         items = []
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "vistela-factory"})
@@ -113,7 +121,7 @@ def _sync_from_links():
             strip = roots.pop() + "/" if len(roots) == 1 and all("/" in n for n in names) else ""
             for n in names:
                 rel = n[len(strip):] if n.startswith(strip) else n
-                if not rel.lower().endswith(VIDEO_EXT):
+                if not rel.lower().endswith(exts):
                     items.append({"path": rel, "action": "skip-ext"})
                     continue
                 dest = os.path.join(local_root, rel)
@@ -142,7 +150,7 @@ def main():
         return
     token = _access_token()
     total = 0
-    for dbx_root, local_root in MAPPING:
+    for dbx_root, local_root, exts in MAPPING:
         entries = _list_folder(token, dbx_root)
         seen = []
         for e in entries:
@@ -150,7 +158,7 @@ def main():
                     "size": e.get("size")}
             if e.get(".tag") != "file":
                 item["action"] = "folder"
-            elif not e["name"].lower().endswith(VIDEO_EXT):
+            elif not e["name"].lower().endswith(exts):
                 item["action"] = "skip-ext"
             else:
                 rel = e["path_display"][len(dbx_root):].lstrip("/")
