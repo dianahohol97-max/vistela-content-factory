@@ -429,6 +429,37 @@ def pin_vinyl():
     save(img, "pin-vinyl.jpg")
 
 
+
+
+def mobile_envelope_screen():
+    """Rebuild the mobile rendering of the envelope entry page: silk
+    background with the names, envelope and caption restacked large,
+    matching how the live Canva site reflows on a phone."""
+    p1 = src("p1-envelope.jpg")
+    W1, H1 = p1.size
+    sw, sh = 747, 1622
+    scr = p1.crop((int(W1*0.765), 0, W1, H1)).resize((sw, sh), Image.LANCZOS)
+    scr = scr.filter(ImageFilter.GaussianBlur(6))
+
+    def feather_paste(dst, piece, cx, cy, feather=36):
+        mask = Image.new("L", piece.size, 255)
+        md = ImageDraw.Draw(mask)
+        w2, h2 = piece.size
+        for i in range(feather):
+            v = int(255 * i / feather)
+            md.rectangle((i, i, w2 - 1 - i, h2 - 1 - i), outline=v)
+        dst.paste(piece, (int(cx - w2 / 2), int(cy - h2 / 2)), mask)
+
+    def piece(x0, y0, x1, y1, out_w):
+        c = p1.crop((int(W1*x0), int(H1*y0), int(W1*x1), int(H1*y1)))
+        return c.resize((out_w, int(c.height * out_w / c.width)), Image.LANCZOS)
+
+    feather_paste(scr, piece(0.24, 0.09, 0.76, 0.335, 700), sw/2, 470)
+    feather_paste(scr, piece(0.265, 0.325, 0.745, 0.785, 664), sw/2, 780)
+    feather_paste(scr, piece(0.36, 0.755, 0.64, 0.855, 420), sw/2, 1130)
+    return scr
+
+
 # ---------------------------------------------------------------- pin 10: envelope -> menu duo
 def pin_duo():
     img = canvas().convert("RGBA")
@@ -437,9 +468,7 @@ def pin_duo():
     y = headline(d, 122, ["Tap the envelope -"], 64)
     y = script_line(d, y + 2, "the wedding unfolds", 94)
 
-    p1 = src("p1-envelope.jpg")
-    env = p1.crop((int(p1.width*0.28), 0, int(p1.width*0.72), p1.height))
-    ph1 = phone_with(env, 880).rotate(4, expand=True, resample=Image.BICUBIC)
+    ph1 = phone_with(mobile_envelope_screen(), 880).rotate(4, expand=True, resample=Image.BICUBIC)
     ph2 = phone_with(src("p2-menu.jpg"), 880).rotate(-4, expand=True, resample=Image.BICUBIC)
     paste_center(img, ph1, 300, 900)
     paste_center(img, ph2, 700, 940)
