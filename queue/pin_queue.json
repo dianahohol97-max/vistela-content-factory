@@ -128,5 +128,70 @@
     "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/champagne-gold.png",
     "board_id": "1092756365776030629",
     "status": "ready"
+  },
+  {
+    "id": "PIN_victoria-michael-envelope-hero",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Ivory Wedding Website Template - An Invitation They Open Like a Gift",
+    "description": "Open the envelope, and the wedding begins - an ivory wedding website template with an envelope entry page, RSVP form, live countdown and venue maps. Fully editable in free Canva, shared as one link or QR code. Instant download from VistelaCo. #weddingwebsite #digitalinvitation #ivorywedding #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-envelope-hero.jpg",
+    "board_id": "1092756365776037252",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-one-link",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Wedding Website Template with RSVP & Countdown - Your Whole Wedding in One Link",
+    "description": "Invitation, love story, RSVP, countdown, venue maps, dress code and FAQ - six elegant pages your guests open with a tap on an envelope. Editable in free Canva, no coding, published in minutes. Instant download from VistelaCo. #weddingwebsite #paperlesswedding #weddingplanning #canvawedding",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-menu-phone.jpg",
+    "board_id": "1092756365776037252",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-details-laptop",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Elegant Wedding Website Template - Countdown, Timeline, Dress Code & Maps",
+    "description": "A luxury ivory wedding website with everything in its place: live countdown, wedding day timeline, dress code palette, travel & stay and FAQ. Editable Canva template - swap names, dates and photos, publish, and share one link. #weddingwebsite #elegantwedding #weddingcountdown #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-laptop-details.jpg",
+    "board_id": "1092756365776037252",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-rsvp",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Wedding RSVP Website Template - Guests Reply Right on Your Site",
+    "description": "No paper RSVPs, no chasing guests. Your wedding website collects attendance, guest count, shuttle seats, song requests and dietary notes - right on the page, straight to your Canva account. Editable in free Canva, instant download. #weddingrsvp #rsvponline #weddingwebsite #paperlesswedding",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-rsvp-phone.jpg",
+    "board_id": "1092756365776399590",
+    "status": "pending"
+  },
+  {
+    "id": "PIN_victoria-michael-love-story",
+    "channels": [
+      "pinterest"
+    ],
+    "format": "pin",
+    "title": "Wedding Website with Love Story & Photo Gallery Page - Editable Canva Template",
+    "description": "A polaroid-style photo gallery and a love story page built into an elegant ivory wedding website. Add your photos in Canva, publish, and send one beautiful link to every guest. Instant download from VistelaCo. #weddingwebsite #lovestory #weddinggallery #canvatemplate",
+    "link": "https://vistelaco.etsy.com/listing/4558653823",
+    "image_url": "https://raw.githubusercontent.com/dianahohol97-max/vistela-content-factory/main/output/pins/victoria-michael-website/pin-gallery.jpg",
+    "board_id": "1092756365775835450",
+    "status": "pending"
   }
 ]
