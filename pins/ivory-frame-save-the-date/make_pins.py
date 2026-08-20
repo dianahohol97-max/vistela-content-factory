@@ -117,7 +117,7 @@ def pin_calendar():
     img = canvas().convert("RGBA")
     d = ImageDraw.Draw(img)
     eyebrow(d, 70, "SAVE OUR DATE")
-    y = headline(d, 122, ["A date they will", "never forget"], 66)
+    y = headline(d, 122, ["A save the date they", "will never forget"], 64)
     crop = fit_frame("calendar", 500)
     box = (250, 434, 250 + crop.width, 434 + crop.height)
     img = shadow_card(img, box)
