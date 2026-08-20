@@ -42,11 +42,19 @@ def _videos(folder):
 
 
 def build_pins():
+    # The queue is also curated by hand (per-listing pin batches, SEO rewrites),
+    # so regeneration must MERGE with the existing file, never overwrite it:
+    # hand-written text wins for known ids, unknown ids are kept as-is.
+    try:
+        with open(os.path.join(Q_DIR, "pin_queue.json")) as f:
+            existing = {e["id"]: e for e in json.load(f)}
+    except (OSError, ValueError):
+        existing = {}
     items = []
     for pal in C.PALETTES:
         rel = f"output/pins/{pal['slug']}.png"
         R.palette_pin(pal, os.path.join(ROOT, rel))
-        items.append({
+        gen = {
             "id": f"PIN_{pal['slug']}",
             "channels": ["pinterest"],
             "format": "pin",
@@ -58,7 +66,15 @@ def build_pins():
             "image_url": raw(rel),
             "board_id": C.PALETTE_BOARD_ID,
             "status": "ready",
-        })
+        }
+        prev = existing.get(gen["id"])
+        if prev:
+            for k in ("title", "description", "link", "board_id", "status"):
+                if prev.get(k):
+                    gen[k] = prev[k]
+        items.append(gen)
+    known = {e["id"] for e in items}
+    items += [e for e in existing.values() if e["id"] not in known]
     return items
 
 

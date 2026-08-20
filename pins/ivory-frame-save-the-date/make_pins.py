@@ -47,6 +47,12 @@ def frame(name):
     return Image.open(os.path.join(SRC, f"{name}.jpg")).convert("RGB")
 
 
+def fit_frame(name, w):
+    """Full 9:16 video frame resized to width w - nothing cropped."""
+    im = frame(name)
+    return im.resize((w, int(im.height * w / im.width)), Image.LANCZOS)
+
+
 # ---------------------------------------------------------------- pin 1: seal hero
 def pin_seal():
     img = canvas().convert("RGBA")
@@ -55,8 +61,8 @@ def pin_seal():
     y = headline(d, 128, ["Sealed with wax,"], 68)
     y = script_line(d, y + 4, "sent by phone", 96)
     subline(d, y + 18, "An embossed envelope opens - and your date is saved")
-    crop = cover(frame("seal"), 760, 830, anchor="center")
-    box = (120, 470, 880, 1300)
+    crop = fit_frame("seal", 466)
+    box = (267, 470, 267 + crop.width, 470 + crop.height)
     img = shadow_card(img, box)
     img.alpha_composite(rounded(crop, 26), (box[0], box[1]))
     d = ImageDraw.Draw(img)
@@ -72,12 +78,12 @@ def pin_story():
     y = headline(d, 112, ["One tap -"], 64)
     y = script_line(d, y + 2, "the whole story", 94)
     cards = [("seal", "THE SEAL"), ("names", "YOUR NAMES"), ("calendar", "THE DATE")]
-    cw, ch = 292, 610
+    cw, ch = 292, 519
     gap = 24
     x = (W - (cw * 3 + gap * 2)) / 2
     y0 = 420
     for name, label in cards:
-        crop = cover(frame(name), cw, ch, anchor="center")
+        crop = fit_frame(name, cw)
         box = (x, y0, x + cw, y0 + ch)
         img_l = shadow_card(img, box, radius=16, blur=12, alpha=48, offset=(0, 8))
         img.paste(img_l, (0, 0))
@@ -85,7 +91,7 @@ def pin_story():
         d = ImageDraw.Draw(img)
         label_under(d, x + cw / 2, y0 + ch + 14, label)
         x += cw + gap
-    subline(d, 1128, "Then a built-in RSVP link - guests reply in one tap")
+    subline(d, 1042, "Then a built-in RSVP link - guests reply in one tap")
     pills(d, ["ANIMATED VIDEO", "RSVP & QR", "CANVA FREE"])
     vm.save(img, "pin-story-strip.jpg")
 
@@ -96,8 +102,10 @@ def pin_names():
     d = ImageDraw.Draw(img)
     eyebrow(d, 70, "ELEGANT VIDEO SAVE THE DATE")
     y = headline(d, 122, ["Your names,", "beautifully in motion"], 66)
-    ph = phone_with(frame("names"), 1000)
-    paste_center(img, ph, W / 2, 878)
+    crop = fit_frame("names", 500)
+    box = (250, 434, 250 + crop.width, 434 + crop.height)
+    img = shadow_card(img, box)
+    img.alpha_composite(rounded(crop, 24), (box[0], box[1]))
     d = ImageDraw.Draw(img)
     pills(d, ["EDIT NAMES & DATE", "SEND BY TEXT OR EMAIL"])
     vm.save(img, "pin-names-phone.jpg")
@@ -109,8 +117,10 @@ def pin_calendar():
     d = ImageDraw.Draw(img)
     eyebrow(d, 70, "SAVE OUR DATE")
     y = headline(d, 122, ["A date they will", "never forget"], 66)
-    ph = phone_with(frame("calendar"), 1000)
-    paste_center(img, ph, W / 2, 878)
+    crop = fit_frame("calendar", 500)
+    box = (250, 434, 250 + crop.width, 434 + crop.height)
+    img = shadow_card(img, box)
+    img.alpha_composite(rounded(crop, 24), (box[0], box[1]))
     d = ImageDraw.Draw(img)
     pills(d, ["YOUR MONTH & DAY", "ANIMATED HEART", "CANVA"])
     vm.save(img, "pin-calendar-phone.jpg")
@@ -123,8 +133,8 @@ def pin_rsvp_qr():
     eyebrow(d, 74, "RSVP BUILT INTO THE VIDEO")
     y = headline(d, 128, ["They watch, they scan,"], 62)
     y = script_line(d, y + 4, "they reply", 96)
-    crop = cover(frame("rsvp"), 700, 800, anchor="center")
-    box = (150, 490, 850, 1290)
+    crop = fit_frame("rsvp", 452)
+    box = (274, 486, 274 + crop.width, 486 + crop.height)
     img = shadow_card(img, box)
     img.alpha_composite(rounded(crop, 26), (box[0], box[1]))
     d = ImageDraw.Draw(img)
