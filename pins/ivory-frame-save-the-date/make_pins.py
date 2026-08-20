@@ -74,16 +74,17 @@ def pin_seal():
 def pin_story():
     img = canvas().convert("RGBA")
     d = ImageDraw.Draw(img)
-    eyebrow(d, 64, "A VIDEO INVITATION IN 3 ACTS")
+    eyebrow(d, 64, "A VIDEO INVITATION IN 4 ACTS")
     y = headline(d, 112, ["One tap -"], 64)
     y = script_line(d, y + 2, "the whole story", 94)
-    cards = [("seal", "THE SEAL"), ("names", "YOUR NAMES"), ("calendar", "THE DATE")]
-    cw, ch = 292, 519
-    gap = 24
-    x = (W - (cw * 3 + gap * 2)) / 2
-    y0 = 420
+    cards = [("seal", "THE SEAL"), ("names", "YOUR NAMES"),
+             ("calendar", "THE DATE"), ("rsvp", "THE RSVP")]
+    cw, ch = 224, 398
+    gap = 18
+    x = (W - (cw * len(cards) + gap * (len(cards) - 1))) / 2
+    y0 = 520
     for name, label in cards:
-        crop = fit_frame(name, cw)
+        crop = fit_frame(name, cw).crop((0, 0, cw, ch))
         box = (x, y0, x + cw, y0 + ch)
         img_l = shadow_card(img, box, radius=16, blur=12, alpha=48, offset=(0, 8))
         img.paste(img_l, (0, 0))
@@ -91,7 +92,7 @@ def pin_story():
         d = ImageDraw.Draw(img)
         label_under(d, x + cw / 2, y0 + ch + 14, label)
         x += cw + gap
-    subline(d, 1042, "Then a built-in RSVP link - guests reply in one tap")
+    subline(d, 1052, "Seal - names - date - RSVP: guests reply in one tap")
     pills(d, ["ANIMATED VIDEO", "RSVP & QR", "CANVA FREE"])
     vm.save(img, "pin-story-strip.jpg")
 
