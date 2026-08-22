@@ -298,9 +298,9 @@
       "last_hook": 2
     },
     "Video 03-08-2026, 18 02 05.mov": {
-      "last": "2026-08-20",
-      "count": 16,
-      "last_hook": 5
+      "last": "2026-08-22",
+      "count": 17,
+      "last_hook": 6
     }
   },
   "single:tour": {
@@ -367,9 +367,9 @@
       "last_hook": 5
     },
     "Video 03-08-2026, 18 07 30.mov": {
-      "last": "2026-08-17",
-      "count": 5,
-      "last_hook": 4
+      "last": "2026-08-22",
+      "count": 6,
+      "last_hook": 5
     }
   }
 }
