@@ -79,7 +79,11 @@ def add_music(reel, slug):
              f"loudnorm=I={target}:TP={C.MUSIC_PEAK_DB}:LRA=11,"
              f"afade=t=out:st={fade_at}:d={C.MUSIC_FADE_S}[m]")
     if has_sound:
-        fc = f"{music};[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]"
+        # Normalise the MIX, not just the music. The iPad reviews carry very
+        # quiet room sound, so placing the music under it left the whole reel at
+        # -30 LUFS — technically "under existing sound", audibly nothing.
+        fc = (f"{music};[0:a][m]amix=inputs=2:duration=first:dropout_transition=0,"
+              f"loudnorm=I={C.MUSIC_LUFS}:TP={C.MUSIC_PEAK_DB}:LRA=11[a]")
     else:
         fc = f"{music};[m]anull[a]"
     tmp = reel + ".mux.mp4"

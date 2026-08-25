@@ -282,7 +282,7 @@ INPUT_MUSIC = "input/music"
 # TikTok normalise to, so the music was barely audible. loudnorm drives every
 # track to the same measured loudness whatever its own level.
 MUSIC_LUFS = -16.0        # music-only reels, just under platform normalisation
-MUSIC_UNDER_LUFS = -26.0  # music sitting under existing sound
+MUSIC_UNDER_LUFS = -20.0  # music under existing sound, before the mix is normalised
 MUSIC_PEAK_DB = -1.5      # true-peak ceiling, keeps the encoder from clipping
 MUSIC_FADE_S = 1.5        # fade out at the end so it never stops mid-note
 
