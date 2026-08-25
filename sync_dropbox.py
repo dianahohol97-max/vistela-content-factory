@@ -43,7 +43,7 @@ MAPPING = [
     ("/Огляди На Айпаді", "input/phone-reviews", VIDEO_EXT),
     ("/аі блогери", "input/ai-reviews", VIDEO_EXT),
     ("/фото сайтів", "input/site-photos", PHOTO_EXT),
-    ("/музика", "input/music", AUDIO_EXT),
+    ("/Elements/Audio", "input/music", AUDIO_EXT),
 ]
 
 

@@ -272,7 +272,7 @@ AI_REVIEW_MAX_S = 22
 AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
 
 # Music baked into every reel (Diana, 25.08.2026). Tracks come from the Dropbox
-# folder "\u043c\u0443\u0437\u0438\u043a\u0430". One is picked per reel from a hash of its slug, so a
+# folder "Elements/Audio". One is picked per reel from a hash of its slug, so a
 # reel always gets the same track and neighbouring reels differ. A reel that
 # already carries its own sound keeps it, with the music underneath.
 INPUT_MUSIC = "input/music"
