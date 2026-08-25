@@ -276,9 +276,14 @@ AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
 # reel always gets the same track and neighbouring reels differ. A reel that
 # already carries its own sound keeps it, with the music underneath.
 INPUT_MUSIC = "input/music"
-MUSIC_DB = -14.0        # music-only reels
-MUSIC_UNDER_DB = -22.0  # music under existing sound
-MUSIC_FADE_S = 1.5      # fade out at the end so it never stops mid-note
+# Targets, not attenuations: a fixed dB cut lands wherever the track happened
+# to sit, and the first pass measured -29 LUFS against the ~-14 Instagram and
+# TikTok normalise to, so the music was barely audible. loudnorm drives every
+# track to the same measured loudness whatever its own level.
+MUSIC_LUFS = -16.0        # music-only reels, just under platform normalisation
+MUSIC_UNDER_LUFS = -26.0  # music sitting under existing sound
+MUSIC_PEAK_DB = -1.5      # true-peak ceiling, keeps the encoder from clipping
+MUSIC_FADE_S = 1.5        # fade out at the end so it never stops mid-note
 
 AI_REVIEW_HOOKS = [
     "I reviewed a $9 wedding save the date",

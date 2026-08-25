@@ -69,12 +69,14 @@ def add_music(reel, slug):
     has_sound = b"Audio:" in subprocess.run(
         ["ffmpeg", "-i", reel], capture_output=True).stderr
     dur = RR._dur(reel)
-    gain = C.MUSIC_UNDER_DB if has_sound else C.MUSIC_DB
+    target = C.MUSIC_UNDER_LUFS if has_sound else C.MUSIC_LUFS
     fade_at = max(0.0, dur - C.MUSIC_FADE_S)
-    # normalise first: a mono or 44.1k track would otherwise decide the format
-    # of the whole reel's audio
+    # aformat first: a mono or 44.1k track would otherwise decide the format of
+    # the whole reel's audio. loudnorm then puts every track at the same
+    # measured loudness — see the note on MUSIC_LUFS in config.
     music = (f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,"
-             f"atrim=0:{dur},asetpts=PTS-STARTPTS,volume={gain}dB,"
+             f"atrim=0:{dur},asetpts=PTS-STARTPTS,"
+             f"loudnorm=I={target}:TP={C.MUSIC_PEAK_DB}:LRA=11,"
              f"afade=t=out:st={fade_at}:d={C.MUSIC_FADE_S}[m]")
     if has_sound:
         fc = f"{music};[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]"
