@@ -318,7 +318,7 @@
    ]
   },
   "/відео продуктів": {
-   "entries": 45,
+   "entries": 31,
    "items": [
     {
      "path": "/відео продуктів",
@@ -339,99 +339,9 @@
      "action": "folder"
     },
     {
-     "path": "/відео продуктів/Весільні Сайти/Video 13-07-2026, 17 46 49.mov",
-     "tag": "file",
-     "size": 85952834,
-     "action": "downloaded"
-    },
-    {
      "path": "/відео продуктів/Save The Date Animations/Save_the_Date_1.0.mp4",
      "tag": "file",
      "size": 10326697,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 13-07-2026, 22 26 57.mov",
-     "tag": "file",
-     "size": 57242237,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 13-07-2026, 22 28 51.mp4",
-     "tag": "file",
-     "size": 61361360,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 47 31.mov",
-     "tag": "file",
-     "size": 21588806,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 47 33.mov",
-     "tag": "file",
-     "size": 8558530,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 47 33 (1).mov",
-     "tag": "file",
-     "size": 5514830,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 47 32.mov",
-     "tag": "file",
-     "size": 21056853,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 50 43.mov",
-     "tag": "file",
-     "size": 9299441,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 50 44.mov",
-     "tag": "file",
-     "size": 16307106,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 50 43 (1).mov",
-     "tag": "file",
-     "size": 14853259,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 53 58.mov",
-     "tag": "file",
-     "size": 7702372,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 53 57.mov",
-     "tag": "file",
-     "size": 7219748,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 53 57 (1).mov",
-     "tag": "file",
-     "size": 11246977,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 55 44.mov",
-     "tag": "file",
-     "size": 13001042,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 21 55 44 (1).mov",
-     "tag": "file",
-     "size": 11445090,
      "action": "downloaded"
     },
     {
@@ -444,114 +354,6 @@
      "path": "/відео продуктів/Save The Date Animations/Video 15-07-2026, 21 56 14 (1).mp4",
      "tag": "file",
      "size": 10328145,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 00 46.mov",
-     "tag": "file",
-     "size": 5743269,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 00 46 (1).mov",
-     "tag": "file",
-     "size": 10957732,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 00 47.mov",
-     "tag": "file",
-     "size": 11020192,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 00 47 (1).mov",
-     "tag": "file",
-     "size": 8254924,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 55.mov",
-     "tag": "file",
-     "size": 9308069,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 56.mov",
-     "tag": "file",
-     "size": 10129897,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 55 (1).mov",
-     "tag": "file",
-     "size": 12526627,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 56 (1).mov",
-     "tag": "file",
-     "size": 8996961,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 56 (2).mov",
-     "tag": "file",
-     "size": 18707866,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 57.mov",
-     "tag": "file",
-     "size": 6837525,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 57 (1).mov",
-     "tag": "file",
-     "size": 14597097,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 58.mov",
-     "tag": "file",
-     "size": 17550543,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 58 (1).mov",
-     "tag": "file",
-     "size": 12191829,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 57 (2).mov",
-     "tag": "file",
-     "size": 7141937,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 06 59.mov",
-     "tag": "file",
-     "size": 13147896,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 07 00.mov",
-     "tag": "file",
-     "size": 13448228,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 07 00 (1).mov",
-     "tag": "file",
-     "size": 13435531,
-     "action": "downloaded"
-    },
-    {
-     "path": "/відео продуктів/Весільні Сайти/Video 15-07-2026, 22 07 00 (2).mov",
-     "tag": "file",
-     "size": 13336139,
      "action": "downloaded"
     },
     {
@@ -588,6 +390,120 @@
      "path": "/відео продуктів/Save The Date Animations/Save the Date - Frame Project - White .mp4",
      "tag": "file",
      "size": 20261725,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Весільні Сайти/Video 25-08-2026, 09 07 12.mov",
+     "tag": "file",
+     "size": 138689265,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 29 24.mov",
+     "tag": "file",
+     "size": 15912118,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 39 14.mov",
+     "tag": "file",
+     "size": 21578549,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 38 42.mov",
+     "tag": "file",
+     "size": 21840400,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 29 09.mov",
+     "tag": "file",
+     "size": 16677457,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 28 29.mov",
+     "tag": "file",
+     "size": 16275295,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 28 14.mov",
+     "tag": "file",
+     "size": 14415436,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 28 55.mov",
+     "tag": "file",
+     "size": 17633097,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 27 57.mov",
+     "tag": "file",
+     "size": 18435617,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 27 41.mov",
+     "tag": "file",
+     "size": 19056669,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 26 47.mov",
+     "tag": "file",
+     "size": 18191147,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 27 24.mov",
+     "tag": "file",
+     "size": 16567703,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 26 28.mov",
+     "tag": "file",
+     "size": 20158889,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 27 03.mov",
+     "tag": "file",
+     "size": 27549797,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 29 38.mov",
+     "tag": "file",
+     "size": 15095682,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Save The Date Animations/Video 25-08-2026, 09 29 52.mov",
+     "tag": "file",
+     "size": 32294763,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Весільні Сайти/Video 25-08-2026, 09 42 09.mov",
+     "tag": "file",
+     "size": 25923575,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Весільні Сайти/Video 25-08-2026, 09 41 25.mov",
+     "tag": "file",
+     "size": 45100162,
+     "action": "downloaded"
+    },
+    {
+     "path": "/відео продуктів/Весільні Сайти/Video 25-08-2026, 09 40 37.mov",
+     "tag": "file",
+     "size": 33833670,
      "action": "downloaded"
     }
    ]
@@ -667,112 +583,112 @@
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 22 33.png",
      "tag": "file",
      "size": 7291044,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 22 49.png",
      "tag": "file",
      "size": 908702,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 22 57.png",
      "tag": "file",
      "size": 2342441,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 22 42.png",
      "tag": "file",
      "size": 7343939,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 18.png",
      "tag": "file",
      "size": 1167417,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 05.png",
      "tag": "file",
      "size": 2041519,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 27.png",
      "tag": "file",
      "size": 684280,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 11.png",
      "tag": "file",
      "size": 3941790,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 48.png",
      "tag": "file",
      "size": 565587,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 41.png",
      "tag": "file",
      "size": 2218366,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 35.png",
      "tag": "file",
      "size": 1232556,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 24 10.png",
      "tag": "file",
      "size": 1006310,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 19 50 22.jpg",
      "tag": "file",
      "size": 154628,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 19 49 14.jpg",
      "tag": "file",
      "size": 749244,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 12 23 56.png",
      "tag": "file",
      "size": 4409995,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 19 49 14 (1).jpg",
      "tag": "file",
      "size": 67986,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 19 49 14 (1) (1).jpg",
      "tag": "file",
      "size": 54016,
-     "action": "downloaded"
+     "action": "exists"
     },
     {
      "path": "/Фото Сайтів/Photo 19-08-2026, 19 49 14 (2).jpg",
      "tag": "file",
      "size": 277320,
-     "action": "downloaded"
+     "action": "exists"
     }
    ]
   }
  },
- "downloaded": 98
+ "downloaded": 66
 }
