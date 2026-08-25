@@ -58,10 +58,13 @@ def add_music(reel, slug):
     neighbouring reels get different ones. A reel that already has sound (iPad
     reviews, AI presenters) keeps it with the music underneath; a silent one
     gets the music at full level. No music folder = the reel is left alone.
+
+    Returns the track filename on success, so the caller can record it on the
+    queue entry and never mux the same reel twice.
     """
     tracks = _tracks()
     if not tracks:
-        return False
+        return None
     track = tracks[int(hashlib.md5(slug.encode()).hexdigest(), 16) % len(tracks)]
     has_sound = b"Audio:" in subprocess.run(
         ["ffmpeg", "-i", reel], capture_output=True).stderr
@@ -86,10 +89,10 @@ def add_music(reel, slug):
     if r.returncode != 0 or not os.path.exists(tmp):
         print(f"  ! music {os.path.basename(track)} -> {slug}: "
               f"{r.stderr.decode()[-200:]}")
-        return False
+        return None
     os.replace(tmp, reel)
     print(f"  ♪ {os.path.basename(track)} -> {slug}")
-    return True
+    return os.path.basename(track)
 
 
 def build_pins():
@@ -666,18 +669,25 @@ def main():
     pin_items = build_pins() if static_day else None
     car_items = build_carousels() if static_day else None
     reel_items = build_daily_reels()
-    # One place rather than inside each rubric: every fresh reel gets its track
-    # here, after the cover has been grabbed (a still, so muxing cannot affect it).
-    for item in reel_items:
-        name = os.path.basename(item.get("video_url") or "")
-        path = os.path.join(ROOT, "output", "reels", name)
-        if name and os.path.exists(path):
-            add_music(path, item.get("id", name))
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)
     reel_queue, dead = _drop_dead_entries(reel_queue, os.path.join(ROOT, "output", "reels"))
     if dead:
         print(f"⚠ media missing, dropped from queue (will re-render): {', '.join(dead)}")
+    # Music goes on here rather than inside each rubric — one place, and after
+    # the cover has been grabbed (a still, so muxing cannot affect it). It runs
+    # over the whole live queue, not just today's builds: a reel rendered before
+    # any track existed would otherwise stay silent forever. The `music` key
+    # records which track went on, so a reel is never muxed twice.
+    for item in reel_queue:
+        if item.get("music"):
+            continue
+        name = os.path.basename(item.get("video_url") or "")
+        path = os.path.join(ROOT, "output", "reels", name)
+        if name and os.path.exists(path):
+            track = add_music(path, item.get("id", name))
+            if track:
+                item["music"] = track
     if pin_items is not None:
         with open(os.path.join(Q_DIR, "pin_queue.json"), "w") as f:
             json.dump(pin_items, f, indent=2, ensure_ascii=False)
