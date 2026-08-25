@@ -94,11 +94,15 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "chore: refresh pins, carousels & queue [skip ci]"
-            # a push to main while the build was running would otherwise reject
-            # this one and throw away the generated media
+            # A push to the same branch while the build was running would
+            # otherwise reject this one and throw away the generated media.
+            # Rebase onto the branch this run is actually on: hardcoding main
+            # made the retry a no-op on every feature branch, so one rejected
+            # push lost a full render.
+            BRANCH="${GITHUB_REF_NAME}"
             for i in 1 2 3; do
               git push && exit 0
-              git pull --rebase origin main
+              git pull --rebase origin "$BRANCH"
             done
             git push
           fi
