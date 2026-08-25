@@ -275,14 +275,13 @@ AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
 # Music baked into every reel (Diana, 25.08.2026). Tracks come from the Dropbox
 # folder "Elements/Audio". One is picked per reel from a hash of its slug, so a
 # reel always gets the same track and neighbouring reels differ. A reel that
-# already carries its own sound keeps it, with the music underneath.
+# original audio is dropped, not mixed under: only these tracks are heard.
 INPUT_MUSIC = "input/music"
 # Targets, not attenuations: a fixed dB cut lands wherever the track happened
 # to sit, and the first pass measured -29 LUFS against the ~-14 Instagram and
 # TikTok normalise to, so the music was barely audible. loudnorm drives every
 # track to the same measured loudness whatever its own level.
 MUSIC_LUFS = -16.0        # music-only reels, just under platform normalisation
-MUSIC_UNDER_LUFS = -20.0  # music under existing sound, before the mix is normalised
 MUSIC_PEAK_DB = -1.5      # true-peak ceiling, keeps the encoder from clipping
 MUSIC_FADE_S = 1.5        # fade out at the end so it never stops mid-note
 

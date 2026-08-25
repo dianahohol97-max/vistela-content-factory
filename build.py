@@ -52,12 +52,13 @@ def _tracks():
 
 
 def add_music(reel, slug):
-    """Mix a track from the music folder into a finished reel, in place.
+    """Replace a finished reel's audio with a track from the music folder.
 
-    Picked by a hash of the slug: a given reel always gets the same track, and
-    neighbouring reels get different ones. A reel that already has sound (iPad
-    reviews, AI presenters) keeps it with the music underneath; a silent one
-    gets the music at full level. No music folder = the reel is left alone.
+    The original sound is dropped, not mixed under (Diana, 25.08.2026): the
+    filmed clips carry room noise and taps, and only the Dropbox tracks should
+    be heard. The track is picked by a hash of the slug, so a given reel always
+    gets the same one and neighbouring reels differ. No music folder = the reel
+    is left alone.
 
     Returns the track filename on success, so the caller can record it on the
     queue entry and never mux the same reel twice.
@@ -66,27 +67,17 @@ def add_music(reel, slug):
     if not tracks:
         return None
     track = tracks[int(hashlib.md5(slug.encode()).hexdigest(), 16) % len(tracks)]
-    has_sound = b"Audio:" in subprocess.run(
-        ["ffmpeg", "-i", reel], capture_output=True).stderr
     dur = RR._dur(reel)
-    target = C.MUSIC_UNDER_LUFS if has_sound else C.MUSIC_LUFS
     fade_at = max(0.0, dur - C.MUSIC_FADE_S)
     # aformat first: a mono or 44.1k track would otherwise decide the format of
     # the whole reel's audio. loudnorm then puts every track at the same
     # measured loudness — see the note on MUSIC_LUFS in config.
-    music = (f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,"
-             f"atrim=0:{dur},asetpts=PTS-STARTPTS,"
-             f"loudnorm=I={target}:TP={C.MUSIC_PEAK_DB}:LRA=11,"
-             f"afade=t=out:st={fade_at}:d={C.MUSIC_FADE_S}[m]")
-    if has_sound:
-        # Normalise the MIX, not just the music. The iPad reviews carry very
-        # quiet room sound, so placing the music under it left the whole reel at
-        # -30 LUFS — technically "under existing sound", audibly nothing.
-        fc = (f"{music};[0:a][m]amix=inputs=2:duration=first:dropout_transition=0,"
-              f"loudnorm=I={C.MUSIC_LUFS}:TP={C.MUSIC_PEAK_DB}:LRA=11[a]")
-    else:
-        fc = f"{music};[m]anull[a]"
+    fc = (f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,"
+          f"atrim=0:{dur},asetpts=PTS-STARTPTS,"
+          f"loudnorm=I={C.MUSIC_LUFS}:TP={C.MUSIC_PEAK_DB}:LRA=11,"
+          f"afade=t=out:st={fade_at}:d={C.MUSIC_FADE_S}[a]")
     tmp = reel + ".mux.mp4"
+    # -map 0:v only: the source audio track is deliberately left behind
     r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", reel,
                         "-stream_loop", "-1", "-i", track, "-filter_complex", fc,
                         "-map", "0:v", "-map", "[a]", "-c:v", "copy",
