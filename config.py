@@ -270,6 +270,16 @@ PHONE_REVIEW_HOOKS = [
 INPUT_AI_REVIEW = "input/ai-reviews"         # Dropbox folder "\u0430\u0456 \u0431\u043b\u043e\u0433\u0435\u0440\u0438"
 AI_REVIEW_MAX_S = 22
 AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
+
+# Music baked into every reel (Diana, 25.08.2026). Tracks come from the Dropbox
+# folder "\u043c\u0443\u0437\u0438\u043a\u0430". One is picked per reel from a hash of its slug, so a
+# reel always gets the same track and neighbouring reels differ. A reel that
+# already carries its own sound keeps it, with the music underneath.
+INPUT_MUSIC = "input/music"
+MUSIC_DB = -14.0        # music-only reels
+MUSIC_UNDER_DB = -22.0  # music under existing sound
+MUSIC_FADE_S = 1.5      # fade out at the end so it never stops mid-note
+
 AI_REVIEW_HOOKS = [
     "I reviewed a $9 wedding save the date",
     "Wedding stationery under $10 - honest look",

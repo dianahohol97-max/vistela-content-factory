@@ -26,9 +26,20 @@ def _run(a): subprocess.run(a, check=True, stdout=subprocess.DEVNULL, stderr=sub
 
 
 def _dur(path):
-    r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
-                        "-of", "csv=p=0", path], capture_output=True, text=True)
-    return float(r.stdout.strip())
+    try:
+        r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                            "-of", "csv=p=0", path], capture_output=True, text=True)
+        return float(r.stdout.strip())
+    except (ValueError, OSError):
+        pass
+    # no ffprobe (imageio's bundled build ships ffmpeg only) — read the Duration
+    # line ffmpeg prints to stderr
+    r = subprocess.run(["ffmpeg", "-i", path], capture_output=True, text=True)
+    m = re.search(r"Duration: (\d+):(\d+):(\d+\.?\d*)", r.stderr)
+    if not m:
+        raise RuntimeError(f"cannot read duration of {path}")
+    h, mnt, s = m.groups()
+    return int(h) * 3600 + int(mnt) * 60 + float(s)
 
 
 def _dims(path):

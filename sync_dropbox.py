@@ -33,6 +33,7 @@ VIDEO_EXT = (".mp4", ".mov", ".m4v", ".webm")
 # are committed (unlike the clips, which .gitignore keeps out), so the design
 # sandbox — which cannot reach Dropbox — gets them with a plain git pull.
 PHOTO_EXT = (".png", ".jpg", ".jpeg", ".webp", ".pdf")
+AUDIO_EXT = (".mp3", ".m4a", ".wav", ".aac")
 
 # (Dropbox folder, local folder, accepted extensions)
 MAPPING = [
@@ -42,6 +43,7 @@ MAPPING = [
     ("/Огляди На Айпаді", "input/phone-reviews", VIDEO_EXT),
     ("/аі блогери", "input/ai-reviews", VIDEO_EXT),
     ("/фото сайтів", "input/site-photos", PHOTO_EXT),
+    ("/музика", "input/music", AUDIO_EXT),
 ]
 
 

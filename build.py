@@ -41,6 +41,57 @@ def _videos(folder):
     return sorted(files)
 
 
+AUDIO_EXTS = ("*.mp3", "*.m4a", "*.wav", "*.aac")
+
+
+def _tracks():
+    files = []
+    for pat in AUDIO_EXTS:
+        files += glob.glob(os.path.join(ROOT, C.INPUT_MUSIC, "**", pat), recursive=True)
+    return sorted(files)
+
+
+def add_music(reel, slug):
+    """Mix a track from the music folder into a finished reel, in place.
+
+    Picked by a hash of the slug: a given reel always gets the same track, and
+    neighbouring reels get different ones. A reel that already has sound (iPad
+    reviews, AI presenters) keeps it with the music underneath; a silent one
+    gets the music at full level. No music folder = the reel is left alone.
+    """
+    tracks = _tracks()
+    if not tracks:
+        return False
+    track = tracks[int(hashlib.md5(slug.encode()).hexdigest(), 16) % len(tracks)]
+    has_sound = b"Audio:" in subprocess.run(
+        ["ffmpeg", "-i", reel], capture_output=True).stderr
+    dur = RR._dur(reel)
+    gain = C.MUSIC_UNDER_DB if has_sound else C.MUSIC_DB
+    fade_at = max(0.0, dur - C.MUSIC_FADE_S)
+    # normalise first: a mono or 44.1k track would otherwise decide the format
+    # of the whole reel's audio
+    music = (f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,"
+             f"atrim=0:{dur},asetpts=PTS-STARTPTS,volume={gain}dB,"
+             f"afade=t=out:st={fade_at}:d={C.MUSIC_FADE_S}[m]")
+    if has_sound:
+        fc = f"{music};[0:a][m]amix=inputs=2:duration=first:dropout_transition=0[a]"
+    else:
+        fc = f"{music};[m]anull[a]"
+    tmp = reel + ".mux.mp4"
+    r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", reel,
+                        "-stream_loop", "-1", "-i", track, "-filter_complex", fc,
+                        "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+                        "-c:a", "aac", "-b:a", "160k", "-shortest",
+                        "-movflags", "+faststart", tmp], capture_output=True)
+    if r.returncode != 0 or not os.path.exists(tmp):
+        print(f"  ! music {os.path.basename(track)} -> {slug}: "
+              f"{r.stderr.decode()[-200:]}")
+        return False
+    os.replace(tmp, reel)
+    print(f"  ♪ {os.path.basename(track)} -> {slug}")
+    return True
+
+
 def build_pins():
     items = []
     for pal in C.PALETTES:
@@ -321,7 +372,10 @@ def _captions(hook, copy, kw, gate):
         t = " ".join("#" + x for x in tags)
         return "\n\n".join(body + [t]) if t else "\n\n".join(body)
 
-    return with_tags(copy.get("ig_hashtags", [])), with_tags(copy["tiktok_tags"])
+    # Instagram runs without a hashtag block (Diana, 25.08.2026) — the search
+    # terms are already in the body sentences, which is what IG indexes. TikTok
+    # keeps its stack.
+    return "\n\n".join(body), with_tags(copy["tiktok_tags"])
 
 
 def _render_hook_overlay(hook, path):
@@ -612,6 +666,13 @@ def main():
     pin_items = build_pins() if static_day else None
     car_items = build_carousels() if static_day else None
     reel_items = build_daily_reels()
+    # One place rather than inside each rubric: every fresh reel gets its track
+    # here, after the cover has been grabbed (a still, so muxing cannot affect it).
+    for item in reel_items:
+        name = os.path.basename(item.get("video_url") or "")
+        path = os.path.join(ROOT, "output", "reels", name)
+        if name and os.path.exists(path):
+            add_music(path, item.get("id", name))
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)
     reel_queue, dead = _drop_dead_entries(reel_queue, os.path.join(ROOT, "output", "reels"))
