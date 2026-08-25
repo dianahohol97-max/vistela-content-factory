@@ -541,8 +541,20 @@ def build_second_reel():
         "product_tour": build_product_tour,
         "ai_review": build_ai_review,
     }
+    # A folder with a single clip still counts as "has footage", so the plain
+    # cycle kept handing the slot to /Personalise with me and re-rendering its
+    # one file under a new hook. Thin folders now fall to the back and only
+    # fill the slot when nothing deeper can.
+    depth = {
+        "personalize": len(_videos(os.path.join(ROOT, C.INPUT_PERSONALIZE))),
+        "phone_review": len(_videos(os.path.join(ROOT, C.INPUT_PHONE_REVIEW))),
+        "product_tour": len(_videos(os.path.join(ROOT, C.INPUT_TEMPLATES))),
+        "ai_review": len(_videos(os.path.join(ROOT, C.INPUT_AI_REVIEW))),
+    }
     forced = os.environ.get("FORCE_RUBRIC", "").strip()
-    order = [forced] if forced in builders else C.second_slot_order(dt.date.today())
+    cycle = sorted(C.second_slot_order(dt.date.today()),
+                   key=lambda r: depth.get(r, 0) < 2)     # stable: deep folders first
+    order = [forced] if forced in builders else cycle
     for rubric in order:
         items = builders[rubric]()
         if items:
@@ -570,16 +582,18 @@ def _merge_reels(path, fresh, keep=30):
 
 
 def build_daily_reels():
-    """Diana's plan from 11.08.2026: an iPad review (phone_review) every day and
-    a personalise-with-me every other day. The scene->phone-reveal, product tour
-    and AI-presenter rubrics stay in the code and still run on a manual dispatch
-    with FORCE_RUBRIC — they are simply no longer on the schedule."""
+    """Two reels a day (Diana, 25.08.2026).
+
+    Slot 1 is the scene->phone-reveal, which draws on the product animation
+    library — by far the deepest folder and the one that keeps growing. Slot 2
+    rotates the footage-driven rubrics through SECOND_SLOT_CYCLE.
+
+    The previous plan (iPad review daily + personalise every other day) rested
+    on the two thinnest folders — five clips and one — so the same footage came
+    round every few days while two dozen product animations went unused."""
     if os.environ.get("FORCE_RUBRIC", "").strip():
         return build_second_reel()
-    items = build_phone_review()
-    if dt.date.today().toordinal() % 2 == 0:
-        items += build_personalize()
-    return items
+    return build_reels() + build_second_reel()
 
 
 def main():
