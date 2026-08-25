@@ -163,6 +163,31 @@ def _laptop_part(scene, product, out_dir, slug, dur, speed=1.0):
     for t in tmp: os.remove(t)
     return out
 
+def _plain_part(scene, product, out_dir, slug, dur, speed=1.0):
+    """The product filling the frame, no device mockup (Diana, 25.08.2026).
+
+    The clips are now filmed devices — a real iPad on a table — so wrapping
+    them in a drawn phone or laptop put a device inside a device and boxed the
+    footage in with grey bars. Anything that does not fill 9:16 sits on a
+    blurred copy of itself rather than on a flat pad.
+    """
+    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=140)
+    out = os.path.join(out_dir, f".{slug}_plain.mp4")
+    fc = (
+        f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
+        f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        f"gblur=sigma=30,eq=brightness=-0.10,setsar=1,fps=30[bg];"
+        f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
+        f"scale={W}:{H}:force_original_aspect_ratio=decrease,setsar=1,fps=30[fg];"
+        f"[bg][fg]overlay=(W-w)/2:(H-h)/2[c1];"
+        f"[c1]{vf}[v]"
+    )
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product,
+          "-filter_complex", fc, "-map", "[v]",
+          "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
+    for t in tmp: os.remove(t)
+    return out
+
 
 def _cta_part(out_dir, slug):
     AB, CG = C.VIDEO_FONT, C.FONT
@@ -196,13 +221,14 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None, intro
     # captures go in the laptop. Guessing from the category alone put a vertical
     # phone capture in a laptop, letterboxed with white on both sides.
     pw, ph = _dims(product)
-    device = "laptop" if pw > ph else "phone"
+    device = ("plain" if not C.REVEAL_IN_DEVICE_FRAME
+              else "laptop" if pw > ph else "phone")
     # Length is a property of the product (a website scroll needs time to be
     # followed), the frame is a property of the footage. They are set apart on
     # purpose: a website filmed on a phone is portrait but still a long scroll.
     cap = max_s or C.PHONE_REVEAL_MAX_S
     pdur = min(src, cap)
-    part = _laptop_part if device == "laptop" else _phone_part
+    part = {"plain": _plain_part, "laptop": _laptop_part}.get(device, _phone_part)
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
     cta = _cta_part(out_dir, slug)
     f1 = round(sdur - 0.5, 2)

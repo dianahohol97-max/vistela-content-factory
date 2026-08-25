@@ -34,10 +34,17 @@ VIDEO_EXTS = ("*.mp4", "*.mov", "*.m4v", "*.webm")
 
 
 def _videos(folder):
-    """All video files under a folder (any supported extension), recursive."""
+    """All video files under a folder (any supported extension), recursive.
+
+    Clips listed in config.BLOCKED_CLIPS are filtered out here, at the single
+    point every rubric reads its footage through, so a rejected clip cannot
+    come back through another rubric's rotation.
+    """
     files = []
     for pat in VIDEO_EXTS:
         files += glob.glob(os.path.join(folder, "**", pat), recursive=True)
+    blocked = getattr(C, "BLOCKED_CLIPS", ())
+    files = [f for f in files if not any(b in f for b in blocked)]
     return sorted(files)
 
 

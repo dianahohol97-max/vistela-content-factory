@@ -112,6 +112,12 @@ LAPTOP_HOOK   = "IMAGINE SENDING THIS LINK"
 # and the reel lost the wedding entirely.
 INTRO_FROM_REVIEWS = False
 
+# Show the product itself after the wedding opening, not a drawn phone or
+# laptop around it (Diana, 25.08.2026). The clips are filmed devices now — a
+# real iPad on a table — so a mockup put a device inside a device and boxed the
+# footage in with grey bars. Set True to bring the frames back.
+REVEAL_IN_DEVICE_FRAME = False
+
 
 # Rotating hashtag sets (vary per reel so captions aren't identical).
 REEL_HASHTAG_SETS = [
@@ -276,6 +282,14 @@ AI_REVIEW_LABEL = "AI-generated presenter \u00b7 real product"
 # folder "Elements/Audio". One is picked per reel from a hash of its slug, so a
 # reel always gets the same track and neighbouring reels differ. A reel that
 # original audio is dropped, not mixed under: only these tracks are heard.
+# Clips Diana has ruled out — matched as a substring of the path, so a whole
+# folder or a single file can be blocked. Uploaded by mistake or unusable:
+# the factory never picks them, whatever rubric they sit in.
+BLOCKED_CLIPS = [
+    "18 06 32",   # iPad review: opens on three seconds of blank white canvas
+    "18-06-32",   # same clip after the sync renames it
+]
+
 INPUT_MUSIC = "input/music"
 # Targets, not attenuations: a fixed dB cut lands wherever the track happened
 # to sit, and the first pass measured -29 LUFS against the ~-14 Instagram and
