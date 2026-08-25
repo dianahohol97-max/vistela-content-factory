@@ -170,8 +170,11 @@ def _plain_part(scene, product, out_dir, slug, dur, speed=1.0):
     them in a drawn phone or laptop put a device inside a device and boxed the
     footage in with grey bars. Anything that does not fill 9:16 sits on a
     blurred copy of itself rather than on a flat pad.
+
+    No second overlay either: the mockup parts burn "IMAGINE OPENING THIS ON
+    YOUR PHONE" over the device, which read as wrong text over a filmed iPad —
+    and the reel's own hook has already run over the wedding opening.
     """
-    vf, tmp = _hook_vf(out_dir, slug, C.PHONE_HOOK, y0=140)
     out = os.path.join(out_dir, f".{slug}_plain.mp4")
     fc = (
         f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
@@ -179,13 +182,11 @@ def _plain_part(scene, product, out_dir, slug, dur, speed=1.0):
         f"gblur=sigma=30,eq=brightness=-0.10,setsar=1,fps=30[bg];"
         f"[0:v]setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,"
         f"scale={W}:{H}:force_original_aspect_ratio=decrease,setsar=1,fps=30[fg];"
-        f"[bg][fg]overlay=(W-w)/2:(H-h)/2[c1];"
-        f"[c1]{vf}[v]"
+        f"[bg][fg]overlay=(W-w)/2:(H-h)/2[v]"
     )
     _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product,
           "-filter_complex", fc, "-map", "[v]",
           "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
-    for t in tmp: os.remove(t)
     return out
 
 
