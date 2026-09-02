@@ -134,7 +134,20 @@ def next_single(root, clips, hooks, prefix, today=None):
 
     clip = sorted(clips, key=score)[0]
     rec = store.get(cname[clip], {"count": 0, "last": None, "last_hook": -1})
-    hook_i = (rec.get("last_hook", -1) + 1) % len(hooks)
+    # The hook cursor belongs to the RUBRIC, not to the clip. Per clip it put the
+    # whole folder in lockstep: the picker above balances usage counts, so every
+    # clip reaches the same count and therefore the same hook index, and the feed
+    # ran the identical line five reels in a row. A folder whose clips are each
+    # used once was worse still — every reel got hooks[0] forever. One cursor per
+    # rubric means consecutive reels never repeat a hook until the list is spent.
+    cursors = log.setdefault("hook_cursor", {})
+    prev = cursors.get(prefix)
+    if prev is None:                      # first run after the fix: carry on from
+        recent = max(store.values(),      # whichever clip went out most recently
+                     key=lambda r: r.get("last") or "", default=None)
+        prev = recent.get("last_hook", -1) if recent else -1
+    hook_i = (prev + 1) % len(hooks)
+    cursors[prefix] = hook_i
     store[cname[clip]] = {"last": today.isoformat(), "count": rec.get("count", 0) + 1, "last_hook": hook_i}
     _save(root, log)
     return clip, hooks[hook_i]

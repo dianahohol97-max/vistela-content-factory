@@ -609,6 +609,21 @@ def build_ai_review():
                          extra={"ai_label": C.AI_REVIEW_LABEL})
 
 
+def _last_second_rubric():
+    """Rubric of the most recent second-slot reel, or None. Read from the queue
+    rather than the rotation log because the log records clips, not slots."""
+    try:
+        with open(os.path.join(Q_DIR, "video_queue.json")) as f:
+            items = json.load(f)
+    except (OSError, ValueError):
+        return None
+    for item in reversed(items if isinstance(items, list) else []):
+        rubric = item.get("rubric")
+        if rubric in ("personalize", "phone_review", "product_tour", "ai_review"):
+            return rubric
+    return None
+
+
 def build_second_reel():
     """One reel a day from SECOND_SLOT_CYCLE. Rubrics with no footage yet are
     skipped so the slot still gets filled by the next one in the cycle."""
@@ -631,6 +646,13 @@ def build_second_reel():
     forced = os.environ.get("FORCE_RUBRIC", "").strip()
     cycle = sorted(C.second_slot_order(dt.date.today()),
                    key=lambda r: depth.get(r, 0) < 2)     # stable: deep folders first
+    # Whichever rubric filled the slot yesterday goes to the back. The date-based
+    # cycle alone did not stop repeats: rubrics that return nothing are skipped,
+    # so the same one kept winning the slot day after day and the grid filled with
+    # near-identical thumbnails of the same footage.
+    last = _last_second_rubric()
+    if last in cycle and len(cycle) > 1:
+        cycle = [r for r in cycle if r != last] + [last]
     order = [forced] if forced in builders else cycle
     for rubric in order:
         items = builders[rubric]()
