@@ -20,12 +20,14 @@
       "type": "content",
       "kicker": "What you'll find",
       "title": "Weddings, birthdays & holidays",
-      "body": "Save the dates, wedding websites, birthday, Halloween and Christmas invitations."
+      "body": "Save the dates, wedding websites, birthday, Halloween and Christmas invitations.",
+      "note": "published as the phone-grid video (studio.py phone-grid), this text version is not used"
     },
     {
-      "type": "content",
+      "type": "phone",
+      "theme": "dark",
       "kicker": "Why VistelaCo",
-      "title": "Already designed for you",
+      "title": "Already designed\nfor you",
       "body": "Change the names and date in free Canva. No designer, no design skills."
     },
     {

@@ -234,8 +234,8 @@ def render_slide(s, size, idx, total):
             y += int(w * 0.06)
         y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
         if s.get("body"):
-            gold_rule(d, w // 2, y + 20)
-            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 50, maxw, fg, 1.45)
+            gold_rule(d, w // 2, y + 34)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 66, maxw, fg, 1.45)
         return img
 
     if kind == "phone":
@@ -285,8 +285,8 @@ def render_slide(s, size, idx, total):
             y += int(w * 0.06)
         y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
         if s.get("body"):
-            gold_rule(d, w // 2, y + 20)
-            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 50, maxw, fg, 1.45)
+            gold_rule(d, w // 2, y + 34)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 66, maxw, fg, 1.45)
         if not story:
             fs = font("sans", int(w * 0.026), "Regular")
             d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
