@@ -264,11 +264,18 @@ def build_reels():
         # works as well as a filename fragment
         products = [p for p in products
                     if force_product in os.path.relpath(p, ROOT).lower()] or products
+    # The scene->reveal opens on a wedding couple, so only wedding products can
+    # follow it. Party products (Halloween, Christmas, birthday) go out as tours.
+    products = [p for p in products if C.product_category(p) in C.WEDDING_CATEGORIES]
     if not products:
         return items
     out_dir = os.path.join(ROOT, "output", "reels")
     today = dt.date.today()
 
+    if not scenes:
+        # RR.assemble (the old scene-less path) no longer exists; without
+        # wedding footage the slot goes to a plain product tour instead.
+        return build_product_tour(categories=C.WEDDING_CATEGORIES)
     if scenes:
         jobs = ROT.next_pairs(ROOT, scenes, products, C.REELS_PER_RUN, today)
     else:
@@ -402,52 +409,38 @@ def _captions(hook, copy, kw, gate):
 
 
 def _render_hook_overlay(hook, path):
-    """Render the hook as a transparent 1080x1920 PNG, matching the phone-reveal
-    style exactly: brand video font, white fill, heavy black outline, no
-    background box, wrapped and centred in the top third. Both text styles used
-    to coexist (a dark pill here, an outline in render_reel), which read as two
-    different accounts in one feed."""
-    from PIL import Image, ImageDraw, ImageFont
-    W, H = 1080, 1920
-    SIZE, STROKE, Y0 = 58, 7, 300
-    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    d = ImageDraw.Draw(img)
-    font = ImageFont.truetype(os.path.join(ROOT, C.VIDEO_FONT), SIZE)
-    words, lines, cur = hook.upper().split(), [], ""
-    for w in words:
-        t = (cur + " " + w).strip()
-        if d.textlength(t, font=font) <= W - 200:
-            cur = t
-        else:
-            lines.append(cur)
-            cur = w
-    lines.append(cur)
-    y = Y0
-    for line in lines:
-        lw = d.textlength(line, font=font)
-        d.text(((W - lw) / 2, y), line, font=font, fill=(255, 255, 255, 255),
-               stroke_width=STROKE, stroke_fill=(0, 0, 0, 255))
-        y += int(SIZE * 1.25)
-    img.save(path)
+    """The hook as a transparent 1080x1920 PNG in the native Instagram style
+    (white Open Sans Bold, soft shadow, top of the frame) - the same renderer
+    the scene->reveal reels and studio.py use, so the feed reads as one account."""
+    RR.native_png(hook, path)
 
 
-def build_product_tour():
-    """Product-tour rubric: every PRODUCT_TOUR_EVERY_DAYS post one raw product
-    video as-is (normalised to 1080x1920) to Instagram + TikTok, alternating
-    save-the-dates and websites. Runs on the days personalize doesn't."""
+def build_product_tour(categories=None):
+    """Product-tour rubric: one raw product video as-is (normalised to
+    1080x1920) with the hook on top and the comment trigger at the end.
+    The product type rotates by day over the types that have footage and are
+    in season (a Halloween invite never goes out in November); `categories`
+    narrows the choice, e.g. to party products for the holiday slot."""
     import re
     import subprocess
     items = []
-    products = _videos(os.path.join(ROOT, C.INPUT_TEMPLATES))
+    today = dt.date.today()
+    products = [p for p in _videos(os.path.join(ROOT, C.INPUT_TEMPLATES))
+                if C.in_season(C.product_category(p), today)]
+    if categories:
+        products = [p for p in products if C.product_category(p) in categories]
+    force_cat = os.environ.get("FORCE_CATEGORY", "").strip()
+    if force_cat:
+        products = [p for p in products if C.product_category(p) == force_cat] or products
     if not products:
         return items
-    today = dt.date.today()
-    # alternate product type per tour day
-    stds  = [p for p in products if C.product_category(p) == "save_the_date"]
-    sites = [p for p in products if C.product_category(p) == "wedding_website"]
-    cycle = (today.toordinal() // C.PRODUCT_TOUR_EVERY_DAYS) % 2
-    pool = (stds if cycle == 0 else sites) or sites or stds or products
-    clip, hook = ROT.next_single(ROOT, pool, C.PRODUCT_TOUR_HOOKS, "tour", today)
+    cats = sorted({C.product_category(p) for p in products})
+    cat = cats[today.toordinal() % len(cats)]
+    pool = [p for p in products if C.product_category(p) == cat]
+    # Party products carry their own hooks; the generic tour hooks talk weddings.
+    hooks = C.hooks_for(cat, pool[0]) if cat in C.SHOWCASE_HOOKS and cat not in C.WEDDING_CATEGORIES \
+        else C.PRODUCT_TOUR_HOOKS
+    clip, hook = ROT.next_single(ROOT, pool, hooks, "tour", today)
     hook = os.environ.get("FORCE_HOOK", "").strip() or hook
     out_dir = os.path.join(ROOT, "output", "reels")
     os.makedirs(out_dir, exist_ok=True)
@@ -490,6 +483,7 @@ def build_product_tour():
                     "-movflags", "+faststart", reel], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     os.remove(hook_png)
+    RR.add_cta(reel)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
                     "-frames:v", "1", cover], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
@@ -528,14 +522,21 @@ def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
     own audio kept. Used by the phone-review and AI-presenter rubrics."""
     import re
     items = []
-    clips = _videos(os.path.join(ROOT, folder))
+    today = dt.date.today()
+    clips = [c for c in _videos(os.path.join(ROOT, folder))
+             if C.in_season(C.product_category(c), today)]
     pick = os.environ.get("FORCE_CLIP", "").strip().lower()
     if pick:
         clips = [c for c in clips if pick in os.path.basename(c).lower()] or clips
     if not clips:
         return items
-    today = dt.date.today()
     clip, hook = ROT.next_single(ROOT, clips, hooks, prefix, today)
+    # Party clips (sorted into a Halloween / Christmas / Birthday subfolder) take
+    # their own hooks: the review hooks talk about wedding names and brides.
+    ccat = C.product_category(clip)
+    if ccat not in C.WEDDING_CATEGORIES and ccat in C.SHOWCASE_HOOKS:
+        party = C.SHOWCASE_HOOKS[ccat]
+        hook = party[today.toordinal() % len(party)]
     hook = os.environ.get("FORCE_HOOK", "").strip() or hook
     out_dir = os.path.join(ROOT, "output", "reels")
     os.makedirs(out_dir, exist_ok=True)
@@ -556,6 +557,7 @@ def _build_review(rubric, folder, hooks, max_s, prefix, extra=None):
                     "-movflags", "+faststart", reel], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     os.remove(hook_png)
+    RR.add_cta(reel)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
                     "-frames:v", "1", cover], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
@@ -624,7 +626,7 @@ def _last_second_rubric():
     return None
 
 
-def build_second_reel():
+def build_second_reel(skip=()):
     """One reel a day from SECOND_SLOT_CYCLE. Rubrics with no footage yet are
     skipped so the slot still gets filled by the next one in the cycle."""
     builders = {
@@ -653,7 +655,7 @@ def build_second_reel():
     last = _last_second_rubric()
     if last in cycle and len(cycle) > 1:
         cycle = [r for r in cycle if r != last] + [last]
-    order = [forced] if forced in builders else cycle
+    order = [forced] if forced in builders else [r for r in cycle if r not in skip] or cycle
     for rubric in order:
         items = builders[rubric]()
         if items:
@@ -692,6 +694,15 @@ def build_daily_reels():
     round every few days while two dozen product animations went unused."""
     if os.environ.get("FORCE_RUBRIC", "").strip():
         return build_second_reel()
+    # While a holiday is in season, every other day its party invite takes slot 1
+    # instead of the wedding reveal (Diana, 11.10.2026: Halloween, Christmas and
+    # birthdays go into the factory). Outside the season nothing changes.
+    today = dt.date.today()
+    if today.toordinal() % 2 == 0:
+        party = build_product_tour(categories=C.HOLIDAYS)
+        if party:
+            # slot 1 was already a tour, so slot 2 must not be a second one
+            return party + build_second_reel(skip=("product_tour",))
     return build_reels() + build_second_reel()
 
 
@@ -709,7 +720,9 @@ def main():
     # and writing their files on a day nothing was built would blank them.
     static_day = today.weekday() in (0, 3) or os.environ.get("FORCE_STATIC")
     pin_items = build_pins() if static_day else None
-    car_items = build_carousels() if static_day else None
+    # Carousels are made by hand now (Diana, 11.10.2026); the factory no longer
+    # builds or queues them. build_carousels() stays for reference.
+    car_items = None
     reel_items = build_daily_reels()
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)

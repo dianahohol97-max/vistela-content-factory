@@ -95,17 +95,84 @@ def _hook_vf(out_dir, slug, hook, fontsize=44, y0=95, enable="1"):
     return ",".join(parts), files
 
 
+def native_png(text, path, top=250, size=64):
+    """Instagram-native caption as a transparent 1080x1920 PNG: white Open Sans
+    Bold, soft shadow, no box. Same look as studio.py, so the factory and the
+    hand-made reels read as one account."""
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+    def fnt(sz):
+        f = ImageFont.truetype(C.NATIVE_FONT, sz)
+        try:
+            f.set_variation_by_name("Bold")
+        except Exception:
+            pass
+        return f
+
+    def lines_for(d, f):
+        out, cur = [], ""
+        for w in text.split():
+            t = (cur + " " + w).strip()
+            if d.textlength(t, font=f) <= 900:
+                cur = t
+            else:
+                out.append(cur)
+                cur = w
+        return out + [cur]
+
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    f = fnt(size)
+    while len(lines_for(d, f)) > 3 and size > 44:
+        size -= 4
+        f = fnt(size)
+    lines, lh = lines_for(d, f), int(size * 1.22)
+
+    def draw(dr, fill, dy=0):
+        y = top + dy
+        for ln in lines:
+            dr.text(((W - dr.textlength(ln, font=f)) / 2, y), ln, font=f, fill=fill)
+            y += lh
+
+    for blur, alpha, dy in ((10, 170, 4), (2, 200, 2)):   # soft glow + tight edge for light footage
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        draw(ImageDraw.Draw(sh), (0, 0, 0, alpha), dy)
+        img = Image.alpha_composite(img, sh.filter(ImageFilter.GaussianBlur(blur)))
+    draw(ImageDraw.Draw(img), (255, 255, 255, 255))
+    img.save(path)
+
+
+def add_cta(reel):
+    """Burn the comment trigger over the last CTA_SECONDS of the reel itself
+    (no end card). Rewrites the file in place and keeps any audio."""
+    dur = _dur(reel)
+    start = max(0.0, dur - C.CTA_SECONDS)
+    png = reel + ".cta.png"
+    tmp = reel + ".tmp.mp4"
+    native_png(C.CTA_TEXT, png, top=1460, size=56)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", reel, "-loop", "1", "-t", f"{dur:.3f}", "-i", png,
+          "-filter_complex",
+          f"[1:v]format=rgba,fade=t=in:st={start:.3f}:d=0.3:alpha=1[c];"
+          f"[0:v][c]overlay=0:0:enable='gte(t,{start:.3f})'[v]",
+          "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "20", "-preset", "medium",
+          "-pix_fmt", "yuv420p", "-c:a", "copy", "-t", f"{dur:.3f}", "-movflags", "+faststart", tmp])
+    os.replace(tmp, reel)
+    os.remove(png)
+
+
 SCENE_MAX_S = 3.5   # wedding intro is a hook, not the show
 
 
 def _scene_part(scene, hook, out_dir, slug):
     out = os.path.join(out_dir, f".{slug}_scene.mp4")
-    vf, tmp = _hook_vf(out_dir, slug, hook, y0=330)
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-vf",
-          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
-          f"trim=duration={SCENE_MAX_S},{vf}",
-          "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
-    for t in tmp: os.remove(t)
+    png = os.path.join(out_dir, f".{slug}_hook.png")
+    native_png(hook, png)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-loop", "1", "-t", str(SCENE_MAX_S), "-i", png,
+          "-filter_complex",
+          f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
+          f"trim=duration={SCENE_MAX_S}[s];[s][1:v]overlay=0:0[v]",
+          "-map", "[v]", "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
+    os.remove(png)
     return out, _dur(out)
 
 
@@ -231,16 +298,16 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None, intro
     pdur = min(src, cap)
     part = {"plain": _plain_part, "laptop": _laptop_part}.get(device, _phone_part)
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
-    cta = _cta_part(out_dir, slug)
+    # No brand end card any more (native style): the comment trigger goes over
+    # the last seconds of the product itself.
     f1 = round(sdur - 0.5, 2)
-    f2 = round(sdur + pdur - 0.5 - 0.5, 2)
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scn, "-i", phn, "-i", cta, "-filter_complex",
-          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={f1}[a];"
-          f"[a][2:v]xfade=transition=fade:duration=0.5:offset={f2}[v]",
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scn, "-i", phn, "-filter_complex",
+          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={f1}[v]",
           "-map", "[v]", "-r", "30", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "20",
           "-movflags", "+faststart", reel])
+    add_cta(reel)
     _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.4", "-i", reel, "-frames:v", "1", cover])
-    for t in (scn, phn, cta):
+    for t in (scn, phn):
         try: os.remove(t)
         except OSError: pass
     return reel, cover

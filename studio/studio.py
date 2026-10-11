@@ -112,7 +112,7 @@ def reel(args):
           f"[base][hk]overlay=0:0:enable='lt(t,{hook_end})'[v1]")
     last = "v1"
     if args.cta:
-        native_text(f"Comment {args.cta} for the link", cp, top=1300, size=56)
+        native_text(f"Comment {args.cta} for the link", cp, top=1460, size=56)
         inputs += ["-loop", "1", "-t", str(dur), "-i", cp]
         fc += (f";[2:v]format=rgba,fade=t=in:st={cta_start}:d=0.3:alpha=1[ct];"
                f"[{last}][ct]overlay=0:0:enable='gte(t,{cta_start})'[v2]")
