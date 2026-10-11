@@ -2,7 +2,6 @@
   {
     "id": "REEL_halloween-00-collection-2026-10-11",
     "channels": [
-      "instagram_reel",
       "youtube_short",
       "tiktok"
     ],
@@ -39,7 +38,8 @@
     ],
     "link": "https://vistelaco.etsy.com",
     "share_to_feed": true,
-    "status": "ready"
+    "status": "ready",
+    "note": "Instagram posted by hand by Diana (11.10.2026, with a trending track)"
   },
   {
     "id": "REEL_12526922-2160-3840-30fps-save-the-date-emerald-butterfly-2026-10-11",
