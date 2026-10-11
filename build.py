@@ -471,10 +471,15 @@ def build_product_tour(categories=None):
             f"[v][2:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]"
         )
     else:
-        inputs = ["-i", clip, "-i", hook_png]
-        fc = ("[0:v]scale=1080:1920:force_original_aspect_ratio=increase,"
-              "crop=1080:1920,setsar=1,fps=30[v];"
-              f"[v][1:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]")
+        # Portrait product animation: on a phone over a blurred copy of itself
+        # (Diana, 11.10.2026), hook above the phone, trigger below it.
+        phone_png = os.path.join(out_dir, f"{slug}_phone.png")
+        box = RR.phone_layer(phone_png)
+        # the looped frame PNG must not outlive the clip, or the last frame freezes
+        tour_s = min(RR._dur(clip), C.PRODUCT_TOUR_MAX_S)
+        inputs = ["-i", clip, "-loop", "1", "-t", f"{tour_s:.3f}", "-i", phone_png, "-i", hook_png]
+        fc = (RR.framed_filter("[0:v]", "[1:v]", box) + "[v];"
+              f"[v][2:v]overlay=0:0:enable='lte(t,{C.HOOK_OVERLAY_SECONDS})'[out]")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", *inputs,
                     "-filter_complex", fc,
                     "-map", "[out]", "-map", "0:a?",
@@ -483,6 +488,8 @@ def build_product_tour(categories=None):
                     "-movflags", "+faststart", reel], check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     os.remove(hook_png)
+    if pw <= ph:
+        os.remove(phone_png)
     RR.add_cta(reel)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", reel,
                     "-frames:v", "1", cover], check=True,

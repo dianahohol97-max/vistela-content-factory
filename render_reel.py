@@ -160,6 +160,56 @@ def add_cta(reel):
     os.remove(png)
 
 
+PHONE_TOP = 450       # hook sits above the phone, the comment trigger (y=1460) below it
+PHONE_SCREEN_H = 940
+
+
+def phone_layer(path):
+    """Transparent 1080x1920 overlay with a phone (same drawn frame as studio.py)
+    whose screen is cut out, plus its soft shadow. Returns the screen box
+    (x, y, w, h) the product video has to fill."""
+    import sys
+    from PIL import Image, ImageFilter
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "studio"))
+    from studio import phone_mockup
+    ph, (sx, sy, sw, sh), mask = phone_mockup(Image.new("RGB", (10, 10)), PHONE_SCREEN_H)
+    px, py = (W - ph.width) // 2, PHONE_TOP
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow.paste((0, 0, 0, 150), (px + 10, py + 30), ph.split()[3])
+    layer = Image.alpha_composite(layer, shadow.filter(ImageFilter.GaussianBlur(30)))
+    layer.alpha_composite(ph, (px, py))
+    layer.paste((0, 0, 0, 0), (px + sx, py + sy), mask)
+    layer.save(path)
+    return px + sx, py + sy, sw, sh
+
+
+def framed_filter(src_label, layer_label, box, pre=""):
+    """ffmpeg graph: the clip blurred and darkened as the background, the clip
+    itself on the phone screen, the phone frame on top. `pre` is applied to the
+    clip first (speed-up, trim)."""
+    x, y, sw, sh = box
+    return (f"{src_label}{pre}split=2[fb][ff];"
+            f"[fb]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+            f"gblur=sigma=40,eq=brightness=-0.18:saturation=0.9,setsar=1,fps=30[bg];"
+            f"[ff]scale={sw}:{sh}:force_original_aspect_ratio=increase,crop={sw}:{sh},setsar=1,fps=30[scr];"
+            f"[bg][scr]overlay={x}:{y}[b1];[b1]{layer_label}overlay=0:0")
+
+
+def _framed_part(scene, product, out_dir, slug, dur, speed=1.0):
+    """The product playing on a phone over a blurred copy of itself (Diana,
+    11.10.2026: the invitation should sit in a phone frame)."""
+    out = os.path.join(out_dir, f".{slug}_framed.mp4")
+    lp = os.path.join(out_dir, f".{slug}_phone.png")
+    box = phone_layer(lp)
+    fc = framed_filter("[0:v]", "[1:v]", box,
+                       pre=f"setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,") + "[v]"
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product, "-loop", "1", "-t", f"{dur:.3f}", "-i", lp,
+          "-filter_complex", fc, "-map", "[v]", "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
+    os.remove(lp)
+    return out
+
+
 SCENE_MAX_S = 3.5   # wedding intro is a hook, not the show
 
 
@@ -289,14 +339,16 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None, intro
     # captures go in the laptop. Guessing from the category alone put a vertical
     # phone capture in a laptop, letterboxed with white on both sides.
     pw, ph = _dims(product)
-    device = ("plain" if not C.REVEAL_IN_DEVICE_FRAME
-              else "laptop" if pw > ph else "phone")
+    # Portrait product animations go in the drawn phone frame; landscape desktop
+    # captures keep the old plain/laptop handling.
+    device = ("laptop" if pw > ph and C.REVEAL_IN_DEVICE_FRAME
+              else "plain" if pw > ph else "framed")
     # Length is a property of the product (a website scroll needs time to be
     # followed), the frame is a property of the footage. They are set apart on
     # purpose: a website filmed on a phone is portrait but still a long scroll.
     cap = max_s or C.PHONE_REVEAL_MAX_S
     pdur = min(src, cap)
-    part = {"plain": _plain_part, "laptop": _laptop_part}.get(device, _phone_part)
+    part = {"plain": _plain_part, "laptop": _laptop_part, "framed": _framed_part}.get(device, _phone_part)
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
     # No brand end card any more (native style): the comment trigger goes over
     # the last seconds of the product itself.
