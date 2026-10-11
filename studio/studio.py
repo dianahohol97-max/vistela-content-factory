@@ -241,7 +241,7 @@ def render_slide(s, size, idx, total):
         # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
         from PIL import ImageFilter
         story = h > 1.6 * w
-        screen_h = int(h * (0.5 if story else 0.52))
+        screen_h = int(h * (0.5 if story else 0.52) * (0.84 if s.get("badge") else 1))
         py = int(h * (0.07 if story else 0.06))
         img = img.convert("RGBA")
         # "images": a row of invitations — two smaller phones peek out behind the centre one
@@ -259,9 +259,24 @@ def render_slide(s, size, idx, total):
         shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
         img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(30)))
         img.alpha_composite(ph, (px, py))
+        y = py + ph.height + int(h * 0.035)
+        s["_badge"] = None
+        if s.get("badge"):
+            # screenshot card (e.g. the Etsy shop header) overlapping the bottom of the phone
+            bdg = Image.open(s["badge"]).convert("RGB")
+            bw = int(w * 0.84)
+            bdg = bdg.resize((bw, int(bdg.height * bw / bdg.width)))
+            bm = Image.new("L", bdg.size, 0)
+            ImageDraw.Draw(bm).rounded_rectangle([0, 0, *bdg.size], radius=28, fill=255)
+            bx, by = (w - bw) // 2, py + ph.height - int(h * 0.075)
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 140), (bx + 6, by + 22), bm)
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
+            img.paste(bdg, (bx, by), bm)
+            s["_badge"] = (bdg, bm, bx, by)
+            y = by + bdg.height + int(h * 0.03)
         img = img.convert("RGB")
         d = ImageDraw.Draw(img)
-        y = py + ph.height + int(h * 0.035)
         if s.get("kicker"):
             d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
             y += int(w * 0.06)
@@ -358,6 +373,9 @@ def phone_video(spec_path, slide_no, video, out):
     layer = render_slide(s, (W, H), 1, 1).convert("RGBA")
     x, y, sw, sh, mask = s["_screen"]
     layer.paste((0, 0, 0, 0), (x, y), mask)   # cut the screen out so the video shows through
+    if s.get("_badge"):   # the badge sits over the screen, put it back on top
+        bdg, bm, bx, by = s["_badge"]
+        layer.paste(bdg, (bx, by), bm)
     lp = os.path.join(tempfile.mkdtemp(), "layer.png")
     layer.save(lp)
     dur, has_audio = probe(video)

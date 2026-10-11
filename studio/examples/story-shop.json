@@ -21,9 +21,9 @@
       "type": "phone",
       "theme": "dark",
       "image": "inbox/rec-0.5.png",
+      "badge": "inbox/etsy-badge.png",
       "kicker": "Where to buy",
-      "title": "Find us on Etsy",
-      "body": "5.0 rating · 13 reviews · 315 sales"
+      "title": "Find us on Etsy"
     },
     {
       "type": "content",
