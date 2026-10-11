@@ -43,11 +43,11 @@
       "body": "— Victoria"
     },
     {
-      "type": "cta",
+      "type": "phone",
       "theme": "dark",
+      "kicker": "Your celebration",
       "title": "Find yours",
-      "body": "Tap the link to see every invitation in the shop.",
-      "button": "Shop on Etsy"
+      "body": "Tap the link to see every invitation in the shop."
     }
   ]
 }
