@@ -14,9 +14,23 @@ queue/      pin_queue.json + carousel_queue.json  <- Make posters read these
 ```
 
 ## What it produces
+- **Reels** (2 a day): a wedding scene → product reveal, or, while a holiday is in
+  season, a Halloween / Christmas party invite every other day; plus one reel
+  from the phone-review / product-tour / AI-review cycle.
 - **Pinterest palette pins** (`output/pins/`, 1000×1500 / 2:3) — one per palette.
-- **Instagram carousels** (`output/carousels/CAR_*/`, 1080×1350 / 4:5) — cover + 5 palettes + CTA.
 - **Queues** with the shared content-object schema and raw-CDN image URLs.
+- Instagram carousels are no longer built here — Diana makes them by hand (11.10.2026).
+
+## Rules for reels (Diana, 11.10.2026)
+- Sell to buyers, never teach: hooks talk about *your guests* and *already made for
+  you*; no "I made / I edited / watch me", no "my guests / I sent 120".
+- One comment trigger everywhere: **DATE**.
+- Native Instagram look: white Open Sans Bold with a soft shadow, hook at the top
+  for ~3 s, "Comment DATE for the link" over the last 2.5 s. No text bands, no end card.
+- Product types come from the Dropbox subfolder or filename: Save the Date, Wedding
+  Websites, Invitations, Halloween, Christmas, Birthday. Halloween runs 10 Sep–31 Oct,
+  Christmas 1 Nov–24 Dec; party products never follow a wedding scene.
+- "Personalise with me" (editing in Canva) is out of the rotation.
 
 ## Anti-repeat
 The 10-palette library splits into two disjoint sets of 5; carousels alternate

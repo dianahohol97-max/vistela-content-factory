@@ -112,7 +112,7 @@ def reel(args):
           f"[base][hk]overlay=0:0:enable='lt(t,{hook_end})'[v1]")
     last = "v1"
     if args.cta:
-        native_text(f"Comment {args.cta} for the link", cp, top=1300, size=56)
+        native_text(f"Comment {args.cta} for the link", cp, top=1460, size=56)
         inputs += ["-loop", "1", "-t", str(dur), "-i", cp]
         fc += (f";[2:v]format=rgba,fade=t=in:st={cta_start}:d=0.3:alpha=1[ct];"
                f"[{last}][ct]overlay=0:0:enable='gte(t,{cta_start})'[v2]")
@@ -422,14 +422,17 @@ def phone_video(spec_path, slide_no, video, out):
     subprocess.run(cmd, check=True)
     print(out)
 
-def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0):
+def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0, height=0.64):
     """Story with a grid of phones, each playing its own invitation video (looped, muted); text underneath."""
     from PIL import ImageFilter
     n = cols * rows
     videos = [videos[i % len(videos)] for i in range(n)]
     mx, gx, gy = int(W * 0.035), int(W * 0.018), int(W * 0.022)
     pw = (W - 2 * mx - (cols - 1) * gx) // cols
-    screen_h = int((pw - 12) / 0.506)
+    # fit both ways: a 3x3 grid is limited by height, not width
+    screen_h = min(int((pw - 12) / 0.506), int((H * height - (rows - 1) * gy) / rows / 1.045))
+    pw = int(screen_h * 0.506) + 12
+    mx = (W - cols * pw - (cols - 1) * gx) // 2
     blank = Image.new("RGB", (10, 10), IVORY)
     ph, scr, mask = phone_mockup(blank, screen_h)
     y0 = int(H * 0.05)
@@ -454,10 +457,11 @@ def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10
     if title:
         y = text_block(d, title, font("serif", int(W * 0.064)), W / 2, y, int(W * 0.92), IVORY, 1.15)
     if body:
-        gold_rule(d, W // 2, y + 20)
-        text_block(d, body, font("sans", int(W * 0.036)), W / 2, y + 50, maxw, IVORY, 1.45)
+        gold_rule(d, W // 2, y + 34)
+        text_block(d, body, font("sans", int(W * 0.036)), W / 2, y + 66, maxw, IVORY, 1.45)
     lp = os.path.join(tempfile.mkdtemp(), "layer.png")
     layer.save(lp)
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     sw = scr[2]
     inputs, fc = [], f"color=c={EMERALD}:s={W}x{H}:r=30:d={dur}[b0];"
     for i, v in enumerate(videos):
@@ -580,6 +584,7 @@ def main():
     pg.add_argument("--kicker", default=""); pg.add_argument("--title", default=""); pg.add_argument("--body", default="")
     pg.add_argument("--cols", type=int, default=5); pg.add_argument("--rows", type=int, default=3)
     pg.add_argument("--seconds", type=float, default=10.0)
+    pg.add_argument("--height", type=float, default=0.64, help="share of the frame the grid may take")
     cp = sub.add_parser("cover-phones", help="highlight cover: three phones with real invitations")
     cp.add_argument("out"); cp.add_argument("sources", nargs="+"); cp.add_argument("--t", type=float, default=9.0)
     sub.add_parser("highlights")
@@ -594,7 +599,7 @@ def main():
     elif a.cmd == "cover-phones":
         cover_phones(a.sources, a.out, a.t)
     elif a.cmd == "phone-grid":
-        phone_grid(a.videos, a.out, a.kicker, a.title, a.body, a.cols, a.rows, a.seconds)
+        phone_grid(a.videos, a.out, a.kicker, a.title, a.body, a.cols, a.rows, a.seconds, a.height)
     elif a.cmd == "phone-video":
         name = os.path.splitext(os.path.basename(a.spec))[0]
         os.makedirs(os.path.join(ROOT, "out", name), exist_ok=True)

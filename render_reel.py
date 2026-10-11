@@ -95,17 +95,145 @@ def _hook_vf(out_dir, slug, hook, fontsize=44, y0=95, enable="1"):
     return ",".join(parts), files
 
 
+def native_png(text, path, top=250, size=64):
+    """Instagram-native caption as a transparent 1080x1920 PNG: white Open Sans
+    Bold, soft shadow, no box. Same look as studio.py, so the factory and the
+    hand-made reels read as one account."""
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+    def fnt(sz):
+        f = ImageFont.truetype(C.NATIVE_FONT, sz)
+        try:
+            f.set_variation_by_name("Bold")
+        except Exception:
+            pass
+        return f
+
+    def lines_for(d, f):
+        out, cur = [], ""
+        for w in text.split():
+            t = (cur + " " + w).strip()
+            if d.textlength(t, font=f) <= 900:
+                cur = t
+            else:
+                out.append(cur)
+                cur = w
+        return out + [cur]
+
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    f = fnt(size)
+    while len(lines_for(d, f)) > 3 and size > 44:
+        size -= 4
+        f = fnt(size)
+    lines, lh = lines_for(d, f), int(size * 1.22)
+
+    def draw(dr, fill, dy=0):
+        y = top + dy
+        for ln in lines:
+            dr.text(((W - dr.textlength(ln, font=f)) / 2, y), ln, font=f, fill=fill)
+            y += lh
+
+    for blur, alpha, dy in ((10, 170, 4), (2, 200, 2)):   # soft glow + tight edge for light footage
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        draw(ImageDraw.Draw(sh), (0, 0, 0, alpha), dy)
+        img = Image.alpha_composite(img, sh.filter(ImageFilter.GaussianBlur(blur)))
+    draw(ImageDraw.Draw(img), (255, 255, 255, 255))
+    img.save(path)
+
+
+def add_cta(reel):
+    """Burn the closing texts into the reel itself (no end card): the
+    "already made, just edit in Canva" line between the hook and the trigger,
+    then the comment trigger over the last CTA_SECONDS. Rewrites the file in
+    place and keeps any audio."""
+    dur = _dur(reel)
+    start = max(0.0, dur - C.CTA_SECONDS)
+    png, mid = reel + ".cta.png", reel + ".mid.png"
+    tmp = reel + ".tmp.mp4"
+    native_png(C.CTA_TEXT, png, top=1460, size=56)
+    m0, m1 = C.MID_WINDOW
+    m1 = min(m1, start - 0.5)
+    inputs = ["-i", reel, "-loop", "1", "-t", f"{dur:.3f}", "-i", png]
+    fc = (f"[1:v]format=rgba,fade=t=in:st={start:.3f}:d=0.3:alpha=1[c];"
+          f"[0:v][c]overlay=0:0:enable='gte(t,{start:.3f})'")
+    if C.MID_TEXT and m1 - m0 >= 3:
+        native_png(C.MID_TEXT, mid)
+        inputs += ["-loop", "1", "-t", f"{dur:.3f}", "-i", mid]
+        fc += (f"[a];[2:v]format=rgba,fade=t=in:st={m0}:d=0.3:alpha=1[m];"
+               f"[a][m]overlay=0:0:enable='between(t,{m0},{m1:.2f})'")
+    _run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", fc + "[v]",
+          "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "20", "-preset", "medium",
+          "-pix_fmt", "yuv420p", "-c:a", "copy", "-t", f"{dur:.3f}", "-movflags", "+faststart", tmp])
+    os.replace(tmp, reel)
+    for f in (png, mid):
+        if os.path.exists(f):
+            os.remove(f)
+
+
+PHONE_TOP = 450       # hook sits above the phone, the comment trigger (y=1460) below it
+PHONE_SCREEN_H = 940
+
+
+def phone_layer(path):
+    """Transparent 1080x1920 overlay with a phone (same drawn frame as studio.py)
+    whose screen is cut out, plus its soft shadow. Returns the screen box
+    (x, y, w, h) the product video has to fill."""
+    import sys
+    from PIL import Image, ImageFilter
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "studio"))
+    from studio import phone_mockup
+    ph, (sx, sy, sw, sh), mask = phone_mockup(Image.new("RGB", (10, 10)), PHONE_SCREEN_H)
+    px, py = (W - ph.width) // 2, PHONE_TOP
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    shadow.paste((0, 0, 0, 150), (px + 10, py + 30), ph.split()[3])
+    layer = Image.alpha_composite(layer, shadow.filter(ImageFilter.GaussianBlur(30)))
+    layer.alpha_composite(ph, (px, py))
+    layer.paste((0, 0, 0, 0), (px + sx, py + sy), mask)
+    layer.save(path)
+    return px + sx, py + sy, sw, sh
+
+
+def framed_filter(src_label, layer_label, box, pre=""):
+    """ffmpeg graph: the clip blurred and darkened as the background, the clip
+    itself on the phone screen, the phone frame on top. `pre` is applied to the
+    clip first (speed-up, trim)."""
+    x, y, sw, sh = box
+    return (f"{src_label}{pre}split=2[fb][ff];"
+            f"[fb]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+            f"gblur=sigma=40,eq=brightness=-0.18:saturation=0.9,setsar=1,fps=30[bg];"
+            f"[ff]scale={sw}:{sh}:force_original_aspect_ratio=increase,crop={sw}:{sh},setsar=1,fps=30[scr];"
+            f"[bg][scr]overlay={x}:{y}[b1];[b1]{layer_label}overlay=0:0")
+
+
+def _framed_part(scene, product, out_dir, slug, dur, speed=1.0):
+    """The product playing on a phone over a blurred copy of itself (Diana,
+    11.10.2026: the invitation should sit in a phone frame)."""
+    out = os.path.join(out_dir, f".{slug}_framed.mp4")
+    lp = os.path.join(out_dir, f".{slug}_phone.png")
+    box = phone_layer(lp)
+    fc = framed_filter("[0:v]", "[1:v]", box,
+                       pre=f"setpts=PTS/{speed:.4f},trim=duration={dur},setpts=PTS-STARTPTS,") + "[v]"
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", product, "-loop", "1", "-t", f"{dur:.3f}", "-i", lp,
+          "-filter_complex", fc, "-map", "[v]", "-t", str(dur), "-r", "30", "-pix_fmt", "yuv420p", out])
+    os.remove(lp)
+    return out
+
+
 SCENE_MAX_S = 3.5   # wedding intro is a hook, not the show
 
 
 def _scene_part(scene, hook, out_dir, slug):
     out = os.path.join(out_dir, f".{slug}_scene.mp4")
-    vf, tmp = _hook_vf(out_dir, slug, hook, y0=330)
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-vf",
-          f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
-          f"trim=duration={SCENE_MAX_S},{vf}",
-          "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
-    for t in tmp: os.remove(t)
+    png = os.path.join(out_dir, f".{slug}_hook.png")
+    native_png(hook, png)
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scene, "-loop", "1", "-t", str(SCENE_MAX_S), "-i", png,
+          "-filter_complex",
+          f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps=30,"
+          f"trim=duration={SCENE_MAX_S}[s];[s][1:v]overlay=0:0[v]",
+          "-map", "[v]", "-an", "-r", "30", "-pix_fmt", "yuv420p", out])
+    os.remove(png)
     return out, _dur(out)
 
 
@@ -222,25 +350,27 @@ def assemble_phone_reveal(scene, product, hook, out_dir, slug, max_s=None, intro
     # captures go in the laptop. Guessing from the category alone put a vertical
     # phone capture in a laptop, letterboxed with white on both sides.
     pw, ph = _dims(product)
-    device = ("plain" if not C.REVEAL_IN_DEVICE_FRAME
-              else "laptop" if pw > ph else "phone")
+    # Portrait product animations go in the drawn phone frame; landscape desktop
+    # captures keep the old plain/laptop handling.
+    device = ("laptop" if pw > ph and C.REVEAL_IN_DEVICE_FRAME
+              else "plain" if pw > ph else "framed")
     # Length is a property of the product (a website scroll needs time to be
     # followed), the frame is a property of the footage. They are set apart on
     # purpose: a website filmed on a phone is portrait but still a long scroll.
     cap = max_s or C.PHONE_REVEAL_MAX_S
     pdur = min(src, cap)
-    part = {"plain": _plain_part, "laptop": _laptop_part}.get(device, _phone_part)
+    part = {"plain": _plain_part, "laptop": _laptop_part, "framed": _framed_part}.get(device, _phone_part)
     phn = part(scene, product, out_dir, slug, pdur, speed=max(1.0, src / pdur))
-    cta = _cta_part(out_dir, slug)
+    # No brand end card any more (native style): the comment trigger goes over
+    # the last seconds of the product itself.
     f1 = round(sdur - 0.5, 2)
-    f2 = round(sdur + pdur - 0.5 - 0.5, 2)
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scn, "-i", phn, "-i", cta, "-filter_complex",
-          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={f1}[a];"
-          f"[a][2:v]xfade=transition=fade:duration=0.5:offset={f2}[v]",
+    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", scn, "-i", phn, "-filter_complex",
+          f"[0:v][1:v]xfade=transition=fade:duration=0.5:offset={f1}[v]",
           "-map", "[v]", "-r", "30", "-pix_fmt", "yuv420p", "-c:v", "libx264", "-crf", "20",
           "-movflags", "+faststart", reel])
+    add_cta(reel)
     _run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1.4", "-i", reel, "-frames:v", "1", cover])
-    for t in (scn, phn, cta):
+    for t in (scn, phn):
         try: os.remove(t)
         except OSError: pass
     return reel, cover
