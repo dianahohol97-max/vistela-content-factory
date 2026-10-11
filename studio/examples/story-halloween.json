@@ -79,6 +79,14 @@
       "kicker": "Halloween invite · 9/9",
       "title": "Vintage Pumpkin",
       "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/vintage.mp4",
+      "badge": "inbox/reviews/r3-jessica-card.png",
+      "kicker": "Under $10 · instant download",
+      "title": "Find your\nHalloween invite"
     }
   ]
 }
