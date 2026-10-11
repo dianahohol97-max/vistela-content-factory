@@ -407,9 +407,9 @@ INPUT_MUSIC = "input/music"
 MUSIC_LUFS = -16.0        # music-only reels, just under platform normalisation
 MUSIC_PEAK_DB = -1.5      # true-peak ceiling, keeps the encoder from clipping
 MUSIC_FADE_S = 1.5        # fade out at the end so it never stops mid-note
-# Halloween product videos keep their own sound (Diana, 11.10.2026): no track
+# Halloween and Christmas product videos keep their own sound (Diana, 11.10.2026): no track
 # is muxed over them.
-KEEP_ORIGINAL_AUDIO = ("halloween", "halloween_envelope")
+KEEP_ORIGINAL_AUDIO = ("halloween", "halloween_envelope", "christmas")
 
 AI_REVIEW_HOOKS = [
     "Is a digital save the date worth it?",
