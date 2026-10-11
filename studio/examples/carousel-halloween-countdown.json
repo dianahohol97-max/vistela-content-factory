@@ -1,0 +1,64 @@
+{
+  "name": "carousel-halloween-countdown",
+  "slides": [
+    {
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/halloween/frames/monster-lab.png",
+      "kicker": "Halloween party countdown",
+      "title": "Your party, planned in 3 weeks",
+      "body": "Save this for later"
+    },
+    {
+      "type": "content",
+      "theme": "light",
+      "kicker": "3 weeks out",
+      "title": "Pick the date, theme and guest list",
+      "body": "The 31st or the weekend before? Kids, adults or both? Decide these first and everything else follows."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/halloween/frames/vampire.png",
+      "kicker": "2–3 weeks out",
+      "title": "Send the invites",
+      "body": "Guests plan costumes and babysitters early.\nAn animated invite goes out by text in minutes."
+    },
+    {
+      "type": "content",
+      "theme": "light",
+      "kicker": "2 weeks out",
+      "title": "Announce the costume theme",
+      "body": "Give everyone time to find a costume. Put the theme right on the invite so nobody misses it."
+    },
+    {
+      "type": "content",
+      "theme": "light",
+      "kicker": "1 week out",
+      "title": "RSVP reminder, food and playlist",
+      "body": "Send a friendly nudge to anyone who hasn't replied. Then plan snacks, drinks and music for the head count you have."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/halloween/frames/ghostly-envelope.png",
+      "kicker": "2 days out",
+      "title": "Carve, bake, decorate",
+      "body": "Pumpkins, snacks that can sit out,\nand a corner for photos."
+    },
+    {
+      "type": "content",
+      "theme": "light",
+      "kicker": "Party day",
+      "title": "Lights low, music up",
+      "body": "LED candles if kids are around, playlist on, door open. Now enjoy your own party."
+    },
+    {
+      "type": "cta",
+      "theme": "dark",
+      "title": "Step one is ready",
+      "body": "Halloween invites, already designed. Edit in free Canva and send them tonight.",
+      "button": "Comment DATE"
+    }
+  ]
+}

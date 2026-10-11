@@ -268,7 +268,7 @@ def render_slide(s, size, idx, total):
         # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
         from PIL import ImageFilter
         story = h > 1.6 * w
-        screen_h = int(h * (0.5 if story else 0.52) * (0.84 if s.get("badge") else 1))
+        screen_h = int(h * (0.5 if story else 0.47) * (0.84 if s.get("badge") else 1))
         py = int(h * (0.07 if story else 0.06))
         img = img.convert("RGBA")
         # "images": a row of invitations — two smaller phones peek out behind the centre one
@@ -318,6 +318,8 @@ def render_slide(s, size, idx, total):
         if not story:
             fs = font("sans", int(w * 0.026), "Regular")
             d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
+            if total > 1:
+                d.text((w - pad, h - int(h * 0.045)), f"{idx}/{total}", font=fs, fill=GOLD, anchor="rm")
         if ph:
             s["_screen"] = (px + scr[0], py + scr[1], scr[2], scr[3], scr_mask)
         return img
