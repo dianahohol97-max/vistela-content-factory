@@ -429,7 +429,10 @@ def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10
     videos = [videos[i % len(videos)] for i in range(n)]
     mx, gx, gy = int(W * 0.035), int(W * 0.018), int(W * 0.022)
     pw = (W - 2 * mx - (cols - 1) * gx) // cols
-    screen_h = int((pw - 12) / 0.506)
+    # fit both ways: a 3x3 grid is limited by height, not width
+    screen_h = min(int((pw - 12) / 0.506), int((H * 0.64 - (rows - 1) * gy) / rows / 1.045))
+    pw = int(screen_h * 0.506) + 12
+    mx = (W - cols * pw - (cols - 1) * gx) // 2
     blank = Image.new("RGB", (10, 10), IVORY)
     ph, scr, mask = phone_mockup(blank, screen_h)
     y0 = int(H * 0.05)
