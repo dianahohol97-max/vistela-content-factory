@@ -250,7 +250,9 @@ def render_set(spec_path, size, suffix):
     print("\n".join(paths))
 
 # ── Highlight covers ────────────────────────────────────────────────
-HIGHLIGHTS = ["Shop", "Save the Date", "Christmas", "How it works", "FAQ", "Websites", "Hi, I'm Diana"]
+# Seasonal covers go right after Shop while their season is live (Halloween until 31 Oct)
+HIGHLIGHTS = ["Shop", "Halloween", "Christmas", "Save the Date", "Birthday", "Websites",
+              "Reviews", "How it works", "FAQ", "Hi, I'm Diana"]
 
 def icon(d, name, cx, cy, r):
     c, lw = IVORY, 10
@@ -265,6 +267,24 @@ def icon(d, name, cx, cy, r):
         d.ellipse([cx - r * 0.8, cy - r * 0.55, cx + r * 0.8, cy + r * 1.05], outline=c, width=lw)
         d.rectangle([cx - 26, cy - r * 0.9, cx + 26, cy - r * 0.55], fill=GOLD)
         d.arc([cx - 24, cy - r * 1.25, cx + 24, cy - r * 0.85], 180, 360, fill=c, width=8)
+    elif name == "Halloween":
+        top, bot = cy - r * 0.55, cy + r * 0.85
+        for x0, x1 in ((cx - r, cx + r * 0.1), (cx - r * 0.1, cx + r), (cx - r * 0.45, cx + r * 0.45)):
+            d.ellipse([x0, top, x1, bot], fill=EMERALD, outline=c, width=lw)  # centre lobe drawn last hides overlaps
+        d.line([(cx, top), (cx + 16, cy - r * 0.95)], fill=GOLD, width=lw + 6)
+    elif name == "Birthday":
+        d.rounded_rectangle([cx - r, cy - r * 0.05, cx + r, cy + r * 0.85], radius=14, outline=c, width=lw)
+        d.line([(cx - r, cy + r * 0.35), (cx + r, cy + r * 0.35)], fill=c, width=6)
+        for dx in (-0.55, 0, 0.55):
+            x = cx + r * dx
+            d.line([(x, cy - r * 0.55), (x, cy - r * 0.05)], fill=c, width=lw)
+            d.ellipse([x - 13, cy - r * 0.85, x + 13, cy - r * 0.6], fill=GOLD)
+    elif name == "Reviews":
+        import math
+        pts = [(cx + (r if k % 2 == 0 else r * 0.42) * math.sin(k * math.pi / 5),
+                cy + 10 - (r if k % 2 == 0 else r * 0.42) * math.cos(k * math.pi / 5)) for k in range(10)]
+        d.polygon(pts, outline=c, width=lw)
+        d.ellipse([cx - 18, cy - 8, cx + 18, cy + 28], fill=GOLD)
     elif name == "How it works":
         for i, yy in enumerate([-0.6, 0, 0.6]):
             y0 = cy + r * yy

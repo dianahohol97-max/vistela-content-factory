@@ -24,7 +24,7 @@
 python3 studio.py reel inbox/VIDEO.mp4 --hook "..." [--cta DATE] [--mute] [--out out/name.mp4]
 python3 studio.py carousel spec.json      # 1080x1350, файли в out/<name>/slide-NN.png
 python3 studio.py story spec.json         # 1080x1920, файли в out/<name>/story-NN.png
-python3 studio.py highlights              # 7 обкладинок у out/highlights/
+python3 studio.py highlights              # 10 обкладинок у out/highlights/
 ```
 
 ## Бренд (каруселі, сторіс, хайлайти, профіль)
@@ -104,7 +104,8 @@ JSON-специфікація, слайди типів:
 Зразки: `examples/story-photo.json`, `story-example.json`.
 
 ## Хайлайти
-Порядок: Shop, Save the Date, Christmas (першим до кінця грудня), How it works, FAQ, Websites, Hi I'm Diana. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Хайлайт із відгуками — лише коли буде ~10 відгуків.
+Порядок: Shop, Halloween (до 31.10, потім в архів), Christmas (до кінця грудня), Save the Date, Birthday, Websites, Reviews, How it works, FAQ, Hi I'm Diana. Сезонне свято завжди стоїть одразу після Shop. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Reviews — скріни відгуків з Etsy (їх уже понад 10).
+Сторіс для хайлайтів: `examples/story-christmas.json`, `story-halloween.json`, `story-example.json` (How it works). Найкраще між ними — реальне відео шаблону.
 FAQ — найчастіші питання покупців: де шаблон, як зробити QR, як працює RSVP, як опублікувати сайт, куди надіслати відео.
 
 ## Профіль (рекомендації, ще не впроваджені)
