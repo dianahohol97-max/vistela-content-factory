@@ -4,39 +4,81 @@
     {
       "type": "content",
       "theme": "dark",
-      "note": "published as the phone-grid video (studio.py phone-grid --cols 3 --rows 3), this text version is not used",
+      "note": "published as the phone-grid video, this text version is not used",
       "kicker": "Halloween collection",
-      "title": "Pick your spooky invite"
+      "title": "Already designed for you"
     },
     {
       "type": "phone",
       "theme": "dark",
-      "kicker": "Already designed",
-      "title": "Just add your\nparty details",
-      "body": "Date, time and address in free Canva.\nDownload and send it tonight."
-    },
-    {
-      "type": "content",
-      "theme": "dark",
-      "kicker": "Party tip",
-      "title": "Send invites 2–3 weeks ahead",
-      "body": "For a party on October 31, invites go out by mid-October. Yours can go out tonight."
-    },
-    {
-      "type": "stack",
-      "theme": "dark",
-      "kicker": "Etsy review",
-      "title": "5.0 from our buyers",
-      "images": [
-        "inbox/reviews/r3-jessica-card.png"
-      ]
+      "video": "inbox/halloween/monster-lab.mp4",
+      "kicker": "Halloween invite · 1/9",
+      "title": "Monster Lab",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
     },
     {
       "type": "phone",
       "theme": "dark",
-      "kicker": "Under $10",
-      "title": "Find yours",
-      "body": "Tap the link to see every Halloween invite."
+      "video": "inbox/halloween/vampire.mp4",
+      "kicker": "Halloween invite · 2/9",
+      "title": "Little Vampires",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/vintage.mp4",
+      "kicker": "Halloween invite · 3/9",
+      "title": "Haunted Manor",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/ghost-envelope.mp4",
+      "kicker": "Halloween invite · 4/9",
+      "title": "Ghost Envelope",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/zombie.mp4",
+      "kicker": "Halloween invite · 5/9",
+      "title": "Zombie Party",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/rsvp-qr.mp4",
+      "kicker": "Halloween invite · 6/9",
+      "title": "Black & Orange",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/gothic-castle.mp4",
+      "kicker": "Halloween invite · 7/9",
+      "title": "Gothic Castle",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/ghostly-envelope.mp4",
+      "kicker": "Halloween invite · 8/9",
+      "title": "Ghostly Party",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "video": "inbox/halloween/vintage-1.mp4",
+      "kicker": "Halloween invite · 9/9",
+      "title": "Vintage Pumpkin",
+      "body": "Edit in free Canva, send by text.\nTap the link to get this one."
     }
   ]
 }
