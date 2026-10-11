@@ -322,6 +322,7 @@ def build_reels():
             "channels": ["instagram_reel", "youtube_short", "tiktok"],
             "format": "video",
             "category": C.product_category(product),
+            "rubric": "reveal",
             "title": _yt_title(hook, kw),  # YouTube-only field; SEO title + #Shorts
             "video_url": raw(os.path.relpath(reel, ROOT)),
             "cover_url": raw(os.path.relpath(cover, ROOT)),
@@ -689,31 +690,72 @@ def _merge_reels(path, fresh, keep=30):
     return list(by_id.values())[-keep:]
 
 
-def build_daily_reels():
-    """Two reels a day (Diana, 25.08.2026).
+def _theme_of(category):
+    for theme, cats in C.THEME_CATEGORIES.items():
+        if category in cats:
+            return theme
+    return "wedding"
 
-    Slot 1 is the scene->phone-reveal, which draws on the product animation
-    library — by far the deepest folder and the one that keeps growing. Slot 2
-    rotates the footage-driven rubrics through SECOND_SLOT_CYCLE.
 
-    The previous plan (iPad review daily + personalise every other day) rested
-    on the two thinnest folders — five clips and one — so the same footage came
-    round every few days while two dozen product animations went unused."""
-    # rubric=none: build nothing, only refresh the queue (music on queued reels).
-    if os.environ.get("FORCE_RUBRIC", "").strip() == "none":
+def _queue_items():
+    try:
+        with open(os.path.join(Q_DIR, "video_queue.json")) as f:
+            items = json.load(f)
+        return items if isinstance(items, list) else []
+    except (OSError, ValueError):
         return []
-    if os.environ.get("FORCE_RUBRIC", "").strip():
+
+
+def _build_theme(theme, last_wedding_format):
+    """One reel of the given theme, or [] if it has no footage / is out of
+    season. Wedding rotates its format: scene reveal, iPad review, template."""
+    if theme != "wedding":
+        return build_product_tour(categories=C.THEME_CATEGORIES[theme])
+    formats = C.WEDDING_FORMATS
+    if last_wedding_format in formats:
+        k = formats.index(last_wedding_format) + 1
+        formats = formats[k:] + formats[:k]
+    builders = {
+        "reveal": build_reels,
+        "phone_review": build_phone_review,
+        "product_tour": lambda: build_product_tour(categories=C.THEME_CATEGORIES["wedding"]),
+    }
+    for f in formats:
+        items = builders[f]()
+        if items:
+            return items
+    return []
+
+
+def build_daily_reels():
+    """REELS_PER_DAY reels, each one the next theme in THEME_CYCLE (Diana,
+    11.10.2026: wedding, Christmas, Halloween in turn, with plain templates
+    and real iPad reviews mixed in). The cycle continues from whatever is last
+    in the queue, so the page keeps alternating across days."""
+    forced = os.environ.get("FORCE_RUBRIC", "").strip()
+    if forced == "none":     # build nothing, only refresh the queue (music)
+        return []
+    if forced:
         return build_second_reel()
-    # While a holiday is in season, every other day its party invite takes slot 1
-    # instead of the wedding reveal (Diana, 11.10.2026: Halloween, Christmas and
-    # birthdays go into the factory). Outside the season nothing changes.
-    today = dt.date.today()
-    if today.toordinal() % 2 == 0:
-        party = build_product_tour(categories=C.HOLIDAYS)
-        if party:
-            # slot 1 was already a tour, so slot 2 must not be a second one
-            return party + build_second_reel(skip=("product_tour",))
-    return build_reels() + build_second_reel()
+    queue = _queue_items()
+    last_theme = _theme_of(queue[-1].get("category")) if queue else None
+    weddings = [i for i in queue if _theme_of(i.get("category")) == "wedding"]
+    last_format = (weddings[-1].get("rubric") or "reveal") if weddings else None
+    cycle = C.THEME_CYCLE
+    start = (cycle.index(last_theme) + 1) % len(cycle) if last_theme in cycle else 0
+    order = cycle[start:] + cycle[:start]
+    out, tries = [], 0
+    while len(out) < C.REELS_PER_DAY and tries < 2 * len(cycle):
+        theme = order[tries % len(order)]
+        tries += 1
+        items = _build_theme(theme, last_format)
+        if items:
+            for it in items:
+                it["theme"] = theme
+            out += items
+            if theme == "wedding":
+                last_format = items[-1].get("rubric") or "reveal"
+    return out
 
 
 def main():

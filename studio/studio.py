@@ -422,7 +422,7 @@ def phone_video(spec_path, slide_no, video, out):
     subprocess.run(cmd, check=True)
     print(out)
 
-def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0, height=0.64):
+def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0, height=0.64, top=0.05):
     """Story with a grid of phones, each playing its own invitation video (looped, muted); text underneath."""
     from PIL import ImageFilter
     n = cols * rows
@@ -435,7 +435,7 @@ def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10
     mx = (W - cols * pw - (cols - 1) * gx) // 2
     blank = Image.new("RGB", (10, 10), IVORY)
     ph, scr, mask = phone_mockup(blank, screen_h)
-    y0 = int(H * 0.05)
+    y0 = int(H * top)   # raise to leave room for a hook above the grid
     layer = Image.new("RGBA", (W, H), EMERALD)
     boxes = []
     for i in range(n):

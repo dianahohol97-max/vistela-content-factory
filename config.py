@@ -206,6 +206,18 @@ PRODUCT_COPY = {
                         "savethedate", "2026bride", "2027bride", "bridetobe",
                         "weddingplanning", "weddingtok"],
     },
+    "halloween_envelope": {
+        "keyword": "animated halloween envelope",
+        "value": "An animated Halloween envelope with a transparent background \u2014 your own invitation opens inside it. Edit in free Canva and use it again and again.",
+        "tiktok_tags": ["halloweenparty", "halloweeninvitation", "animatedenvelope", "halloween2026", "partyinvite"],
+        "yt_tags": ["animated envelope", "halloween envelope", "envelope opening video", "animated halloween envelope",
+                    "halloween invitation video", "digital envelope", "envelope reveal", "canva envelope",
+                    "halloween party invitation", "transparent background envelope", "halloween 2026", "party invitation video"],
+        "yt_hashtags": ["halloween", "animatedenvelope", "shorts", "halloweeninvitation", "envelopereveal"],
+        "ig_seo": ("Animated Halloween envelope video with a transparent background: drop in your own "
+                   "invitation and it opens inside the envelope. Edit in free Canva, send by text."),
+        "ig_hashtags": [],
+    },
     "halloween": {
         "keyword": "halloween party invitation",
         "value": "An animated Halloween party invitation your guests open on their phone \u2014 already designed, just add your party details in free Canva.",
@@ -271,6 +283,12 @@ PRODUCT_COPY = {
 def product_category(path):
     """Detect product type from its folder or filename (works for EN + UA)."""
     s = (os.path.basename(os.path.dirname(path)) + " " + os.path.basename(path)).lower()
+    folder = os.path.basename(os.path.dirname(path)).lower()
+    # Envelope-only products (transparent background, the buyer's invite opens
+    # inside) live in their own folder, e.g. "Halloween envelope". Invitation
+    # file names often say "envelope" too, so only the folder decides.
+    if "envelope" in folder or "\u043a\u043e\u043d\u0432\u0435\u0440\u0442" in folder:
+        return "halloween_envelope" if "halloween" in folder else "envelope"
     if any(k in s for k in ["halloween", "\u0445\u0435\u043b\u043e\u0432\u0456\u043d", "\u0445\u0435\u043b\u043b\u043e\u0432\u0456\u043d"]):
         return "halloween"
     if any(k in s for k in ["christmas", "xmas", "\u0440\u0456\u0437\u0434\u0432", "\u043d\u043e\u0432\u043e\u0440\u0456\u0447"]):
@@ -288,11 +306,25 @@ def product_category(path):
 
 # Holiday products only run in their selling window: a Halloween invite in
 # November is a dead post. Birthdays and weddings sell all year.
-HOLIDAYS = ("halloween", "christmas")
+HOLIDAYS = ("halloween", "halloween_envelope", "christmas")
 SEASONS = {
     "halloween": ((9, 10), (10, 31)),
-    "christmas": ((11, 1), (12, 24)),
+    "halloween_envelope": ((9, 10), (10, 31)),
+    # Christmas party invites start selling early (Diana, 11.10.2026)
+    "christmas": ((10, 1), (12, 24)),
 }
+# What the page alternates between, one reel each in turn (Diana, 11.10.2026).
+# A theme with no footage or out of season is skipped.
+THEME_CYCLE = ["wedding", "christmas", "halloween"]
+THEME_CATEGORIES = {
+    "wedding": ("save_the_date", "wedding_website", "invitation", "default"),
+    "christmas": ("christmas",),
+    "halloween": ("halloween", "halloween_envelope"),
+}
+# Inside the wedding theme the format rotates too: scene reveal, real iPad
+# review, plain template.
+WEDDING_FORMATS = ["reveal", "phone_review", "product_tour"]
+REELS_PER_DAY = 2
 WEDDING_CATEGORIES = ("save_the_date", "wedding_website", "invitation", "default")
 
 
@@ -335,17 +367,15 @@ PHONE_REVIEW_MAX_S = 15
 # what is on the screen. "This arrives in your messages" over a Canva editor is
 # the same broken promise as a wax-seal hook on a design with no seal.
 PHONE_REVIEW_HOOKS = [
-    # Buyer-facing only (Diana, 11.10.2026): no "I made / I edited / watch me",
-    # nothing that sells the process. No price either: a review clip can be a
-    # website, and the website is not under $10.
-    "Your guests will open this on their phone",
-    "You don't need a designer. Just change the names.",
-    "No design skills? This is already made for you",
-    "Change the names, hit download, send. That's it.",
-    "Already designed. You just add your names.",
-    "No printing. No postage. Just send the link.",
-    "2027 brides: this one is already designed",
+    # Real iPad footage of wedding products (save the dates and websites), so
+    # no price: the website is not under $10. Rewritten 11.10.2026.
+    "Real iPad, real template. Your names go here.",
+    "This is the whole thing. Just change the names.",
+    "Engaged? This one is already designed",
     "What your guests see when they tap the link",
+    "No design skills? This is already made for you",
+    "You don't need a designer. Just change the names.",
+    "POV: your wedding invite is ready in minutes",
 ]
 
 # --- AI-presenter review reels ---------------------------------------------
@@ -410,43 +440,45 @@ SHOWCASE_HOOKS = {
     # Prices only where they are true: the save the dates, invitations and
     # party invites are $7.99 on Etsy, so "under $10" holds. The wedding
     # website costs more, so its hooks carry no price.
+    # Wedding hooks rewritten again 11.10.2026 (Diana: fresh hooks for weddings).
     "save_the_date": [
-        # money math - strongest lever in this niche
+        "Just engaged? This is your save the date",
+        "Engaged? Your save the dates are already done",
+        "The save the date your guests actually open",
+        "Your guests will screenshot this save the date",
+        "POV: your save the date arrives by text",
+        "Change the names. Send it tonight.",
+        "No designer. No printer. Just your names.",
+        "2027 wedding? Send this before the paper ones",
         "Save the date for the price of 2 coffees",
-        "Paper save the dates: $400. This one: under $10.",
         "Under $10. No printing. No postage.",
         "Cheaper than stamps. Prettier than paper.",
-        "Your save the dates for less than a pizza",
         "I almost paid $400 for paper. Then I found this.",
-        "I spent under $10 instead of $400 on invitations",
-        # already made for you
-        "You don't need a designer. Just change the names.",
-        "Your save the dates, done on your lunch break",
-        "2027 brides: your save the dates are designed",
-        # the guest's side
-        "Your guests will open this on their phone",
-        "POV: your guests just opened your save the date",
         "Tap the wax seal and watch what happens",
-        "Budget tip: send it, don't print it",
     ],
     "wedding_website": [
-        "One link that answers every guest question",
-        "Never answer 'what's the dress code' again",
-        "Let your website collect the RSVPs for you",
-        "Schedule, map, RSVP. One link for your guests.",
-        "Your whole wedding in one link",
-        "Already designed. Just add your story and date.",
-        "POV: your guests just opened your website",
-        "2027 brides, this is the invite you need",
+        "Your guests' questions, answered in one link",
+        "RSVPs, schedule and map in one link",
+        "The wedding website your guests will actually use",
+        "Engaged? Your wedding website is already built",
+        "Stop answering 'what time is the ceremony?'",
+        "POV: your guests RSVP from their phone",
+        "Change the names. Your website is ready.",
     ],
     "invitation": [
-        "Printed invites: $500. This one: under $10.",
+        "Your wedding invite, opened on their phone",
+        "POV: your wedding invitation arrives by text",
+        "Already designed. Just add your names.",
+        "Change the names. Send it tonight.",
+        "The invite your guests will replay",
         "Under $10. No printing. No postage.",
-        "Already designed. Just change the names.",
-        "Your guests will open this on their phone",
-        "POV: your guests just opened your invitation",
-        "Budget tip: send it, don't print it",
-        "2027 brides, this is the invite you need",
+    ],
+    "halloween_envelope": [
+        "Already have an invite? Put it in this envelope",
+        "Your invite, opening from an animated envelope",
+        "Make any Halloween invite open like this",
+        "Tap. The envelope opens. Your invite appears.",
+        "One envelope. Use it for every party.",
     ],
     "halloween": [
         "Your Halloween party invite is already designed",
@@ -501,16 +533,14 @@ LAPTOP_REVEAL_MAX_S = 20
 PRODUCT_TOUR_EVERY_DAYS = 2
 PRODUCT_TOUR_MAX_S = 30
 PRODUCT_TOUR_HOOKS = [
-    # Wedding tours. Party products (Halloween, Christmas, birthday) use their
-    # own SHOWCASE_HOOKS list instead - see build_product_tour.
-    "Your guests tap. Then this happens.",
-    "Wait for the reveal\u2026",
-    "Turn your sound on for this one",
-    "Rate this invitation 1\u201310",
+    # Wedding tours (party products use their own SHOWCASE_HOOKS list).
+    "Watch it open the way your guests will",
+    "This is what lands in your guests' messages",
+    "Engaged? Your invites are already designed",
+    "Rate this save the date 1\u201310",
     "Would you send this to your guests?",
-    "Your guests will open this on their phone",
-    "Already designed. You just add the details.",
     "No printing. No postage. Just send it.",
+    "Change the names. Send it tonight.",
 ]
 
 # Burned-in hook overlay on product-tour reels: the hook line is shown as
