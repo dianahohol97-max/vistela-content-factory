@@ -200,6 +200,43 @@ def render_slide(s, size, idx, total):
             d.text((w - pad, h - int(h * 0.045)), f"{idx}/{total}", font=fs, fill=GOLD, anchor="rm")
         return img
 
+    if kind == "cards":
+        # "ribbon" of product cards: two offset rows of square shots bleeding off both edges, centred text below
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        cw, gap = int(w * 0.39), int(w * 0.025)
+        y0 = int(h * (0.07 if story else 0.05))
+        img = img.convert("RGBA")
+        srcs = s["images"]
+        for row in range(2):
+            x = -int(cw * (0.42 if row == 0 else 0.92))
+            y = y0 + row * (cw + gap)
+            for j in range(4):
+                src = srcs[(j if row == 0 else 3 + j) % len(srcs)]
+                card = Image.open(src).convert("RGB")
+                sc = max(cw / card.width, cw / card.height)
+                card = card.resize((int(card.width * sc) + 1, int(card.height * sc) + 1))
+                card = card.crop(((card.width - cw) // 2, (card.height - cw) // 2,
+                                  (card.width - cw) // 2 + cw, (card.height - cw) // 2 + cw))
+                m = Image.new("L", (cw, cw), 0)
+                ImageDraw.Draw(m).rounded_rectangle([0, 0, cw, cw], radius=int(cw * 0.06), fill=255)
+                sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+                sh_.paste((0, 0, 0, 100), (x + 6, y + 18), m)
+                img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(22)))
+                img.paste(card, (x, y), m)
+                x += cw + gap
+        img = img.convert("RGB")
+        d = ImageDraw.Draw(img)
+        y = y0 + 2 * cw + gap + int(h * 0.045)
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        if s.get("body"):
+            gold_rule(d, w // 2, y + 20)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 50, maxw, fg, 1.45)
+        return img
+
     if kind == "phone":
         # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
         from PIL import ImageFilter

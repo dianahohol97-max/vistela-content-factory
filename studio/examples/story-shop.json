@@ -2,22 +2,28 @@
   "name": "story-shop",
   "slides": [
     {
-      "type": "phone",
+      "type": "cards",
       "theme": "dark",
       "images": [
-        "inbox/std-0.2.png",
-        "inbox/std-5.5.png",
-        "inbox/std-9.png"
+        "inbox/cards/1-halloween.png",
+        "inbox/cards/2-std-phone.png",
+        "inbox/cards/3-lavender-bday.png",
+        "inbox/cards/7-dusty-rose.png",
+        "inbox/cards/4-whiskey-bday.png",
+        "inbox/cards/5-website.png",
+        "inbox/cards/6-champagne.png"
       ],
       "kicker": "Animated invitations",
       "title": "Shop VistelaCo",
       "body": "Weddings, birthdays & holidays. Already designed for you."
     },
     {
-      "type": "content",
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/rec-0.5.png",
       "kicker": "Where to buy",
-      "title": "On Etsy",
-      "body": "Tap the link below to open the shop. Your download arrives right after checkout."
+      "title": "Find us on Etsy",
+      "body": "5.0 rating · 13 reviews · 315 sales"
     },
     {
       "type": "content",
