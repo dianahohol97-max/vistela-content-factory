@@ -253,22 +253,24 @@ def render_slide(s, size, idx, total):
             sh_.paste((0, 0, 0, 110), (sx + 8, sy + 24), side.split()[3])
             img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
             img.alpha_composite(side, (sx, sy))
-        ph, scr, scr_mask = phone_mockup(Image.open(s.get("image") or s["images"][0]).convert("RGB"), screen_h)
-        px = (w - ph.width) // 2
-        shadow = Image.new("RGBA", size, (0, 0, 0, 0))
-        shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
-        img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(30)))
-        img.alpha_composite(ph, (px, py))
-        y = py + ph.height + int(h * 0.035)
+        ph = None   # no image: badge only (e.g. just the shop header)
+        if s.get("image") or s.get("images"):
+            ph, scr, scr_mask = phone_mockup(Image.open(s.get("image") or s["images"][0]).convert("RGB"), screen_h)
+            px = (w - ph.width) // 2
+            shadow = Image.new("RGBA", size, (0, 0, 0, 0))
+            shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
+            img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(30)))
+            img.alpha_composite(ph, (px, py))
+            y = py + ph.height + int(h * 0.035)
         s["_badge"] = None
         if s.get("badge"):
             # screenshot card (e.g. the Etsy shop header) overlapping the bottom of the phone
             bdg = Image.open(s["badge"]).convert("RGB")
-            bw = int(w * 0.84)
+            bw = int(w * (0.84 if ph else 0.9))
             bdg = bdg.resize((bw, int(bdg.height * bw / bdg.width)))
             bm = Image.new("L", bdg.size, 0)
             ImageDraw.Draw(bm).rounded_rectangle([0, 0, *bdg.size], radius=28, fill=255)
-            bx, by = (w - bw) // 2, py + ph.height - int(h * 0.075)
+            bx, by = (w - bw) // 2, (py + ph.height - int(h * 0.075)) if ph else int(h * 0.2)
             sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
             sh_.paste((0, 0, 0, 140), (bx + 6, by + 22), bm)
             img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
@@ -287,7 +289,8 @@ def render_slide(s, size, idx, total):
         if not story:
             fs = font("sans", int(w * 0.026), "Regular")
             d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
-        s["_screen"] = (px + scr[0], py + scr[1], scr[2], scr[3], scr_mask)
+        if ph:
+            s["_screen"] = (px + scr[0], py + scr[1], scr[2], scr[3], scr_mask)
         return img
 
     if s.get("image"):

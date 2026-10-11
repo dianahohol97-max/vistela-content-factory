@@ -2,17 +2,9 @@
   "name": "story-shop",
   "slides": [
     {
-      "type": "cards",
+      "type": "phone",
       "theme": "dark",
-      "images": [
-        "inbox/cards/1-halloween.png",
-        "inbox/cards/2-std-phone.png",
-        "inbox/cards/3-lavender-bday.png",
-        "inbox/cards/7-dusty-rose.png",
-        "inbox/cards/4-whiskey-bday.png",
-        "inbox/cards/5-website.png",
-        "inbox/cards/6-champagne.png"
-      ],
+      "image": "inbox/rec-0.5.png",
       "kicker": "Animated invitations",
       "title": "Shop VistelaCo",
       "body": "Weddings, birthdays & holidays. Already designed for you."
@@ -20,7 +12,6 @@
     {
       "type": "phone",
       "theme": "dark",
-      "image": "inbox/rec-0.5.png",
       "badge": "inbox/etsy-badge.png",
       "kicker": "Where to buy",
       "title": "Find us on Etsy"
