@@ -25,6 +25,7 @@ python3 studio.py reel inbox/VIDEO.mp4 --hook "..." [--cta DATE] [--mute] [--out
 python3 studio.py carousel spec.json      # 1080x1350, файли в out/<name>/slide-NN.png
 python3 studio.py story spec.json         # 1080x1920, файли в out/<name>/story-NN.png
 python3 studio.py phone-video spec.json N inbox/VIDEO.mp4   # слайд N типу phone, відео грає на екрані телефона
+python3 studio.py phone-grid V1.mp4 … V15.mp4 --out out/x.mp4 [--kicker --title]   # сітка 5×3 телефонів, у кожному своє відео (без звуку, 10 с)
 python3 studio.py highlights              # 10 обкладинок у out/highlights/
 ```
 

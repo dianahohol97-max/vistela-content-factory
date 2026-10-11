@@ -5,6 +5,7 @@
   python3 studio.py carousel spec.json      (slides -> 1080x1350 PNG)
   python3 studio.py story    spec.json      (frames -> 1080x1920 PNG)
   python3 studio.py phone-video spec.json N VIDEO.mp4   (story slide N: video on a phone screen)
+  python3 studio.py phone-grid V1.mp4 V2.mp4 ... --out out/x.mp4 [--title ...]   (grid of phones, 5x3)
   python3 studio.py highlights              (all highlight covers)
 """
 import argparse, json, os, subprocess, sys, tempfile
@@ -147,7 +148,7 @@ def phone_mockup(shot, screen_h):
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, sw, screen_h], radius=int(pw * 0.15) - bz, fill=255)
     img.paste(shot, (6 + bz, bz), mask)
     iw = int(sw * 0.3)
-    d.rounded_rectangle([6 + pw / 2 - iw / 2, bz + 18, 6 + pw / 2 + iw / 2, bz + 18 + int(iw * 0.3)],
+    d.rounded_rectangle([6 + pw / 2 - iw / 2, bz + int(screen_h * 0.019), 6 + pw / 2 + iw / 2, bz + int(screen_h * 0.019) + int(iw * 0.3)],
                         radius=int(iw * 0.15), fill="#141816")
     return img, (6 + bz, bz, sw, screen_h), mask
 
@@ -393,6 +394,55 @@ def phone_video(spec_path, slide_no, video, out):
     subprocess.run(cmd, check=True)
     print(out)
 
+def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0):
+    """Story with a grid of phones, each playing its own invitation video (looped, muted); text underneath."""
+    from PIL import ImageFilter
+    n = cols * rows
+    videos = [videos[i % len(videos)] for i in range(n)]
+    mx, gx, gy = int(W * 0.035), int(W * 0.018), int(W * 0.022)
+    pw = (W - 2 * mx - (cols - 1) * gx) // cols
+    screen_h = int((pw - 12) / 0.506)
+    blank = Image.new("RGB", (10, 10), IVORY)
+    ph, scr, mask = phone_mockup(blank, screen_h)
+    y0 = int(H * 0.05)
+    layer = Image.new("RGBA", (W, H), EMERALD)
+    boxes = []
+    for i in range(n):
+        x = mx + (i % cols) * (pw + gx) - 6
+        y = y0 + (i // cols) * (ph.height + gy)
+        sh_ = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sh_.paste((0, 0, 0, 110), (x + 6, y + 16), ph.split()[3])
+        layer = Image.alpha_composite(layer, sh_.filter(ImageFilter.GaussianBlur(14)))
+        layer.alpha_composite(ph, (x, y))
+        boxes.append((x + scr[0], y + scr[1]))
+    for bx, by in boxes:   # cut the screens out so the videos show through
+        layer.paste((0, 0, 0, 0), (bx, by), mask)
+    d = ImageDraw.Draw(layer)
+    maxw = int(W * 0.8)
+    y = y0 + rows * (ph.height + gy) + int(H * 0.012)
+    if kicker:
+        d.text((W / 2, y), kicker.upper(), font=font("sans", int(W * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+        y += int(W * 0.06)
+    if title:
+        y = text_block(d, title, font("serif", int(W * 0.064)), W / 2, y, int(W * 0.92), IVORY, 1.15)
+    if body:
+        gold_rule(d, W // 2, y + 20)
+        text_block(d, body, font("sans", int(W * 0.036)), W / 2, y + 50, maxw, IVORY, 1.45)
+    lp = os.path.join(tempfile.mkdtemp(), "layer.png")
+    layer.save(lp)
+    sw = scr[2]
+    inputs, fc = [], f"color=c={EMERALD}:s={W}x{H}:r=30:d={dur}[b0];"
+    for i, v in enumerate(videos):
+        inputs += ["-stream_loop", "-1", "-t", str(dur), "-i", v]
+        fc += (f"[{i}:v]scale={sw}:{screen_h}:force_original_aspect_ratio=increase,crop={sw}:{screen_h},"
+               f"setsar=1,fps=30,setpts=PTS-STARTPTS[v{i}];[b{i}][v{i}]overlay={boxes[i][0]}:{boxes[i][1]}:eof_action=repeat[b{i + 1}];")
+    inputs += ["-loop", "1", "-t", str(dur), "-i", lp]
+    fc += f"[b{n}][{n}:v]overlay=0:0,format=yuv420p[out]"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", fc, "-map", "[out]",
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-movflags", "+faststart",
+                    "-t", str(dur), out], check=True)
+    print(out)
+
 # ── Highlight covers ────────────────────────────────────────────────
 # Seasonal covers go right after Shop while their season is live (Halloween until 31 Oct)
 HIGHLIGHTS = ["Shop", "Halloween", "Christmas", "Save the Date", "Birthday", "Websites",
@@ -471,6 +521,11 @@ def main():
     s = sub.add_parser("story"); s.add_argument("spec")
     pv = sub.add_parser("phone-video", help="story slide of type phone, with a video on the screen")
     pv.add_argument("spec"); pv.add_argument("slide", type=int); pv.add_argument("video"); pv.add_argument("--out")
+    pg = sub.add_parser("phone-grid", help="story: grid of phones, each playing its own video")
+    pg.add_argument("videos", nargs="+"); pg.add_argument("--out", required=True)
+    pg.add_argument("--kicker", default=""); pg.add_argument("--title", default=""); pg.add_argument("--body", default="")
+    pg.add_argument("--cols", type=int, default=5); pg.add_argument("--rows", type=int, default=3)
+    pg.add_argument("--seconds", type=float, default=10.0)
     sub.add_parser("highlights")
     a = ap.parse_args()
     if a.cmd == "reel":
@@ -480,6 +535,8 @@ def main():
         render_set(a.spec, (1080, 1350), "slide")
     elif a.cmd == "story":
         render_set(a.spec, (1080, 1920), "story")
+    elif a.cmd == "phone-grid":
+        phone_grid(a.videos, a.out, a.kicker, a.title, a.body, a.cols, a.rows, a.seconds)
     elif a.cmd == "phone-video":
         name = os.path.splitext(os.path.basename(a.spec))[0]
         os.makedirs(os.path.join(ROOT, "out", name), exist_ok=True)
