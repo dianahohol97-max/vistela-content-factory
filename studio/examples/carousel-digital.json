@@ -1,0 +1,10 @@
+{
+  "name": "carousel-digital-invites",
+  "slides": [
+    {"type": "cover", "theme": "dark", "title": "Sending digital invites", "subtitle": "So every guest actually opens it"},
+    {"type": "content", "kicker": "Tip 1", "title": "Send it where they already talk", "body": "Family chat on WhatsApp, friends by text, older relatives by email. One video, three channels."},
+    {"type": "content", "kicker": "Tip 2", "title": "Add one line of text", "body": "A short personal message above the video makes it feel like an invitation, not a forward."},
+    {"type": "content", "kicker": "Tip 3", "title": "Call the ones who won't open it", "body": "For a grandparent who never opens links, a quick call plus the video on your phone works best."},
+    {"type": "cta", "title": "Ready to send?", "body": "Animated invitations you edit in free Canva. Just change the names.", "button": "Comment DATE"}
+  ]
+}

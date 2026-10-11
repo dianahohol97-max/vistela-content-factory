@@ -1,0 +1,9 @@
+{
+  "name": "story-photo",
+  "slides": [
+    {"type": "photo", "image": "examples/ph/envelope.jpg", "title": "New: dusty pink envelope", "body": "Animated save the date, edit in free Canva"},
+    {"type": "photo", "image": "examples/ph/phone.jpg", "kicker": "What your guests get", "title": "It opens on their phone", "body": "A short video they can watch and save"},
+    {"type": "content", "kicker": "How it works", "title": "Buy, change the names, send", "body": "Instant download. Free Canva is enough."},
+    {"type": "photo", "image": "examples/ph/ipad.jpg", "title": "Tap the link to see it", "body": "Animated invitations, ready to edit"}
+  ]
+}

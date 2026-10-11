@@ -1,0 +1,10 @@
+{
+  "name": "carousel-wording",
+  "slides": [
+    {"type": "cover", "title": "Save the date wording", "subtitle": "What to write so guests don't have to ask"},
+    {"type": "content", "kicker": "Step 1", "title": "Names first", "body": "Lead with both names, then the date. Guests scan the top line and decide whether to keep reading."},
+    {"type": "content", "kicker": "Step 2", "title": "City, not the venue", "body": "A save the date only needs the city. Venue, time and dress code belong on the invitation."},
+    {"type": "content", "kicker": "Step 3", "title": "Say what comes next", "body": "Close with one line such as \"Formal invitation to follow\", so nobody books travel too early."},
+    {"type": "cta", "theme": "dark", "title": "Already designed for you", "body": "Animated save the dates you edit in free Canva. Just change the names.", "button": "Comment DATE"}
+  ]
+}
