@@ -793,7 +793,7 @@ def main():
     # any track existed would otherwise stay silent forever. The `music` key
     # records which track went on, so a reel is never muxed twice.
     for item in reel_queue:
-        if item.get("music"):
+        if item.get("music") or item.get("category") in C.KEEP_ORIGINAL_AUDIO:
             continue
         name = os.path.basename(item.get("video_url") or "")
         path = os.path.join(ROOT, "output", "reels", name)
