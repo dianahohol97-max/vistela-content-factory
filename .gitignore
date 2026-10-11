@@ -8,3 +8,9 @@ input/**/*.mp4
 input/**/*.mov
 input/**/*.MP4
 input/**/*.MOV
+
+# Instagram studio (studio/)
+studio/inbox/*
+!studio/inbox/.gitkeep
+studio/out/*
+!studio/out/.gitkeep

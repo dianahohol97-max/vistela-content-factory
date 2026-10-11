@@ -1,0 +1,10 @@
+{
+  "name": "story-how-it-works",
+  "slides": [
+    {"type": "cover", "theme": "dark", "title": "How it works", "subtitle": "Four steps, no design skills"},
+    {"type": "content", "kicker": "1", "title": "Buy on Etsy", "body": "Your download arrives instantly as a PDF."},
+    {"type": "content", "kicker": "2", "title": "Open the link", "body": "The PDF has a button that opens your template in Canva."},
+    {"type": "content", "kicker": "3", "title": "Change the text", "body": "Names, date, city. Free Canva is enough."},
+    {"type": "cta", "theme": "dark", "title": "Send it to your guests", "body": "Download the video and share it by WhatsApp, email or text.", "button": "Shop now"}
+  ]
+}
