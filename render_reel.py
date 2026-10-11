@@ -102,7 +102,7 @@ def native_png(text, path, top=250, size=64):
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
     def fnt(sz):
-        f = ImageFont.truetype(C.NATIVE_FONT, sz)
+        f = ImageFont.truetype(os.path.join(os.path.dirname(os.path.abspath(__file__)), C.NATIVE_FONT), sz)
         try:
             f.set_variation_by_name("Bold")
         except Exception:
