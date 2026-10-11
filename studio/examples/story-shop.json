@@ -31,10 +31,12 @@
       "body": "Change the names and date in free Canva. No designer, no design skills."
     },
     {
-      "type": "content",
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/chat-clean.png",
       "kicker": "Why VistelaCo",
       "title": "Your guests just tap",
-      "body": "An animated invite sent by text, WhatsApp or email. No printing, no postage."
+      "body": "Sent by text, WhatsApp or email.\nNo printing, no postage."
     },
     {
       "type": "content",

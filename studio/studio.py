@@ -254,9 +254,11 @@ def render_slide(s, size, idx, total):
             sh_.paste((0, 0, 0, 110), (sx + 8, sy + 24), side.split()[3])
             img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
             img.alpha_composite(side, (sx, sy))
-        ph = None   # no image: badge only (e.g. just the shop header)
-        if s.get("image") or s.get("images"):
-            ph, scr, scr_mask = phone_mockup(Image.open(s.get("image") or s["images"][0]).convert("RGB"), screen_h)
+        ph = None   # badge and no image: badge only (e.g. just the shop header)
+        if s.get("image") or s.get("images") or not s.get("badge"):
+            src = s.get("image") or (s.get("images") or [None])[0]
+            shot = Image.open(src).convert("RGB") if src else Image.new("RGB", (10, 10), IVORY)  # video slides: filled by phone-video
+            ph, scr, scr_mask = phone_mockup(shot, screen_h)
             px = (w - ph.width) // 2
             shadow = Image.new("RGBA", size, (0, 0, 0, 0))
             shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
