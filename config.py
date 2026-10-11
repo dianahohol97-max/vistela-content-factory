@@ -452,6 +452,9 @@ SHOWCASE_HOOKS = {
         "Last-minute Halloween party? This is ready.",
         "No printing. Send your Halloween invite by text.",
         "Halloween invites under $10. No printing.",
+        "Kids' Halloween party? The invite is ready.",
+        "Halloween invites your guests open on their phone",
+        "Spooky invites, sent by text. No printing.",
     ],
     "christmas": [
         "Your Christmas party invite is already designed",
