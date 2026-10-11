@@ -308,8 +308,9 @@ def product_category(path):
 # November is a dead post. Birthdays and weddings sell all year.
 HOLIDAYS = ("halloween", "halloween_envelope", "christmas")
 SEASONS = {
-    "halloween": ((9, 10), (10, 31)),
-    "halloween_envelope": ((9, 10), (10, 31)),
+    # Diana, 11.10.2026: no Halloween posts after 24 October
+    "halloween": ((9, 10), (10, 24)),
+    "halloween_envelope": ((9, 10), (10, 24)),
     # Christmas party invites start selling early (Diana, 11.10.2026)
     "christmas": ((10, 1), (12, 24)),
 }

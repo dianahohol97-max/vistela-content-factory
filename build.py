@@ -778,6 +778,12 @@ def main():
     reel_items = build_daily_reels()
     video_path = os.path.join(Q_DIR, "video_queue.json")
     reel_queue = _merge_reels(video_path, reel_items)
+    # The posters publish whatever is queued and know nothing about seasons, so
+    # anything out of season (Halloween after 24 Oct) leaves the queue here.
+    stale = [i.get("id") for i in reel_queue if not C.in_season(i.get("category"), today)]
+    if stale:
+        reel_queue = [i for i in reel_queue if C.in_season(i.get("category"), today)]
+        print(f"out of season, dropped from queue: {', '.join(stale)}")
     reel_queue, dead = _drop_dead_entries(reel_queue, os.path.join(ROOT, "output", "reels"))
     if dead:
         print(f"⚠ media missing, dropped from queue (will re-render): {', '.join(dead)}")
