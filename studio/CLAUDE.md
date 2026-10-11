@@ -26,7 +26,8 @@ python3 studio.py carousel spec.json      # 1080x1350, файли в out/<name>/
 python3 studio.py story spec.json         # 1080x1920, файли в out/<name>/story-NN.png
 python3 studio.py phone-video spec.json N inbox/VIDEO.mp4   # слайд N типу phone, відео грає на екрані телефона
 python3 studio.py phone-grid V1.mp4 … V15.mp4 --out out/x.mp4 [--kicker --title]   # сітка 5×3 телефонів, у кожному своє відео (без звуку, 10 с)
-python3 studio.py highlights              # 10 обкладинок у out/highlights/
+python3 studio.py cover-phones out/highlights-v2/NN-name.png V1.mp4 V2.mp4 V3.mp4   # обкладинка хайлайту: 3 телефони віялом (центр — перше)
+python3 studio.py highlights              # старі іконкові обкладинки (Діана обрала телефони, іконки — лише для Reviews/FAQ тощо, якщо нема кращого)
 ```
 
 ## Бренд (каруселі, сторіс, хайлайти, профіль)
@@ -109,6 +110,7 @@ JSON-специфікація, слайди типів:
 Зразки: `examples/story-photo.json`, `story-example.json`.
 
 ## Хайлайти
+Обкладинки — три телефони віялом з реальними запрошеннями цього свята на смарагдовому фоні в тонкому золотому кільці (`cover-phones`, вибір Діани; іконки вона назвала шаблонними).
 Порядок: Shop, Halloween (до 31.10, потім в архів), Christmas (до кінця грудня), Save the Date, Birthday, Websites, Reviews, How it works, FAQ, Hi I'm Diana. Сезонне свято завжди стоїть одразу після Shop. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Reviews — скріни відгуків з Etsy (їх уже понад 10).
 Сторіс для хайлайтів: `examples/story-shop.json`, `story-christmas.json`, `story-halloween.json`, `story-example.json` (How it works). Найкраще між ними — реальне відео шаблону.
 FAQ — найчастіші питання покупців: де шаблон, як зробити QR, як працює RSVP, як опублікувати сайт, куди надіслати відео.

@@ -471,6 +471,32 @@ def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10
                     "-t", str(dur), out], check=True)
     print(out)
 
+def cover_phones(sources, out, t=9.0):
+    """Highlight cover: three phones fanned out on emerald inside a thin gold ring (centre phone = first source).
+    Sources can be images or videos (a frame at t seconds is used)."""
+    from PIL import ImageFilter
+    shots = []
+    for src in sources[:3]:
+        if src.lower().endswith((".mp4", ".mov")):
+            fp = os.path.join(tempfile.mkdtemp(), "f.png")
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", str(t), "-i", src, "-frames:v", "1", fp], check=True)
+            src = fp
+        shots.append(Image.open(src).convert("RGB"))
+    cx, cy, R = W // 2, H // 2, 330
+    img = Image.new("RGBA", (W, H), EMERALD)
+    order = [(shots[1 % len(shots)], 14, -150, 30), (shots[2 % len(shots)], -14, 150, 30), (shots[0], 0, 0, -10)]
+    for shot, ang, dx, dy in order:   # side phones first, centre phone on top
+        ph, _, _ = phone_mockup(shot, 430)
+        ph = ph.rotate(ang, resample=Image.BICUBIC, expand=True)
+        sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        sh.paste((0, 0, 0, 130), (cx + dx - ph.width // 2 + 6, cy + dy - ph.height // 2 + 16), ph.split()[3])
+        img = Image.alpha_composite(img, sh.filter(ImageFilter.GaussianBlur(16)))
+        img.alpha_composite(ph, (cx + dx - ph.width // 2, cy + dy - ph.height // 2))
+    img = img.convert("RGB")
+    ImageDraw.Draw(img).ellipse([cx - R + 6, cy - R + 6, cx + R - 6, cy + R - 6], outline=GOLD, width=3)
+    img.save(out)
+    print(out)
+
 # ── Highlight covers ────────────────────────────────────────────────
 # Seasonal covers go right after Shop while their season is live (Halloween until 31 Oct)
 HIGHLIGHTS = ["Shop", "Halloween", "Christmas", "Save the Date", "Birthday", "Websites",
@@ -554,6 +580,8 @@ def main():
     pg.add_argument("--kicker", default=""); pg.add_argument("--title", default=""); pg.add_argument("--body", default="")
     pg.add_argument("--cols", type=int, default=5); pg.add_argument("--rows", type=int, default=3)
     pg.add_argument("--seconds", type=float, default=10.0)
+    cp = sub.add_parser("cover-phones", help="highlight cover: three phones with real invitations")
+    cp.add_argument("out"); cp.add_argument("sources", nargs="+"); cp.add_argument("--t", type=float, default=9.0)
     sub.add_parser("highlights")
     a = ap.parse_args()
     if a.cmd == "reel":
@@ -563,6 +591,8 @@ def main():
         render_set(a.spec, (1080, 1350), "slide")
     elif a.cmd == "story":
         render_set(a.spec, (1080, 1920), "story")
+    elif a.cmd == "cover-phones":
+        cover_phones(a.sources, a.out, a.t)
     elif a.cmd == "phone-grid":
         phone_grid(a.videos, a.out, a.kicker, a.title, a.body, a.cols, a.rows, a.seconds)
     elif a.cmd == "phone-video":
