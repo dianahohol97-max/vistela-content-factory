@@ -28,8 +28,8 @@ queue/      pin_queue.json + carousel_queue.json  <- Make posters read these
 - Native Instagram look: white Open Sans Bold with a soft shadow, hook at the top
   for ~3 s, "Comment DATE for the link" over the last 2.5 s. No text bands, no end card.
 - Product types come from the Dropbox subfolder or filename: Save the Date, Wedding
-  Websites, Invitations, Halloween, Christmas, Birthday. Halloween runs 10 Sep–31 Oct,
-  Christmas 1 Nov–24 Dec; party products never follow a wedding scene.
+  Websites, Invitations, Halloween, Christmas, Birthday. Halloween runs 10 Sep–24 Oct,
+  Christmas 1 Oct–24 Dec; party products never follow a wedding scene.
 - "Personalise with me" (editing in Canva) is out of the rotation.
 
 ## Anti-repeat
