@@ -238,6 +238,32 @@ def render_slide(s, size, idx, total):
             text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 66, maxw, fg, 1.45)
         return img
 
+    if kind == "stack":
+        # title on top, screenshot cards (e.g. Etsy reviews) stacked underneath
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        y = int(h * (0.06 if story else 0.05))
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        gold_rule(d, w // 2, y + 34)
+        y += int(h * 0.045)
+        img = img.convert("RGBA")
+        cw, gap = int(w * 0.78), int(h * 0.016)
+        for src in s["images"]:
+            c = Image.open(src).convert("RGB")
+            c = c.resize((cw, int(c.height * cw / c.width)))
+            m = Image.new("L", c.size, 0)
+            ImageDraw.Draw(m).rounded_rectangle([0, 0, *c.size], radius=int(cw * 0.035), fill=255)
+            x = (w - cw) // 2
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 120), (x + 6, y + 18), m)
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(22)))
+            img.paste(c, (x, y), m)
+            y += c.height + gap
+        return img.convert("RGB")
+
     if kind == "phone":
         # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
         from PIL import ImageFilter

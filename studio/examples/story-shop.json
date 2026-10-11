@@ -39,10 +39,15 @@
       "body": "Sent by text, WhatsApp or email.\nNo printing, no postage."
     },
     {
-      "type": "content",
-      "kicker": "Etsy review",
-      "title": "“Very easy to customize, fits perfectly with our theme and colours.”",
-      "body": "— Victoria"
+      "type": "stack",
+      "theme": "dark",
+      "kicker": "Etsy reviews",
+      "title": "5.0 from our buyers",
+      "images": [
+        "inbox/reviews/r1-rim-card.png",
+        "inbox/reviews/r2-katrina-card.png",
+        "inbox/reviews/r3-jessica-card.png"
+      ]
     },
     {
       "type": "phone",
