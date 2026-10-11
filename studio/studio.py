@@ -205,11 +205,22 @@ def render_slide(s, size, idx, total):
         from PIL import ImageFilter
         story = h > 1.6 * w
         screen_h = int(h * (0.5 if story else 0.52))
-        ph, scr, scr_mask = phone_mockup(Image.open(s["image"]).convert("RGB"), screen_h)
-        px, py = (w - ph.width) // 2, int(h * (0.07 if story else 0.06))
+        py = int(h * (0.07 if story else 0.06))
+        img = img.convert("RGBA")
+        # "images": a row of invitations — two smaller phones peek out behind the centre one
+        for i, src in enumerate(s.get("images", [])[:3][1:]):
+            side, _, _ = phone_mockup(Image.open(src).convert("RGB"), int(screen_h * 0.82))
+            sx = int(w * 0.03) if i == 0 else w - side.width - int(w * 0.03)
+            sy = py + int(screen_h * 0.09)
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 110), (sx + 8, sy + 24), side.split()[3])
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
+            img.alpha_composite(side, (sx, sy))
+        ph, scr, scr_mask = phone_mockup(Image.open(s.get("image") or s["images"][0]).convert("RGB"), screen_h)
+        px = (w - ph.width) // 2
         shadow = Image.new("RGBA", size, (0, 0, 0, 0))
         shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
-        img = Image.alpha_composite(img.convert("RGBA"), shadow.filter(ImageFilter.GaussianBlur(30)))
+        img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(30)))
         img.alpha_composite(ph, (px, py))
         img = img.convert("RGB")
         d = ImageDraw.Draw(img)

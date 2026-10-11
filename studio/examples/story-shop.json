@@ -4,7 +4,11 @@
     {
       "type": "phone",
       "theme": "dark",
-      "image": "inbox/std-0.2.png",
+      "images": [
+        "inbox/std-0.2.png",
+        "inbox/std-5.5.png",
+        "inbox/std-9.png"
+      ],
       "kicker": "Animated invitations",
       "title": "Shop VistelaCo",
       "body": "Weddings, birthdays & holidays. Already designed for you."
