@@ -105,7 +105,7 @@ JSON-специфікація, слайди типів:
 
 ## Хайлайти
 Порядок: Shop, Halloween (до 31.10, потім в архів), Christmas (до кінця грудня), Save the Date, Birthday, Websites, Reviews, How it works, FAQ, Hi I'm Diana. Сезонне свято завжди стоїть одразу після Shop. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Reviews — скріни відгуків з Etsy (їх уже понад 10).
-Сторіс для хайлайтів: `examples/story-christmas.json`, `story-halloween.json`, `story-example.json` (How it works). Найкраще між ними — реальне відео шаблону.
+Сторіс для хайлайтів: `examples/story-shop.json`, `story-christmas.json`, `story-halloween.json`, `story-example.json` (How it works). Найкраще між ними — реальне відео шаблону.
 FAQ — найчастіші питання покупців: де шаблон, як зробити QR, як працює RSVP, як опублікувати сайт, куди надіслати відео.
 
 ## Профіль (рекомендації, ще не впроваджені)
