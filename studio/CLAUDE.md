@@ -24,6 +24,7 @@
 python3 studio.py reel inbox/VIDEO.mp4 --hook "..." [--cta DATE] [--mute] [--out out/name.mp4]
 python3 studio.py carousel spec.json      # 1080x1350, файли в out/<name>/slide-NN.png
 python3 studio.py story spec.json         # 1080x1920, файли в out/<name>/story-NN.png
+python3 studio.py phone-video spec.json N inbox/VIDEO.mp4   # слайд N типу phone, відео грає на екрані телефона
 python3 studio.py highlights              # 10 обкладинок у out/highlights/
 ```
 
@@ -89,6 +90,7 @@ JSON-специфікація, слайди типів:
 - `content` — `kicker` (Tip 1 / Step 2), `title`, `body`
 - `photo` — фото на весь слайд, затемнення лише під текстом, `kicker`/`title`/`body`
 - `cta` — `title`, `body`, `button` («Comment DATE»)
+- `phone` — фото продукту на екрані телефона на смарагдовому фоні, під ним `kicker`/`title`/`body` по центру. З `phone-video` — те саме, але на екрані грає відео (Діані так більше подобається, ніж фото на весь слайд).
 - Поле `image` у `content` вставляє фото в рамку посередині.
 
 Правила:

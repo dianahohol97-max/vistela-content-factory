@@ -4,6 +4,7 @@
   python3 studio.py reel  INPUT.mp4 --hook "..." [--cta DATE] [--out out/x.mp4]
   python3 studio.py carousel spec.json      (slides -> 1080x1350 PNG)
   python3 studio.py story    spec.json      (frames -> 1080x1920 PNG)
+  python3 studio.py phone-video spec.json N VIDEO.mp4   (story slide N: video on a phone screen)
   python3 studio.py highlights              (all highlight covers)
 """
 import argparse, json, os, subprocess, sys, tempfile
@@ -127,6 +128,29 @@ def reel(args):
                     "-frames:v", "1", "-q:v", "2", cover], check=True)
     print(args.out, cover)
 
+def phone_mockup(shot, screen_h):
+    """Product shot inside a simple phone frame (dark bezel, rounded screen, island).
+    Returns (RGBA image, screen box (x, y, w, h), screen mask)."""
+    sw = int(screen_h * 0.462)
+    sc = max(sw / shot.width, screen_h / shot.height)
+    shot = shot.resize((int(shot.width * sc) + 1, int(shot.height * sc) + 1))
+    shot = shot.crop(((shot.width - sw) // 2, (shot.height - screen_h) // 2,
+                      (shot.width - sw) // 2 + sw, (shot.height - screen_h) // 2 + screen_h))
+    bz = int(screen_h * 0.022)
+    pw, ph = sw + 2 * bz, screen_h + 2 * bz
+    img = Image.new("RGBA", (pw + 12, ph), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    for x0, y0, y1 in ((0, 0.20, 0.27), (0, 0.30, 0.37), (pw + 6, 0.25, 0.36)):   # side buttons
+        d.rounded_rectangle([x0, ph * y0, x0 + 8, ph * y1], radius=4, fill="#2A2F2C")
+    d.rounded_rectangle([6, 0, pw + 6, ph], radius=int(pw * 0.15), fill="#141816")
+    mask = Image.new("L", (sw, screen_h), 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, sw, screen_h], radius=int(pw * 0.15) - bz, fill=255)
+    img.paste(shot, (6 + bz, bz), mask)
+    iw = int(sw * 0.3)
+    d.rounded_rectangle([6 + pw / 2 - iw / 2, bz + 18, 6 + pw / 2 + iw / 2, bz + 18 + int(iw * 0.3)],
+                        radius=int(iw * 0.15), fill="#141816")
+    return img, (6 + bz, bz, sw, screen_h), mask
+
 # ── Carousels & stories ──────────────────────────────────────────────
 def render_slide(s, size, idx, total):
     w, h = size
@@ -174,6 +198,33 @@ def render_slide(s, size, idx, total):
             d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
         if total > 1 and not story:
             d.text((w - pad, h - int(h * 0.045)), f"{idx}/{total}", font=fs, fill=GOLD, anchor="rm")
+        return img
+
+    if kind == "phone":
+        # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        screen_h = int(h * (0.5 if story else 0.52))
+        ph, scr, scr_mask = phone_mockup(Image.open(s["image"]).convert("RGB"), screen_h)
+        px, py = (w - ph.width) // 2, int(h * (0.07 if story else 0.06))
+        shadow = Image.new("RGBA", size, (0, 0, 0, 0))
+        shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
+        img = Image.alpha_composite(img.convert("RGBA"), shadow.filter(ImageFilter.GaussianBlur(30)))
+        img.alpha_composite(ph, (px, py))
+        img = img.convert("RGB")
+        d = ImageDraw.Draw(img)
+        y = py + ph.height + int(h * 0.035)
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        if s.get("body"):
+            gold_rule(d, w // 2, y + 20)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 50, maxw, fg, 1.45)
+        if not story:
+            fs = font("sans", int(w * 0.026), "Regular")
+            d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
+        s["_screen"] = (px + scr[0], py + scr[1], scr[2], scr[3], scr_mask)
         return img
 
     if s.get("image"):
@@ -248,6 +299,30 @@ def render_set(spec_path, size, suffix):
         img.save(p)
         paths.append(p)
     print("\n".join(paths))
+
+def phone_video(spec_path, slide_no, video, out):
+    """Story slide of type "phone" with the video playing on the phone screen; text stays static."""
+    spec = json.load(open(spec_path))
+    s = spec["slides"][slide_no - 1]
+    if not s.get("image"):   # still for layout only: grab the video's first frame
+        s["image"] = os.path.join(tempfile.mkdtemp(), "f.png")
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", video, "-frames:v", "1", s["image"]], check=True)
+    layer = render_slide(s, (W, H), 1, 1).convert("RGBA")
+    x, y, sw, sh, mask = s["_screen"]
+    layer.paste((0, 0, 0, 0), (x, y), mask)   # cut the screen out so the video shows through
+    lp = os.path.join(tempfile.mkdtemp(), "layer.png")
+    layer.save(lp)
+    dur, has_audio = probe(video)
+    fc = (f"color=c={EMERALD}:s={W}x{H}:r=30:d={dur}[bg];"
+          f"[0:v]scale={sw}:{sh}:force_original_aspect_ratio=increase,crop={sw}:{sh},setsar=1,fps=30[v];"
+          f"[bg][v]overlay={x}:{y}[b];[b][1:v]overlay=0:0,format=yuv420p[out]")
+    cmd = ["ffmpeg", "-y", "-v", "error", "-i", video, "-loop", "1", "-t", str(dur), "-i", lp,
+           "-filter_complex", fc, "-map", "[out]"]
+    if has_audio:
+        cmd += ["-map", "0:a", "-c:a", "aac", "-b:a", "192k"]
+    cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "18", "-movflags", "+faststart", "-t", str(dur), out]
+    subprocess.run(cmd, check=True)
+    print(out)
 
 # ── Highlight covers ────────────────────────────────────────────────
 # Seasonal covers go right after Shop while their season is live (Halloween until 31 Oct)
@@ -325,6 +400,8 @@ def main():
     r.add_argument("--out")
     c = sub.add_parser("carousel"); c.add_argument("spec")
     s = sub.add_parser("story"); s.add_argument("spec")
+    pv = sub.add_parser("phone-video", help="story slide of type phone, with a video on the screen")
+    pv.add_argument("spec"); pv.add_argument("slide", type=int); pv.add_argument("video"); pv.add_argument("--out")
     sub.add_parser("highlights")
     a = ap.parse_args()
     if a.cmd == "reel":
@@ -334,6 +411,10 @@ def main():
         render_set(a.spec, (1080, 1350), "slide")
     elif a.cmd == "story":
         render_set(a.spec, (1080, 1920), "story")
+    elif a.cmd == "phone-video":
+        name = os.path.splitext(os.path.basename(a.spec))[0]
+        os.makedirs(os.path.join(ROOT, "out", name), exist_ok=True)
+        phone_video(a.spec, a.slide, a.video, a.out or os.path.join(ROOT, "out", name, f"story-{a.slide:02d}.mp4"))
     else:
         highlights(a)
 

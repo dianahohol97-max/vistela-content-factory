@@ -2,8 +2,9 @@
   "name": "story-shop",
   "slides": [
     {
-      "type": "photo",
-      "image": "inbox/shop-cover.png",
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/std-0.2.png",
       "kicker": "Animated invitations",
       "title": "Shop VistelaCo",
       "body": "Weddings, birthdays & holidays. Already designed for you."
