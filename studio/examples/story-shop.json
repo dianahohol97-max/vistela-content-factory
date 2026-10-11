@@ -1,12 +1,49 @@
 {
   "name": "story-shop",
   "slides": [
-    {"type": "cover", "theme": "dark", "title": "Shop VistelaCo", "subtitle": "Animated invitations for every celebration"},
-    {"type": "content", "kicker": "Where to buy", "title": "On Etsy", "body": "Tap the link below to open the shop. Your download arrives right after checkout."},
-    {"type": "content", "kicker": "What you'll find", "title": "Weddings, birthdays & holidays", "body": "Save the dates, wedding websites, birthday, Halloween and Christmas invitations."},
-    {"type": "content", "kicker": "Why VistelaCo", "title": "Already designed for you", "body": "Change the names and date in free Canva. No designer, no design skills."},
-    {"type": "content", "kicker": "Why VistelaCo", "title": "Your guests just tap", "body": "An animated invite sent by text, WhatsApp or email. No printing, no postage."},
-    {"type": "content", "kicker": "Etsy review", "title": "“Very easy to customize, fits perfectly with our theme and colours.”", "body": "— Victoria"},
-    {"type": "cta", "theme": "dark", "title": "Find yours", "body": "Tap the link to see every invitation in the shop.", "button": "Shop on Etsy"}
+    {
+      "type": "photo",
+      "image": "inbox/shop-cover.png",
+      "kicker": "Animated invitations",
+      "title": "Shop VistelaCo",
+      "body": "Weddings, birthdays & holidays. Already designed for you."
+    },
+    {
+      "type": "content",
+      "kicker": "Where to buy",
+      "title": "On Etsy",
+      "body": "Tap the link below to open the shop. Your download arrives right after checkout."
+    },
+    {
+      "type": "content",
+      "kicker": "What you'll find",
+      "title": "Weddings, birthdays & holidays",
+      "body": "Save the dates, wedding websites, birthday, Halloween and Christmas invitations."
+    },
+    {
+      "type": "content",
+      "kicker": "Why VistelaCo",
+      "title": "Already designed for you",
+      "body": "Change the names and date in free Canva. No designer, no design skills."
+    },
+    {
+      "type": "content",
+      "kicker": "Why VistelaCo",
+      "title": "Your guests just tap",
+      "body": "An animated invite sent by text, WhatsApp or email. No printing, no postage."
+    },
+    {
+      "type": "content",
+      "kicker": "Etsy review",
+      "title": "“Very easy to customize, fits perfectly with our theme and colours.”",
+      "body": "— Victoria"
+    },
+    {
+      "type": "cta",
+      "theme": "dark",
+      "title": "Find yours",
+      "body": "Tap the link to see every invitation in the shop.",
+      "button": "Shop on Etsy"
+    }
   ]
 }
