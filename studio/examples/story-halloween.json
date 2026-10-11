@@ -1,0 +1,8 @@
+{
+  "name": "story-halloween",
+  "slides": [
+    {"type": "cover", "theme": "dark", "title": "Halloween party invites", "subtitle": "Animated, already designed"},
+    {"type": "content", "kicker": "Last minute?", "title": "Your invite can go out today", "body": "Change the details in free Canva, download, send."},
+    {"type": "cta", "theme": "dark", "title": "Your guests tap. The party starts.", "body": "Tap the link to see the Halloween invites.", "button": "Comment DATE"}
+  ]
+}

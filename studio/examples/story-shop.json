@@ -1,0 +1,60 @@
+{
+  "name": "story-shop",
+  "slides": [
+    {
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/rec-0.5.png",
+      "kicker": "Animated invitations",
+      "title": "Shop VistelaCo",
+      "body": "Weddings, birthdays & holidays. Already designed for you."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "badge": "inbox/etsy-header-full.jpg",
+      "kicker": "Where to buy",
+      "title": "Find us on Etsy"
+    },
+    {
+      "type": "content",
+      "kicker": "What you'll find",
+      "title": "Weddings, birthdays & holidays",
+      "body": "Save the dates, wedding websites, birthday, Halloween and Christmas invitations.",
+      "note": "published as the phone-grid video (studio.py phone-grid), this text version is not used"
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "kicker": "Why VistelaCo",
+      "title": "Already designed\nfor you",
+      "body": "Change the names and date in free Canva. No designer, no design skills."
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "image": "inbox/chat-clean.png",
+      "kicker": "Why VistelaCo",
+      "title": "Your guests just tap",
+      "body": "Sent by text, WhatsApp or email.\nNo printing, no postage."
+    },
+    {
+      "type": "stack",
+      "theme": "dark",
+      "kicker": "Etsy reviews",
+      "title": "5.0 from our buyers",
+      "images": [
+        "inbox/reviews/r1-rim-card.png",
+        "inbox/reviews/r2-katrina-card.png",
+        "inbox/reviews/r3-jessica-card.png"
+      ]
+    },
+    {
+      "type": "phone",
+      "theme": "dark",
+      "kicker": "Your celebration",
+      "title": "Find yours",
+      "body": "Tap the link to see every invitation in the shop."
+    }
+  ]
+}

@@ -24,7 +24,10 @@
 python3 studio.py reel inbox/VIDEO.mp4 --hook "..." [--cta DATE] [--mute] [--out out/name.mp4]
 python3 studio.py carousel spec.json      # 1080x1350, файли в out/<name>/slide-NN.png
 python3 studio.py story spec.json         # 1080x1920, файли в out/<name>/story-NN.png
-python3 studio.py highlights              # 7 обкладинок у out/highlights/
+python3 studio.py phone-video spec.json N inbox/VIDEO.mp4   # слайд N типу phone, відео грає на екрані телефона
+python3 studio.py phone-grid V1.mp4 … V15.mp4 --out out/x.mp4 [--kicker --title]   # сітка 5×3 телефонів, у кожному своє відео (без звуку, 10 с)
+python3 studio.py cover-phones out/highlights-v2/NN-name.png V1.mp4 V2.mp4 V3.mp4   # обкладинка хайлайту: 3 телефони віялом (центр — перше)
+python3 studio.py highlights              # старі іконкові обкладинки (Діана обрала телефони, іконки — лише для Reviews/FAQ тощо, якщо нема кращого)
 ```
 
 ## Бренд (каруселі, сторіс, хайлайти, профіль)
@@ -68,7 +71,7 @@ I almost paid $400 for paper. Then I found this.
 What $10 gets you instead of $400 of paper
 Cheaper than stamps. Prettier than paper.
 ```
-Перед ціновим гачком перевір, що шаблон у ролику справді коштує до $10 (уточни в Діани, якщо невідомо).
+Перед ціновим гачком перевір, що шаблон у ролику справді коштує до $10 (уточни в Діани, якщо невідомо). Станом на жовтень 2026 save the date, дні народження й Хелловін на Etsy — $7.99 (видно на скрінах відгуків).
 
 ### Правила гачків
 - Продаємо покупцям, не вчимо: ніколи «how I made», «tutorial», «step by step», не продавати шари/таймлайн/побудову анімації. В Instagram багато людей просять навчити — VistelaCo це не обслуговує.
@@ -89,6 +92,9 @@ JSON-специфікація, слайди типів:
 - `content` — `kicker` (Tip 1 / Step 2), `title`, `body`
 - `photo` — фото на весь слайд, затемнення лише під текстом, `kicker`/`title`/`body`
 - `cta` — `title`, `body`, `button` («Comment DATE»)
+- `stack` — заголовок угорі, під ним скрін-картки стовпчиком (напр. відгуки з Etsy; з карток прибрано «in stock» і меню продавця)
+- `cards` — «стрічка» карток лістингів: два зміщені ряди квадратних фото, що виходять за краї, текст по центру знизу (`images`: 1-й ряд 0–2, 2-й ряд 3–6)
+- `phone` — фото продукту на екрані телефона (`badge` — скрін-картка поверх низу телефона, напр. шапка Etsy; або `images`: до 3 запрошень стрічкою, центральне — перше) на смарагдовому фоні, під ним `kicker`/`title`/`body` по центру. З `phone-video` — те саме, але на екрані грає відео (Діані так більше подобається, ніж фото на весь слайд).
 - Поле `image` у `content` вставляє фото в рамку посередині.
 
 Правила:
@@ -104,7 +110,9 @@ JSON-специфікація, слайди типів:
 Зразки: `examples/story-photo.json`, `story-example.json`.
 
 ## Хайлайти
-Порядок: Shop, Save the Date, Christmas (першим до кінця грудня), How it works, FAQ, Websites, Hi I'm Diana. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Хайлайт із відгуками — лише коли буде ~10 відгуків.
+Обкладинки — три телефони віялом з реальними запрошеннями цього свята на смарагдовому фоні в тонкому золотому кільці (`cover-phones`, вибір Діани; іконки вона назвала шаблонними).
+Порядок: Shop, Halloween (до 31.10, потім в архів), Christmas (до кінця грудня), Save the Date, Birthday, Websites, Reviews, How it works, FAQ, Hi I'm Diana. Сезонне свято завжди стоїть одразу після Shop. У кожному — сторіс зі стікером на відповідну секцію Etsy (посилання дає Діана). Reviews — скріни відгуків з Etsy (їх уже понад 10).
+Сторіс для хайлайтів: `examples/story-shop.json`, `story-christmas.json`, `story-halloween.json`, `story-example.json` (How it works). Найкраще між ними — реальне відео шаблону.
 FAQ — найчастіші питання покупців: де шаблон, як зробити QR, як працює RSVP, як опублікувати сайт, куди надіслати відео.
 
 ## Профіль (рекомендації, ще не впроваджені)

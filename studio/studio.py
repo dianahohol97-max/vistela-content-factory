@@ -4,6 +4,8 @@
   python3 studio.py reel  INPUT.mp4 --hook "..." [--cta DATE] [--out out/x.mp4]
   python3 studio.py carousel spec.json      (slides -> 1080x1350 PNG)
   python3 studio.py story    spec.json      (frames -> 1080x1920 PNG)
+  python3 studio.py phone-video spec.json N VIDEO.mp4   (story slide N: video on a phone screen)
+  python3 studio.py phone-grid V1.mp4 V2.mp4 ... --out out/x.mp4 [--title ...]   (grid of phones, 5x3)
   python3 studio.py highlights              (all highlight covers)
 """
 import argparse, json, os, subprocess, sys, tempfile
@@ -127,6 +129,29 @@ def reel(args):
                     "-frames:v", "1", "-q:v", "2", cover], check=True)
     print(args.out, cover)
 
+def phone_mockup(shot, screen_h):
+    """Product shot inside a simple phone frame (dark bezel, rounded screen, island).
+    Returns (RGBA image, screen box (x, y, w, h), screen mask)."""
+    sw = int(screen_h * 0.462)
+    sc = max(sw / shot.width, screen_h / shot.height)
+    shot = shot.resize((int(shot.width * sc) + 1, int(shot.height * sc) + 1))
+    shot = shot.crop(((shot.width - sw) // 2, (shot.height - screen_h) // 2,
+                      (shot.width - sw) // 2 + sw, (shot.height - screen_h) // 2 + screen_h))
+    bz = int(screen_h * 0.022)
+    pw, ph = sw + 2 * bz, screen_h + 2 * bz
+    img = Image.new("RGBA", (pw + 12, ph), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    for x0, y0, y1 in ((0, 0.20, 0.27), (0, 0.30, 0.37), (pw + 6, 0.25, 0.36)):   # side buttons
+        d.rounded_rectangle([x0, ph * y0, x0 + 8, ph * y1], radius=4, fill="#2A2F2C")
+    d.rounded_rectangle([6, 0, pw + 6, ph], radius=int(pw * 0.15), fill="#141816")
+    mask = Image.new("L", (sw, screen_h), 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, sw, screen_h], radius=int(pw * 0.15) - bz, fill=255)
+    img.paste(shot, (6 + bz, bz), mask)
+    iw = int(sw * 0.3)
+    d.rounded_rectangle([6 + pw / 2 - iw / 2, bz + int(screen_h * 0.019), 6 + pw / 2 + iw / 2, bz + int(screen_h * 0.019) + int(iw * 0.3)],
+                        radius=int(iw * 0.15), fill="#141816")
+    return img, (6 + bz, bz, sw, screen_h), mask
+
 # ── Carousels & stories ──────────────────────────────────────────────
 def render_slide(s, size, idx, total):
     w, h = size
@@ -174,6 +199,127 @@ def render_slide(s, size, idx, total):
             d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
         if total > 1 and not story:
             d.text((w - pad, h - int(h * 0.045)), f"{idx}/{total}", font=fs, fill=GOLD, anchor="rm")
+        return img
+
+    if kind == "cards":
+        # "ribbon" of product cards: two offset rows of square shots bleeding off both edges, centred text below
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        cw, gap = int(w * 0.39), int(w * 0.025)
+        y0 = int(h * (0.07 if story else 0.05))
+        img = img.convert("RGBA")
+        srcs = s["images"]
+        for row in range(2):
+            x = -int(cw * (0.42 if row == 0 else 0.92))
+            y = y0 + row * (cw + gap)
+            for j in range(4):
+                src = srcs[(j if row == 0 else 3 + j) % len(srcs)]
+                card = Image.open(src).convert("RGB")
+                sc = max(cw / card.width, cw / card.height)
+                card = card.resize((int(card.width * sc) + 1, int(card.height * sc) + 1))
+                card = card.crop(((card.width - cw) // 2, (card.height - cw) // 2,
+                                  (card.width - cw) // 2 + cw, (card.height - cw) // 2 + cw))
+                m = Image.new("L", (cw, cw), 0)
+                ImageDraw.Draw(m).rounded_rectangle([0, 0, cw, cw], radius=int(cw * 0.06), fill=255)
+                sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+                sh_.paste((0, 0, 0, 100), (x + 6, y + 18), m)
+                img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(22)))
+                img.paste(card, (x, y), m)
+                x += cw + gap
+        img = img.convert("RGB")
+        d = ImageDraw.Draw(img)
+        y = y0 + 2 * cw + gap + int(h * 0.045)
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        if s.get("body"):
+            gold_rule(d, w // 2, y + 34)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 66, maxw, fg, 1.45)
+        return img
+
+    if kind == "stack":
+        # title on top, screenshot cards (e.g. Etsy reviews) stacked underneath
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        y = int(h * (0.06 if story else 0.05))
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        gold_rule(d, w // 2, y + 34)
+        y += int(h * 0.045)
+        img = img.convert("RGBA")
+        cw, gap = int(w * 0.78), int(h * 0.016)
+        for src in s["images"]:
+            c = Image.open(src).convert("RGB")
+            c = c.resize((cw, int(c.height * cw / c.width)))
+            m = Image.new("L", c.size, 0)
+            ImageDraw.Draw(m).rounded_rectangle([0, 0, *c.size], radius=int(cw * 0.035), fill=255)
+            x = (w - cw) // 2
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 120), (x + 6, y + 18), m)
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(22)))
+            img.paste(c, (x, y), m)
+            y += c.height + gap
+        return img.convert("RGB")
+
+    if kind == "phone":
+        # product shown on a phone screen, centred text underneath (stories keep the bottom ~25% clear)
+        from PIL import ImageFilter
+        story = h > 1.6 * w
+        screen_h = int(h * (0.5 if story else 0.52) * (0.84 if s.get("badge") else 1))
+        py = int(h * (0.07 if story else 0.06))
+        img = img.convert("RGBA")
+        # "images": a row of invitations — two smaller phones peek out behind the centre one
+        for i, src in enumerate(s.get("images", [])[:3][1:]):
+            side, _, _ = phone_mockup(Image.open(src).convert("RGB"), int(screen_h * 0.82))
+            sx = int(w * 0.03) if i == 0 else w - side.width - int(w * 0.03)
+            sy = py + int(screen_h * 0.09)
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 110), (sx + 8, sy + 24), side.split()[3])
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
+            img.alpha_composite(side, (sx, sy))
+        ph = None   # badge and no image: badge only (e.g. just the shop header)
+        if s.get("image") or s.get("images") or not s.get("badge"):
+            src = s.get("image") or (s.get("images") or [None])[0]
+            shot = Image.open(src).convert("RGB") if src else Image.new("RGB", (10, 10), IVORY)  # video slides: filled by phone-video
+            ph, scr, scr_mask = phone_mockup(shot, screen_h)
+            px = (w - ph.width) // 2
+            shadow = Image.new("RGBA", size, (0, 0, 0, 0))
+            shadow.paste((0, 0, 0, 120), (px + 10, py + 30), ph.split()[3])
+            img = Image.alpha_composite(img, shadow.filter(ImageFilter.GaussianBlur(30)))
+            img.alpha_composite(ph, (px, py))
+            y = py + ph.height + int(h * 0.035)
+        s["_badge"] = None
+        if s.get("badge"):
+            # screenshot card (e.g. the Etsy shop header) overlapping the bottom of the phone
+            bdg = Image.open(s["badge"]).convert("RGB")
+            bw = int(w * (0.84 if ph else 0.9))
+            bdg = bdg.resize((bw, int(bdg.height * bw / bdg.width)))
+            bm = Image.new("L", bdg.size, 0)
+            ImageDraw.Draw(bm).rounded_rectangle([0, 0, *bdg.size], radius=28, fill=255)
+            bx, by = (w - bw) // 2, (py + ph.height - int(h * 0.075)) if ph else int(h * 0.2)
+            sh_ = Image.new("RGBA", size, (0, 0, 0, 0))
+            sh_.paste((0, 0, 0, 140), (bx + 6, by + 22), bm)
+            img = Image.alpha_composite(img, sh_.filter(ImageFilter.GaussianBlur(26)))
+            img.paste(bdg, (bx, by), bm)
+            s["_badge"] = (bdg, bm, bx, by)
+            y = by + bdg.height + int(h * 0.03)
+        img = img.convert("RGB")
+        d = ImageDraw.Draw(img)
+        if s.get("kicker"):
+            d.text((w / 2, y), s["kicker"].upper(), font=font("sans", int(w * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+            y += int(w * 0.06)
+        y = text_block(d, s["title"], font("serif", int(w * 0.08)), w / 2, y, maxw, accent, 1.15)
+        if s.get("body"):
+            gold_rule(d, w // 2, y + 34)
+            text_block(d, s["body"], font("sans", int(w * 0.036)), w / 2, y + 66, maxw, fg, 1.45)
+        if not story:
+            fs = font("sans", int(w * 0.026), "Regular")
+            d.text((pad, h - int(h * 0.045)), "VISTELACO", font=fs, fill=GOLD, anchor="lm")
+        if ph:
+            s["_screen"] = (px + scr[0], py + scr[1], scr[2], scr[3], scr_mask)
         return img
 
     if s.get("image"):
@@ -249,8 +395,112 @@ def render_set(spec_path, size, suffix):
         paths.append(p)
     print("\n".join(paths))
 
+def phone_video(spec_path, slide_no, video, out):
+    """Story slide of type "phone" with the video playing on the phone screen; text stays static."""
+    spec = json.load(open(spec_path))
+    s = spec["slides"][slide_no - 1]
+    if not s.get("image"):   # still for layout only: grab the video's first frame
+        s["image"] = os.path.join(tempfile.mkdtemp(), "f.png")
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", video, "-frames:v", "1", s["image"]], check=True)
+    layer = render_slide(s, (W, H), 1, 1).convert("RGBA")
+    x, y, sw, sh, mask = s["_screen"]
+    layer.paste((0, 0, 0, 0), (x, y), mask)   # cut the screen out so the video shows through
+    if s.get("_badge"):   # the badge sits over the screen, put it back on top
+        bdg, bm, bx, by = s["_badge"]
+        layer.paste(bdg, (bx, by), bm)
+    lp = os.path.join(tempfile.mkdtemp(), "layer.png")
+    layer.save(lp)
+    dur, has_audio = probe(video)
+    fc = (f"color=c={EMERALD}:s={W}x{H}:r=30:d={dur}[bg];"
+          f"[0:v]scale={sw}:{sh}:force_original_aspect_ratio=increase,crop={sw}:{sh},setsar=1,fps=30[v];"
+          f"[bg][v]overlay={x}:{y}[b];[b][1:v]overlay=0:0,format=yuv420p[out]")
+    cmd = ["ffmpeg", "-y", "-v", "error", "-i", video, "-loop", "1", "-t", str(dur), "-i", lp,
+           "-filter_complex", fc, "-map", "[out]"]
+    if has_audio:
+        cmd += ["-map", "0:a", "-c:a", "aac", "-b:a", "192k"]
+    cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "18", "-movflags", "+faststart", "-t", str(dur), out]
+    subprocess.run(cmd, check=True)
+    print(out)
+
+def phone_grid(videos, out, kicker="", title="", body="", cols=5, rows=3, dur=10.0):
+    """Story with a grid of phones, each playing its own invitation video (looped, muted); text underneath."""
+    from PIL import ImageFilter
+    n = cols * rows
+    videos = [videos[i % len(videos)] for i in range(n)]
+    mx, gx, gy = int(W * 0.035), int(W * 0.018), int(W * 0.022)
+    pw = (W - 2 * mx - (cols - 1) * gx) // cols
+    screen_h = int((pw - 12) / 0.506)
+    blank = Image.new("RGB", (10, 10), IVORY)
+    ph, scr, mask = phone_mockup(blank, screen_h)
+    y0 = int(H * 0.05)
+    layer = Image.new("RGBA", (W, H), EMERALD)
+    boxes = []
+    for i in range(n):
+        x = mx + (i % cols) * (pw + gx) - 6
+        y = y0 + (i // cols) * (ph.height + gy)
+        sh_ = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sh_.paste((0, 0, 0, 110), (x + 6, y + 16), ph.split()[3])
+        layer = Image.alpha_composite(layer, sh_.filter(ImageFilter.GaussianBlur(14)))
+        layer.alpha_composite(ph, (x, y))
+        boxes.append((x + scr[0], y + scr[1]))
+    for bx, by in boxes:   # cut the screens out so the videos show through
+        layer.paste((0, 0, 0, 0), (bx, by), mask)
+    d = ImageDraw.Draw(layer)
+    maxw = int(W * 0.8)
+    y = y0 + rows * (ph.height + gy) + int(H * 0.012)
+    if kicker:
+        d.text((W / 2, y), kicker.upper(), font=font("sans", int(W * 0.03), "SemiBold"), fill=GOLD, anchor="mt")
+        y += int(W * 0.06)
+    if title:
+        y = text_block(d, title, font("serif", int(W * 0.064)), W / 2, y, int(W * 0.92), IVORY, 1.15)
+    if body:
+        gold_rule(d, W // 2, y + 20)
+        text_block(d, body, font("sans", int(W * 0.036)), W / 2, y + 50, maxw, IVORY, 1.45)
+    lp = os.path.join(tempfile.mkdtemp(), "layer.png")
+    layer.save(lp)
+    sw = scr[2]
+    inputs, fc = [], f"color=c={EMERALD}:s={W}x{H}:r=30:d={dur}[b0];"
+    for i, v in enumerate(videos):
+        inputs += ["-stream_loop", "-1", "-t", str(dur), "-i", v]
+        fc += (f"[{i}:v]scale={sw}:{screen_h}:force_original_aspect_ratio=increase,crop={sw}:{screen_h},"
+               f"setsar=1,fps=30,setpts=PTS-STARTPTS[v{i}];[b{i}][v{i}]overlay={boxes[i][0]}:{boxes[i][1]}:eof_action=repeat[b{i + 1}];")
+    inputs += ["-loop", "1", "-t", str(dur), "-i", lp]
+    fc += f"[b{n}][{n}:v]overlay=0:0,format=yuv420p[out]"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", fc, "-map", "[out]",
+                    "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-movflags", "+faststart",
+                    "-t", str(dur), out], check=True)
+    print(out)
+
+def cover_phones(sources, out, t=9.0):
+    """Highlight cover: three phones fanned out on emerald inside a thin gold ring (centre phone = first source).
+    Sources can be images or videos (a frame at t seconds is used)."""
+    from PIL import ImageFilter
+    shots = []
+    for src in sources[:3]:
+        if src.lower().endswith((".mp4", ".mov")):
+            fp = os.path.join(tempfile.mkdtemp(), "f.png")
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", str(t), "-i", src, "-frames:v", "1", fp], check=True)
+            src = fp
+        shots.append(Image.open(src).convert("RGB"))
+    cx, cy, R = W // 2, H // 2, 330
+    img = Image.new("RGBA", (W, H), EMERALD)
+    order = [(shots[1 % len(shots)], 14, -150, 30), (shots[2 % len(shots)], -14, 150, 30), (shots[0], 0, 0, -10)]
+    for shot, ang, dx, dy in order:   # side phones first, centre phone on top
+        ph, _, _ = phone_mockup(shot, 430)
+        ph = ph.rotate(ang, resample=Image.BICUBIC, expand=True)
+        sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        sh.paste((0, 0, 0, 130), (cx + dx - ph.width // 2 + 6, cy + dy - ph.height // 2 + 16), ph.split()[3])
+        img = Image.alpha_composite(img, sh.filter(ImageFilter.GaussianBlur(16)))
+        img.alpha_composite(ph, (cx + dx - ph.width // 2, cy + dy - ph.height // 2))
+    img = img.convert("RGB")
+    ImageDraw.Draw(img).ellipse([cx - R + 6, cy - R + 6, cx + R - 6, cy + R - 6], outline=GOLD, width=3)
+    img.save(out)
+    print(out)
+
 # ── Highlight covers ────────────────────────────────────────────────
-HIGHLIGHTS = ["Shop", "Save the Date", "Christmas", "How it works", "FAQ", "Websites", "Hi, I'm Diana"]
+# Seasonal covers go right after Shop while their season is live (Halloween until 31 Oct)
+HIGHLIGHTS = ["Shop", "Halloween", "Christmas", "Save the Date", "Birthday", "Websites",
+              "Reviews", "How it works", "FAQ", "Hi, I'm Diana"]
 
 def icon(d, name, cx, cy, r):
     c, lw = IVORY, 10
@@ -265,6 +515,24 @@ def icon(d, name, cx, cy, r):
         d.ellipse([cx - r * 0.8, cy - r * 0.55, cx + r * 0.8, cy + r * 1.05], outline=c, width=lw)
         d.rectangle([cx - 26, cy - r * 0.9, cx + 26, cy - r * 0.55], fill=GOLD)
         d.arc([cx - 24, cy - r * 1.25, cx + 24, cy - r * 0.85], 180, 360, fill=c, width=8)
+    elif name == "Halloween":
+        top, bot = cy - r * 0.55, cy + r * 0.85
+        for x0, x1 in ((cx - r, cx + r * 0.1), (cx - r * 0.1, cx + r), (cx - r * 0.45, cx + r * 0.45)):
+            d.ellipse([x0, top, x1, bot], fill=EMERALD, outline=c, width=lw)  # centre lobe drawn last hides overlaps
+        d.line([(cx, top), (cx + 16, cy - r * 0.95)], fill=GOLD, width=lw + 6)
+    elif name == "Birthday":
+        d.rounded_rectangle([cx - r, cy - r * 0.05, cx + r, cy + r * 0.85], radius=14, outline=c, width=lw)
+        d.line([(cx - r, cy + r * 0.35), (cx + r, cy + r * 0.35)], fill=c, width=6)
+        for dx in (-0.55, 0, 0.55):
+            x = cx + r * dx
+            d.line([(x, cy - r * 0.55), (x, cy - r * 0.05)], fill=c, width=lw)
+            d.ellipse([x - 13, cy - r * 0.85, x + 13, cy - r * 0.6], fill=GOLD)
+    elif name == "Reviews":
+        import math
+        pts = [(cx + (r if k % 2 == 0 else r * 0.42) * math.sin(k * math.pi / 5),
+                cy + 10 - (r if k % 2 == 0 else r * 0.42) * math.cos(k * math.pi / 5)) for k in range(10)]
+        d.polygon(pts, outline=c, width=lw)
+        d.ellipse([cx - 18, cy - 8, cx + 18, cy + 28], fill=GOLD)
     elif name == "How it works":
         for i, yy in enumerate([-0.6, 0, 0.6]):
             y0 = cy + r * yy
@@ -305,6 +573,15 @@ def main():
     r.add_argument("--out")
     c = sub.add_parser("carousel"); c.add_argument("spec")
     s = sub.add_parser("story"); s.add_argument("spec")
+    pv = sub.add_parser("phone-video", help="story slide of type phone, with a video on the screen")
+    pv.add_argument("spec"); pv.add_argument("slide", type=int); pv.add_argument("video"); pv.add_argument("--out")
+    pg = sub.add_parser("phone-grid", help="story: grid of phones, each playing its own video")
+    pg.add_argument("videos", nargs="+"); pg.add_argument("--out", required=True)
+    pg.add_argument("--kicker", default=""); pg.add_argument("--title", default=""); pg.add_argument("--body", default="")
+    pg.add_argument("--cols", type=int, default=5); pg.add_argument("--rows", type=int, default=3)
+    pg.add_argument("--seconds", type=float, default=10.0)
+    cp = sub.add_parser("cover-phones", help="highlight cover: three phones with real invitations")
+    cp.add_argument("out"); cp.add_argument("sources", nargs="+"); cp.add_argument("--t", type=float, default=9.0)
     sub.add_parser("highlights")
     a = ap.parse_args()
     if a.cmd == "reel":
@@ -314,6 +591,14 @@ def main():
         render_set(a.spec, (1080, 1350), "slide")
     elif a.cmd == "story":
         render_set(a.spec, (1080, 1920), "story")
+    elif a.cmd == "cover-phones":
+        cover_phones(a.sources, a.out, a.t)
+    elif a.cmd == "phone-grid":
+        phone_grid(a.videos, a.out, a.kicker, a.title, a.body, a.cols, a.rows, a.seconds)
+    elif a.cmd == "phone-video":
+        name = os.path.splitext(os.path.basename(a.spec))[0]
+        os.makedirs(os.path.join(ROOT, "out", name), exist_ok=True)
+        phone_video(a.spec, a.slide, a.video, a.out or os.path.join(ROOT, "out", name, f"story-{a.slide:02d}.mp4"))
     else:
         highlights(a)
 

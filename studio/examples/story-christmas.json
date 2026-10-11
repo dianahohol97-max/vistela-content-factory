@@ -1,0 +1,9 @@
+{
+  "name": "story-christmas",
+  "slides": [
+    {"type": "cover", "theme": "dark", "title": "Christmas invitations", "subtitle": "Animated, already designed"},
+    {"type": "content", "kicker": "For your party", "title": "Your guests tap. It opens.", "body": "An animated invite they get by text, WhatsApp or email."},
+    {"type": "content", "kicker": "No designer", "title": "Just change the details", "body": "Name, date, address. Free Canva is enough."},
+    {"type": "cta", "theme": "dark", "title": "Send it tonight", "body": "Tap the link to see the Christmas collection.", "button": "Comment DATE"}
+  ]
+}
