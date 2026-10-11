@@ -1,10 +1,10 @@
 name: build-content
 
 on:
-  # PAUSED (Diana, 11.10.2026): no scheduled builds while hooks, CTA and
-  # categories are reworked. Restore to re-enable:
-  #   schedule:
-  #     - cron: "0 6 * * *"
+  schedule:
+    # Daily 06:00 UTC — two reels a day, alternating wedding / Christmas /
+    # Halloween (see THEME_CYCLE in config.py). Re-enabled by Diana 11.10.2026.
+    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       hook:
@@ -16,7 +16,7 @@ on:
         required: false
         default: ""
       rubric:
-        description: "Force the second reel's rubric (personalize / phone_review / product_tour / ai_review)"
+        description: "Force a rubric (phone_review / product_tour / ai_review), or none = only refresh the queue and add music"
         required: false
         default: ""
       clip:
