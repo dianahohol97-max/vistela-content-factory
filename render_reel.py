@@ -143,21 +143,32 @@ def native_png(text, path, top=250, size=64):
 
 
 def add_cta(reel):
-    """Burn the comment trigger over the last CTA_SECONDS of the reel itself
-    (no end card). Rewrites the file in place and keeps any audio."""
+    """Burn the closing texts into the reel itself (no end card): the
+    "already made, just edit in Canva" line between the hook and the trigger,
+    then the comment trigger over the last CTA_SECONDS. Rewrites the file in
+    place and keeps any audio."""
     dur = _dur(reel)
     start = max(0.0, dur - C.CTA_SECONDS)
-    png = reel + ".cta.png"
+    png, mid = reel + ".cta.png", reel + ".mid.png"
     tmp = reel + ".tmp.mp4"
     native_png(C.CTA_TEXT, png, top=1460, size=56)
-    _run(["ffmpeg", "-y", "-loglevel", "error", "-i", reel, "-loop", "1", "-t", f"{dur:.3f}", "-i", png,
-          "-filter_complex",
-          f"[1:v]format=rgba,fade=t=in:st={start:.3f}:d=0.3:alpha=1[c];"
-          f"[0:v][c]overlay=0:0:enable='gte(t,{start:.3f})'[v]",
+    m0, m1 = C.MID_WINDOW
+    m1 = min(m1, start - 0.5)
+    inputs = ["-i", reel, "-loop", "1", "-t", f"{dur:.3f}", "-i", png]
+    fc = (f"[1:v]format=rgba,fade=t=in:st={start:.3f}:d=0.3:alpha=1[c];"
+          f"[0:v][c]overlay=0:0:enable='gte(t,{start:.3f})'")
+    if C.MID_TEXT and m1 - m0 >= 3:
+        native_png(C.MID_TEXT, mid)
+        inputs += ["-loop", "1", "-t", f"{dur:.3f}", "-i", mid]
+        fc += (f"[a];[2:v]format=rgba,fade=t=in:st={m0}:d=0.3:alpha=1[m];"
+               f"[a][m]overlay=0:0:enable='between(t,{m0},{m1:.2f})'")
+    _run(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", fc + "[v]",
           "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-crf", "20", "-preset", "medium",
           "-pix_fmt", "yuv420p", "-c:a", "copy", "-t", f"{dur:.3f}", "-movflags", "+faststart", tmp])
     os.replace(tmp, reel)
-    os.remove(png)
+    for f in (png, mid):
+        if os.path.exists(f):
+            os.remove(f)
 
 
 PHONE_TOP = 450       # hook sits above the phone, the comment trigger (y=1460) below it

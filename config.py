@@ -78,6 +78,9 @@ VIDEO_FONT = "fonts/ArchivoBlack.ttf"   # bold sans for video-legible captions
 NATIVE_FONT = "studio/fonts/OpenSans.ttf"
 CTA_TEXT = "Comment DATE for the link"
 CTA_SECONDS = 2.5
+# Second line, shown between the hook and the trigger (Diana, 11.10.2026).
+MID_TEXT = "Everything's ready. Just edit your details in Canva."
+MID_WINDOW = (4.0, 10.0)   # seconds; skipped on reels too short to hold it
 
 # Input folders (synced from Dropbox by the workflow, or committed manually).
 INPUT_TEMPLATES = "input/templates"          # Canva MP4 exports (Hook->Reveal etc.)

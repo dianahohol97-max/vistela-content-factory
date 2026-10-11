@@ -699,6 +699,9 @@ def build_daily_reels():
     The previous plan (iPad review daily + personalise every other day) rested
     on the two thinnest folders — five clips and one — so the same footage came
     round every few days while two dozen product animations went unused."""
+    # rubric=none: build nothing, only refresh the queue (music on queued reels).
+    if os.environ.get("FORCE_RUBRIC", "").strip() == "none":
+        return []
     if os.environ.get("FORCE_RUBRIC", "").strip():
         return build_second_reel()
     # While a holiday is in season, every other day its party invite takes slot 1
