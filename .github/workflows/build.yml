@@ -1,10 +1,10 @@
 name: build-content
 
 on:
-  schedule:
-    # Daily 06:00 UTC — an iPad review every day, a personalise-with-me every
-    # other day. Pins and carousels still build only on Mon+Thu (see build.py).
-    - cron: "0 6 * * *"
+  # PAUSED (Diana, 11.10.2026): no scheduled builds while hooks, CTA and
+  # categories are reworked. Restore to re-enable:
+  #   schedule:
+  #     - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       hook:
