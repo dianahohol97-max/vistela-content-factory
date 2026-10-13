@@ -713,6 +713,11 @@
       "last": "2026-10-12",
       "count": 1,
       "last_hook": 1
+    },
+    "Animated Halloween Invitation Video _ Editable Canva Template with RSVP QR Code.mp4": {
+      "last": "2026-10-13",
+      "count": 1,
+      "last_hook": 2
     }
   },
   "single:phone": {
@@ -740,10 +745,15 @@
       "last": "2026-10-09",
       "count": 13,
       "last_hook": 3
+    },
+    "Save the Date - EMERALD ENVELOPE - 0.2.mp4": {
+      "last": "2026-10-13",
+      "count": 1,
+      "last_hook": 4
     }
   },
   "hook_cursor": {
-    "tour": 1,
-    "phone": 3
+    "tour": 2,
+    "phone": 4
   }
 }
