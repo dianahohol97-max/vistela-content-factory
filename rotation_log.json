@@ -635,9 +635,9 @@
       "last_hook": 6
     },
     "Save the Date - EMERALD - Butterfly.mp4": {
-      "last": "2026-09-02",
-      "count": 1,
-      "last_hook": 1
+      "last": "2026-10-17",
+      "count": 2,
+      "last_hook": 2
     },
     "Video 25-08-2026, 09 25 09.mov": {
       "last": "2026-10-06",
@@ -738,6 +738,11 @@
       "last": "2026-10-16",
       "count": 1,
       "last_hook": 1
+    },
+    "Animated Monster Lab Halloween Invitation 🧪 Editable Canva Video + RSVP QR Code #shorts.mp4": {
+      "last": "2026-10-17",
+      "count": 1,
+      "last_hook": 3
     }
   },
   "single:phone": {
@@ -778,7 +783,7 @@
     }
   },
   "hook_cursor": {
-    "tour": 1,
+    "tour": 3,
     "phone": 5
   }
 }
