@@ -650,9 +650,9 @@
       "last_hook": 8
     },
     "Save the Date - EMERALD - Swan Frame.mp4": {
-      "last": "2026-09-06",
-      "count": 1,
-      "last_hook": 3
+      "last": "2026-10-20",
+      "count": 2,
+      "last_hook": 6
     },
     "Video 25-08-2026, 09 31 06.mov": {
       "last": "2026-10-10",
@@ -758,6 +758,11 @@
       "last": "2026-10-19",
       "count": 1,
       "last_hook": 5
+    },
+    "Presentation Halloween v13.mp4": {
+      "last": "2026-10-20",
+      "count": 1,
+      "last_hook": 2
     }
   },
   "single:phone": {
@@ -803,7 +808,7 @@
     }
   },
   "hook_cursor": {
-    "tour": 5,
+    "tour": 2,
     "phone": 6
   }
 }
