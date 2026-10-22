@@ -773,6 +773,11 @@
       "last": "2026-10-21",
       "count": 1,
       "last_hook": 3
+    },
+    "Presentation Halloween v14.mp4": {
+      "last": "2026-10-22",
+      "count": 1,
+      "last_hook": 4
     }
   },
   "single:phone": {
@@ -815,10 +820,15 @@
       "last": "2026-10-19",
       "count": 1,
       "last_hook": 6
+    },
+    "Video 25-08-2026, 09 27 03.mov": {
+      "last": "2026-10-22",
+      "count": 1,
+      "last_hook": 0
     }
   },
   "hook_cursor": {
-    "tour": 3,
-    "phone": 6
+    "tour": 4,
+    "phone": 0
   }
 }
