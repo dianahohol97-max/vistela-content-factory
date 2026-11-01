@@ -625,9 +625,9 @@
       "last_hook": 0
     },
     "Save the Date - DUSTY PINK - Butterfly.mp4": {
-      "last": "2026-10-14",
-      "count": 2,
-      "last_hook": 3
+      "last": "2026-11-01",
+      "count": 3,
+      "last_hook": 0
     },
     "Video 13-07-2026, 22 26 57.mov": {
       "last": "2026-08-03",
@@ -880,10 +880,15 @@
       "last": "2026-10-30",
       "count": 1,
       "last_hook": 4
+    },
+    "Video 25-08-2026, 09 28 29.mov": {
+      "last": "2026-11-01",
+      "count": 1,
+      "last_hook": 5
     }
   },
   "hook_cursor": {
-    "tour": 6,
-    "phone": 4
+    "tour": 0,
+    "phone": 5
   }
 }
