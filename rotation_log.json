@@ -730,9 +730,9 @@
       "last_hook": 8
     },
     "Save the Date - Frame Project - White .mp4": {
-      "last": "2026-10-25",
-      "count": 2,
-      "last_hook": 3
+      "last": "2026-11-07",
+      "count": 3,
+      "last_hook": 4
     },
     "Video 25-08-2026, 09 41 25.mov": {
       "last": "2026-09-20",
@@ -920,10 +920,15 @@
       "last": "2026-11-05",
       "count": 1,
       "last_hook": 1
+    },
+    "Video 25-08-2026, 09 29 38.mov": {
+      "last": "2026-11-07",
+      "count": 1,
+      "last_hook": 2
     }
   },
   "hook_cursor": {
-    "tour": 3,
-    "phone": 1
+    "tour": 4,
+    "phone": 2
   }
 }
