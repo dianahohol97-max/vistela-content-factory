@@ -705,9 +705,9 @@
       "last_hook": 0
     },
     "Save the Date - DUSTY PINK - Butterfly.mp4": {
-      "last": "2026-11-14",
-      "count": 4,
-      "last_hook": 1
+      "last": "2026-11-27",
+      "count": 5,
+      "last_hook": 2
     },
     "Video 13-07-2026, 22 26 57.mov": {
       "last": "2026-08-03",
@@ -922,9 +922,9 @@
       "last_hook": 3
     },
     "Save the Date - EMERALD ENVELOPE - 0.2.mp4": {
-      "last": "2026-10-13",
-      "count": 1,
-      "last_hook": 4
+      "last": "2026-11-27",
+      "count": 2,
+      "last_hook": 0
     },
     "Video 25-08-2026, 09 26 28.mov": {
       "last": "2026-10-16",
@@ -1043,7 +1043,7 @@
     }
   },
   "hook_cursor": {
-    "tour": 1,
-    "phone": 6
+    "tour": 2,
+    "phone": 0
   }
 }
